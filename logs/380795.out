@@ -1,0 +1,55 @@
+Sender: LSF System <srv-lsf@bmi-460g6-28>
+Subject: Job 380795: <#BSUB -L /bin/bash;#BSUB -W 72:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 65000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform RNAseq --bedDir /data/salomonis2/SRP042161_GBM/bams --output /data/salomonis2/SRP042161_GBM/bams --expname SRP042161-GBM --runGOElite no --multiThreading no> Done
+
+Job <#BSUB -L /bin/bash;#BSUB -W 72:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 65000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform RNAseq --bedDir /data/salomonis2/SRP042161_GBM/bams --output /data/salomonis2/SRP042161_GBM/bams --expname SRP042161-GBM --runGOElite no --multiThreading no> was submitted from host <bmiclusterp1> by user <venz6v> in cluster <BMICluster>.
+Job was executed on host(s) <4*bmi-460g6-28>, in queue <normal>, as user <venz6v> in cluster <BMICluster>.
+                            <4*bmi-460g6-13>
+                            <4*bmi-460g6-02>
+                            <4*bmi-460g6-16>
+</users/venz6v> was used as the home directory.
+</data/salomonis2/SRP042161_GBM/bams> was used as the working directory.
+Started at Mon Jul 11 17:24:36 2016
+Results reported at Mon Jul 11 17:25:17 2016
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -L /bin/bash
+#BSUB -W 72:00
+#BSUB -n 16
+#BSUB -R "span[ptile=4]"
+#BSUB -M 65000
+#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err
+#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out
+
+module load samtools python
+
+python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform RNAseq --bedDir /data/salomonis2/SRP042161_GBM/bams --output /data/salomonis2/SRP042161_GBM/bams --expname SRP042161-GBM --runGOElite no --multiThreading no
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      7.59 sec.
+    Max Memory :        53 MB
+    Max Swap   :       778 MB
+
+    Max Processes  :         5
+    Max Threads    :         6
+
+The output (if any) follows:
+
+3 [['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--species', 'Hs', '--platform', 'RNAseq', '--bedDir', '/data/salomonis2/SRP042161_GBM/bams', '--output', '/data/salomonis2/SRP042161_GBM/bams', '--expname', 'SRP042161-GBM', '--runGOElite', 'no', '--multiThreading', 'no']] Running commandline options
+
+Arguments input: ['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--species', 'Hs', '--platform', 'RNAseq', '--bedDir', '/data/salomonis2/SRP042161_GBM/bams', '--output', '/data/salomonis2/SRP042161_GBM/bams', '--expname', 'SRP042161-GBM', '--runGOElite', 'no', '--multiThreading', 'no'] 
+
+[None] not currently supported... Please provide CDF to AltAnalyze (commandline or GUI) or manually add to AltDatabase/affymetrix/LibraryFiles
+
+
+PS:
+
+Read file </data/salomonis1/software/AltAnalyze/logs/380795.err> for stderr output of this job.
+

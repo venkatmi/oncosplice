@@ -1,0 +1,579 @@
+Sender: LSF System <srv-lsf@bmi-460g6-04>
+Subject: Job 257891: <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 32000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load python/2.7.5; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams --output /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams --platform RNASeq --species Hs --expname patient2> Done
+
+Job <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 32000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load python/2.7.5; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams --output /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams --platform RNASeq --species Hs --expname patient2> was submitted from host <bmiclusterp1> by user <saljh8> in cluster <BMICluster>.
+Job was executed on host(s) <4*bmi-460g6-04>, in queue <normal>, as user <saljh8> in cluster <BMICluster>.
+                            <4*bmi-460g6-20>
+                            <4*bmi-460g6-34>
+                            <4*bmi-460g6-21>
+</users/saljh8> was used as the home directory.
+</users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams> was used as the working directory.
+Started at Fri Sep 11 16:31:03 2015
+Results reported at Fri Sep 11 21:08:46 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -L /bin/bash
+#BSUB -W 48:00
+#BSUB -n 16
+#BSUB -R "span[ptile=4]"
+#BSUB -M 32000
+#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err
+#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out
+
+module load python/2.7.5
+
+python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams --output /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams --platform RNASeq --species Hs --expname patient2
+
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :  36375.56 sec.
+    Max Memory :      6794 MB
+    Max Swap   :      7580 MB
+
+    Max Processes  :        13
+    Max Threads    :        14
+
+The output (if any) follows:
+
+Running commandline options
+
+Arguments input: ['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--bedDir', '/users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams', '--output', '/users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams', '--platform', 'RNASeq', '--species', 'Hs', '--expname', 'patient2'] 
+
+AltAnalyze inferred a groups and comps file from the CEL file names.
+Beginning AltAnalyze Analysis... Format: non-log
+AltAnalyze version 2.0.9 - Expression Analysis Parameters Being Used...
+	database: EnsMart72
+	species: Hs
+	method: RNASeq
+	manufacturer: RNASeq
+	probability_statistic: moderated t-test
+	constitutive_source: Ensembl
+	dabg_p: 1.0
+	junction expression threshold: 2.0
+	exon_exp_threshold: 5.0
+	gene_exp_threshold: 10.0
+	exon_rpkm_threshold: 0.5
+	gene_rpkm_threshold: 1.0
+	exclude low expressing exons for RPKM: no
+	avg_all_for_ss: yes
+	expression_data_format: non-log
+	include_raw_data: yes
+	run_from_scratch: Process RNA-seq reads
+	perform_alt_analysis: yes
+	calculate_gene_expression_using: core
+Alternative Exon Analysis Parameters Being Used...
+	analysis_method: ASPIRE
+	p_threshold: 0.05
+	filter_data_types: all
+	alt_exon_fold_variable: 0.2
+	gene_expression_cutoff: 10.0
+	remove_intronic_junctions: yes
+	avg_all_for_ss: yes
+	permute_p_threshold: 0.05
+	perform_permutation_analysis: no
+	export_NI_values: yes
+	run_MiDAS: no
+	use_direct_domain_alignments_only: inferred comparison
+	microRNA_prediction_method: any
+	analyze_all_conditions: pairwise
+	filter_for_AS: no
+	run_GOElite: run-immediately
+Running command line mode: yes
+multiThreading: True
+Writing AltDatabase/Hs/RNASeq/Hs_Ensembl_exons.txt
+Processing exon/junction coordinates sequentially by chromosome
+Note: this step is time intensive (can be hours) and no print statements may post for a while
+Using 8 processes
+Read exon and junction mapping complete
+...RNA-seq import completed in 4312 seconds
+
+RPKM normalization complete
+Imported Junction Statistics:
+     79684 junctions found in Ensembl/UCSC and 23583 are novel
+     806 trans-splicing junctions found (two aligning Ensembl genes)
+     2972 junctions where neither splice-site aligned to a gene
+Imported Exon Statistics:
+     249 exons where neither aligned to a gene
+User databases and read counts written to: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionInput
+Beginning to Process the Hs RNASeq dataset
+21168 Ensembl GO/pathway annotations imported in 2 seconds
+63193 constitutive genes and 1002930 junction IDs imported out of 1002931 lines.
+63193 constitutive genes and 1180745 junction IDs imported out of 554775 lines.
+Exon data imported in 7 seconds
+Reorganizing expression data into comparison groups for export to down-stream splicing analysis software
+Exon data imported in 295 seconds
+Exon data imported in 0 seconds
+Pairwise comparisons for AltAnalyze exported...
+1180745 junction IDs after detection RPKM and read count filtering.
+Exon data imported in 3 seconds
+Exon data imported in 5 seconds
+248727 junction IDs imported with expression values
+484438 junction IDs after detection RPKM and read count filtering.
+Exon data imported in 0 seconds
+Steady-state data exported to /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionInput/exp.patient2-steady-state.txt
+Reorganizing expression data into comparison groups for export to down-stream splicing analysis software
+Exon data imported in 298 seconds
+Exon data imported in 15 seconds
+Pairwise comparisons for AltAnalyze exported...
+Reorganizing expression data into comparison groups for export to down-stream splicing analysis software
+Exon data imported in 374 seconds
+Exon data imported in 20 seconds
+Pairwise comparisons for AltAnalyze exported...
+Processing the expression file: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionInput/counts.patient2-steady-state.txt
+26208 IDs imported...beginning to calculate statistics for all group comparisons
+Processing the expression file: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionInput/exp.patient2-steady-state.txt
+26208 IDs imported...beginning to calculate statistics for all group comparisons
+Exported GO-Elite input files...
+* * * * * * * * * * Ensembl-Affymetrix relationships imported
+63194 Ensembl Biotypes and 9 housekeeping genes.
+Full Dataset with statistics: DATASET-patient2.txt written
+Exported GO-Elite input files...
+
+/users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams///ExpressionOutput/DATASET-patient2.txt
+1713 genes with data to export...
+Export inputs for clustering to: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionOutput/Clustering/SampleLogFolds-patient2.txt
+Export summary gene expression results to: SUMMARY-patient2.txt
+Using fastcluster instead of scipy hierarchical cluster
+Building quality control graphs...
+Dataset import in 30.6 seconds
+Unable to generate QC plots:
+Traceback (most recent call last):
+  File "/data/salomonis1/software/AltAnalyze/ExpressionBuilder.py", line 1469, in visualizeQCPlots
+    graphic_links = QC.outputRNASeqQC(counts_input_dir)
+  File "/data/salomonis1/software/AltAnalyze/QC.py", line 863, in outputRNASeqQC
+    plotExpressionDistribution(qc_db,dataset_name)
+  File "/data/salomonis1/software/AltAnalyze/QC.py", line 733, in plotExpressionDistribution
+    pylab.figure()
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/pyplot.py", line 423, in figure
+    **kwargs)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 79, in new_figure_manager
+    return new_figure_manager_given_figure(num, figure)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 87, in new_figure_manager_given_figure
+    window = Tk.Tk()
+  File "/usr/local/python/2.7.5/lib/python2.7/lib-tk/Tkinter.py", line 1745, in __init__
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+TclError: no display name and no $DISPLAY environment variable
+
+Biological data type to examine: protein_coding
+Importing the tissue compedium database: Hs_exon_tissue-specific_protein_coding.txt
+3946 genes in the tissue compendium database
+importing: exp.patient2-steady-state.txt
+2427 matching genes in the dataset and tissue compendium database
+Beginning LineageProfiler analysis
+* * * * * * * * * * * * * * * * Correlation analysis finished
+LineageCorrelations-patient2-protein_coding-exon.txt exported...
+Importing the tissue compedium database: Hs_gene_tissue-specific_protein_coding.txt
+2776 genes in the tissue compendium database
+importing: exp.patient2-steady-state.txt
+1553 matching genes in the dataset and tissue compendium database
+Beginning LineageProfiler analysis
+* * * * * * * * * * * * * * * * * * Correlation analysis finished
+LineageCorrelations-patient2-protein_coding-gene.txt exported...
+Importing the tissue compedium database: Hs_3'array_tissue-specific_protein_coding.txt
+4261 genes in the tissue compendium database
+importing: exp.patient2-steady-state.txt
+3042 matching genes in the dataset and tissue compendium database
+Beginning LineageProfiler analysis
+* * * * * * * * * * * * * * * Correlation analysis finished
+LineageCorrelations-patient2-protein_coding-3'array.txt exported...
+249 rows and 79 columns imported for LineageCorrelations-patient2-protein_coding-zscores in 0.0 seconds...
+LineageProfiler analysis completed in 23.1 seconds
+Export inputs for clustering to: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams///ExpressionOutput/Clustering/LineageCorrelations-patient2-protein_coding-zscores-groups.txt
+249 rows and 79 columns imported for LineageCorrelations-patient2-protein_coding-zscores in 0.0 seconds...
+max allowed cluster size: 7000
+Performing hiearchical clustering using cosine for columns and cosine for rows
+Error using cosine ... trying euclidean instead
+Performing hiearchical clustering using cosine for columns and euclidean for rows
+Traceback (most recent call last):
+  File "/data/salomonis1/software/AltAnalyze/clustering.py", line 1749, in runHierarchicalClustering
+    contrast=contrast,allowAxisCompression=allowAxisCompression,Normalize=Normalize)
+  File "/data/salomonis1/software/AltAnalyze/clustering.py", line 119, in heatmap
+    pylab.figure() ### Add this to avoid a Tkinter bug after running MarkerFinder (not sure why it is needed) - creates a second empty window when display == True
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/pyplot.py", line 423, in figure
+    **kwargs)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 79, in new_figure_manager
+    return new_figure_manager_given_figure(num, figure)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 87, in new_figure_manager_given_figure
+    window = Tk.Tk()
+  File "/usr/local/python/2.7.5/lib/python2.7/lib-tk/Tkinter.py", line 1745, in __init__
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+TclError: no display name and no $DISPLAY environment variable
+
+Unable to generate cluster due to dataset incompatibilty.
+38 rows and 12 columns imported for LineageCorrelations-patient2-protein_coding-zscores-groups_filtered in 0.0 seconds...
+max allowed cluster size: 7000
+Performing hiearchical clustering using cosine for columns and cosine for rows
+Error using cosine ... trying euclidean instead
+Performing hiearchical clustering using cosine for columns and euclidean for rows
+Traceback (most recent call last):
+  File "/data/salomonis1/software/AltAnalyze/clustering.py", line 1749, in runHierarchicalClustering
+    contrast=contrast,allowAxisCompression=allowAxisCompression,Normalize=Normalize)
+  File "/data/salomonis1/software/AltAnalyze/clustering.py", line 119, in heatmap
+    pylab.figure() ### Add this to avoid a Tkinter bug after running MarkerFinder (not sure why it is needed) - creates a second empty window when display == True
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/pyplot.py", line 423, in figure
+    **kwargs)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 79, in new_figure_manager
+    return new_figure_manager_given_figure(num, figure)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 87, in new_figure_manager_given_figure
+    window = Tk.Tk()
+  File "/usr/local/python/2.7.5/lib/python2.7/lib-tk/Tkinter.py", line 1745, in __init__
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+TclError: no display name and no $DISPLAY environment variable
+
+Unable to generate cluster due to dataset incompatibilty.
+Coloring LineageMap profiles using WikiPathways webservice...
+Traceback (most recent call last):
+  File "/data/salomonis1/software/AltAnalyze/ExpressionBuilder.py", line 1396, in performLineageProfiler
+    graphic_links = WikiPathways_webservice.viewLineageProfilerResults(export_path,graphic_links)
+  File "/data/salomonis1/software/AltAnalyze/WikiPathways_webservice.py", line 199, in viewLineageProfilerResults
+    pathway_db = getPathwayAs(pathway_db,'Hs','Ensembl')
+  File "/data/salomonis1/software/AltAnalyze/WikiPathways_webservice.py", line 64, in getPathwayAs
+    wp_id_data = client.service.getPathwayAs(fileType = file_type,pwId = wpid, revision = 0)
+NameError: global name 'client' is not defined
+
+
+Exporting exon-level Normalized Intensity file to: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams///AltResults/RawSpliceData/Hs/splicing-index/patient2.txt
+26208 genes with data imported
+491581 found with 374612 entries normalized.
+547631 exon/junction IDs stored as instances of SplicingAnnotationData in memory
+0 genes not viewed as constitutive as a result of filtering exon/junction IDs based on splicing evidence, added back
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN701
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN701.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN703_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN702_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN706
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN706.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN708_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN711_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN705_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN702
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN702.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN701_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN708
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN708.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN703
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN703.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN712
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN712.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN707
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN712_vs_run1096_lane12_read1_indexN707.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN710
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN706_vs_run1096_lane12_read1_indexN710.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN709
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN707_vs_run1096_lane12_read1_indexN709.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN711
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN711.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN704
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN710_vs_run1096_lane12_read1_indexN704.ExpCutoff-2.0_average.txt
+Begining to filter Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN705
+...Exporting /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams//AltExpression/RNASeq/Hs/Hs_RNASeq_run1096_lane12_read1_indexN704_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average.txt
+Export 26208 rows to: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionOutput//AVERAGE-patient2.txt
+Filtered columns printed to: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionInput/exp.patient2-steady-state-output.txt
+* * * * * * * * * * * * * [True, '/users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionInput/exp.patient2-steady-state.txt', 'Housekeeping']
+
+exported: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionOutput/MarkerFinder/MarkerGenes-ReplicateBased.txt
+
+/users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams/ExpressionOutput/DATASET-patient2.txt
+720 genes with data to export...
+Export inputs for clustering to: /users/saljh8/salomonis1/projects/Grimes/Grimes_AML/bams///ExpressionOutput/MarkerFinder/Clustering/MarkerGenes_correlations-ReplicateBased.txt
+720 rows and 79 columns imported for MarkerGenes_correlations-ReplicateBased in 0.1 seconds...
+max allowed cluster size: 20000
+Performing hiearchical clustering using euclidean for columns and cosine for rows
+Error using cosine ... trying euclidean instead
+Performing hiearchical clustering using euclidean for columns and euclidean for rows
+Traceback (most recent call last):
+  File "/data/salomonis1/software/AltAnalyze/clustering.py", line 1749, in runHierarchicalClustering
+    contrast=contrast,allowAxisCompression=allowAxisCompression,Normalize=Normalize)
+  File "/data/salomonis1/software/AltAnalyze/clustering.py", line 119, in heatmap
+    pylab.figure() ### Add this to avoid a Tkinter bug after running MarkerFinder (not sure why it is needed) - creates a second empty window when display == True
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/pyplot.py", line 423, in figure
+    **kwargs)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 79, in new_figure_manager
+    return new_figure_manager_given_figure(num, figure)
+  File "/usr/local/python/2.7.5/lib/python2.7/site-packages/matplotlib-1.3.1-py2.7-linux-x86_64.egg/matplotlib/backends/backend_tkagg.py", line 87, in new_figure_manager_given_figure
+    window = Tk.Tk()
+  File "/usr/local/python/2.7.5/lib/python2.7/lib-tk/Tkinter.py", line 1745, in __init__
+    self.tk = _tkinter.create(screenName, baseName, className, interactive, wantobjects, useTk, sync, use)
+TclError: no display name and no $DISPLAY environment variable
+
+Unable to generate cluster due to dataset incompatibilty.
+Importing GO-Elite pathway/GO annotations
+21168 Ensembl GO/pathway annotations imported in 2 seconds
+410242 exon/junction IDs stored as instances of SplicingAnnotationData in memory
+0 genes not viewed as constitutive as a result of filtering exon/junction IDs based on splicing evidence, added back
+Beginning to process Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average
+83677 sequence identifiers imported out of 102456
+Number of Genes with Examined Splice Events: 7588
+0 exon/junction IDs excluded prior to  analysis... predicted not detected
+Intensity normalization complete...
+4637 genes undergoing analysis for alternative splicing/transcription
+Beginning to run ASPIRE algorithm on Hs_RNASeq_run1096_lane12_read1_indexN709_vs_run1096_lane12_read1_indexN705.ExpCutoff-2.0_average data
+Number of exon-events analyzed: 1284
+Number of exon-events excluded: 7422
+filtered ASPIRE scores: 0
+0 alternative events after subsequent filtering (optional)
+410242 exon/junction IDs stored as instances of SplicingAnnotationData in memory
+0 genes not viewed as constitutive as a result of filtering exon/junction IDs based on splicing evidence, added back
+Traceback (most recent call last):
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 7399, in runCommandLineVersion
+    commandLineRun()
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 7369, in commandLineRun
+    AltAnalyzeMain(expr_var, alt_var, goelite_var, additional_var, exp_file_location_db,None)
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 5548, in AltAnalyzeMain
+    analysis_summary = RunAltAnalyze() ### Only run if analysis methods is specified (only available for RNA-Seq and junction analyses)
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 4426, in RunAltAnalyze
+    summary_results_db, summary_results_db2, aspire_output, aspire_output_gene, number_events_analyzed = splicingAnalysisAlgorithms(nonlog_NI_db,adj_fold_dbase,dataset_name,gene_expression_diff_db,exon_db,ex_db,si_db,dataset_dir)
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 1818, in splicingAnalysisAlgorithms
+    microRNA_full_exon_db,microRNA_count_db,gene_microRNA_denom = ExonAnalyze_module.importmicroRNADataExon(species,array_type,exon_db,microRNA_prediction_method,explicit_data_type,root_dir)
+  File "/data/salomonis1/software/AltAnalyze/ExonAnalyze_module.py", line 138, in importmicroRNADataExon
+    for line in open(fn,'rU').xreadlines():
+IOError: [Errno 2] No such file or directory: '/data/salomonis1/software/AltAnalyze/AltDatabase/EnsMart72/Hs/RNASeq/Hs_probeset_microRNAs_any.txt'
+
+
+
+PS:
+
+Read file </data/salomonis1/software/AltAnalyze/logs/257891.err> for stderr output of this job.
+

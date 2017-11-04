@@ -1,0 +1,120 @@
+Sender: LSF System <srv-lsf@bmi-380g8-02>
+Subject: Job 361583: <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 16000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python/2.7.6; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir /data/salomonis1/projects/Grimes/GEC_14002 --output /data/salomonis1/projects/Grimes/GEC_14002 --platform RNASeq --species Mm --expname GEC_14002> Done
+
+Job <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 16000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python/2.7.6; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir /data/salomonis1/projects/Grimes/GEC_14002 --output /data/salomonis1/projects/Grimes/GEC_14002 --platform RNASeq --species Mm --expname GEC_14002> was submitted from host <bmiclusterp1> by user <saljh8> in cluster <BMICluster>.
+Job was executed on host(s) <4*bmi-380g8-02>, in queue <normal>, as user <saljh8> in cluster <BMICluster>.
+                            <4*bmi-460g6-23>
+                            <4*bmi-460g6-10>
+                            <4*bmi-460g6-11>
+</users/saljh8> was used as the home directory.
+</data/salomonis1/software> was used as the working directory.
+Started at Wed Nov  5 15:58:02 2014
+Results reported at Wed Nov  5 16:00:22 2014
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -L /bin/bash
+#BSUB -W 48:00
+#BSUB -n 16
+#BSUB -R "span[ptile=4]"
+#BSUB -M 16000
+#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err
+#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out
+
+module load samtools python/2.7.6
+
+python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir /data/salomonis1/projects/Grimes/GEC_14002 --output /data/salomonis1/projects/Grimes/GEC_14002 --platform RNASeq --species Mm --expname GEC_14002
+
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :    519.07 sec.
+    Max Memory :      2204 MB
+    Max Swap   :     10427 MB
+
+    Max Processes  :        20
+    Max Threads    :        21
+
+The output (if any) follows:
+
+
+Pmw or Tkinter not found... Tkinter print out not available
+
+Pmw or Tkinter not found... Tkinter print out not available
+
+Pmw or Tkinter not found... Tkinter print out not available
+Running commandline options
+
+Arguments input: ['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--bedDir', '/data/salomonis1/projects/Grimes/GEC_14002', '--output', '/data/salomonis1/projects/Grimes/GEC_14002', '--platform', 'RNASeq', '--species', 'Mm', '--expname', 'GEC_14002'] 
+
+Beginning AltAnalyze Analysis... Format: non-log
+AltAnalyze version 2.0.9 - Expression Analysis Parameters Being Used...
+	database: EnsMart72
+	species: Mm
+	method: RNASeq
+	manufacturer: RNASeq
+	probability_statistic: moderated t-test
+	constitutive_source: Ensembl
+	dabg_p: 1.0
+	junction expression threshold: 2.0
+	exon_exp_threshold: 5.0
+	gene_exp_threshold: 10.0
+	exon_rpkm_threshold: 0.5
+	gene_rpkm_threshold: 1.0
+	exclude low expressing exons for RPKM: no
+	avg_all_for_ss: yes
+	expression_data_format: non-log
+	include_raw_data: yes
+	run_from_scratch: Process RNA-seq reads
+	perform_alt_analysis: yes
+	calculate_gene_expression_using: core
+Alternative Exon Analysis Parameters Being Used...
+	analysis_method: ASPIRE
+	p_threshold: 0.05
+	filter_data_types: all
+	alt_exon_fold_variable: 0.2
+	gene_expression_cutoff: 10.0
+	remove_intronic_junctions: yes
+	avg_all_for_ss: yes
+	permute_p_threshold: 0.05
+	perform_permutation_analysis: no
+	export_NI_values: yes
+	run_MiDAS: no
+	use_direct_domain_alignments_only: inferred comparison
+	microRNA_prediction_method: any
+	analyze_all_conditions: pairwise
+	filter_for_AS: no
+	run_GOElite: run-immediately
+Running command line mode: yes
+multiThreading: True
+Writing AltDatabase/Mm/RNASeq/Mm_Ensembl_exons.txt
+Processing exon/junction coordinates sequentially by chromosome
+Note: this step is time intensive (can be hours) and no print statements may post for a while
+Using 16 processes
+Read exon and junction mapping complete
+...RNA-seq import completed in 122 seconds
+
+RPKM normalization complete
+Imported Junction Statistics:
+     105341 junctions found in Ensembl/UCSC and 22449 are novel
+     744 trans-splicing junctions found (two aligning Ensembl genes)
+     3839 junctions where neither splice-site aligned to a gene
+User databases and read counts written to: /data/salomonis1/projects/Grimes/GEC_14002/ExpressionInput
+Beginning to Process the Mm RNASeq dataset
+22076 Ensembl GO/pathway annotations imported in 1 seconds
+WARNING!!! At least one sample-ID listed in the "groups." file (e.g.,d0_10B.bed)
+ is not in the sample "exp." file. See the new file "arrays." with all "exp." header names
+and correct "groups."
+Critical Error - Exiting Program!!!
+
+
+PS:
+
+Read file </data/salomonis1/software/AltAnalyze/logs/361583.err> for stderr output of this job.
+

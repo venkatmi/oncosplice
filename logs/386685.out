@@ -1,0 +1,134 @@
+Sender: LSF System <srv-lsf@bmi-460g9-02>
+Subject: Job 386685: <#BSUB -L /bin/bash;#BSUB -W 72:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 100000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform RNASeq --bedDir /data/salomonis2/Leucegene_project/AltAnalyze_run --output /data/salomonis2/Leucegene_project/AltAnalyze_run --expname Leucegene --geneRPKM 1 --rawexp 5 --exonExp 5 --GEcutoff 10> Exited
+
+Job <#BSUB -L /bin/bash;#BSUB -W 72:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 100000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform RNASeq --bedDir /data/salomonis2/Leucegene_project/AltAnalyze_run --output /data/salomonis2/Leucegene_project/AltAnalyze_run --expname Leucegene --geneRPKM 1 --rawexp 5 --exonExp 5 --GEcutoff 10> was submitted from host <bmiclusterp1> by user <cherr5> in cluster <BMICluster>.
+Job was executed on host(s) <4*bmi-460g9-02>, in queue <normal>, as user <cherr5> in cluster <BMICluster>.
+                            <4*bmi-460g9-12>
+                            <4*bmi-460g9-01>
+                            <4*bmi-460g9-13>
+</users/cherr5> was used as the home directory.
+</data/salomonis2/Leucegene_project/AltAnalyze_run> was used as the working directory.
+Started at Wed Jul 13 10:25:30 2016
+Results reported at Thu Jul 14 15:50:19 2016
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -L /bin/bash
+#BSUB -W 72:00
+#BSUB -n 16
+#BSUB -R "span[ptile=4]"
+#BSUB -M 100000
+#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err
+#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out
+
+module load samtools python
+
+python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform RNASeq --bedDir /data/salomonis2/Leucegene_project/AltAnalyze_run --output /data/salomonis2/Leucegene_project/AltAnalyze_run --expname Leucegene --geneRPKM 1 --rawexp 5 --exonExp 5 --GEcutoff 10
+
+------------------------------------------------------------
+
+TERM_OWNER: job killed by owner.
+Exited with exit code 143.
+
+Resource usage summary:
+
+    CPU time   : 113885.00 sec.
+    Max Memory :     89540 MB
+    Max Swap   :     90371 MB
+
+    Max Processes  :        30
+    Max Threads    :        31
+
+The output (if any) follows:
+
+3 [['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--species', 'Hs', '--platform', 'RNASeq', '--bedDir', '/data/salomonis2/Leucegene_project/AltAnalyze_run', '--output', '/data/salomonis2/Leucegene_project/AltAnalyze_run', '--expname', 'Leucegene', '--geneRPKM', '1', '--rawexp', '5', '--exonExp', '5', '--GEcutoff', '10']] Running commandline options
+
+Arguments input: ['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--species', 'Hs', '--platform', 'RNASeq', '--bedDir', '/data/salomonis2/Leucegene_project/AltAnalyze_run', '--output', '/data/salomonis2/Leucegene_project/AltAnalyze_run', '--expname', 'Leucegene', '--geneRPKM', '1', '--rawexp', '5', '--exonExp', '5', '--GEcutoff', '10'] 
+
+Beginning AltAnalyze Analysis... Format: non-log
+AltAnalyze version 2.0.9.4 - Expression Analysis Parameters Being Used...
+	database: EnsMart72
+	species: Hs
+	method: RNASeq
+	manufacturer: RNASeq
+	probability_statistic: moderated t-test
+	constitutive_source: Ensembl
+	dabg_p: 1.0
+	junction expression threshold: 5.0
+	exon_exp_threshold: 5.0
+	gene_exp_threshold: 200.0
+	exon_rpkm_threshold: 0.5
+	gene_rpkm_threshold: 1.0
+	exclude low expressing exons for RPKM: no
+	avg_all_for_ss: yes
+	expression_data_format: non-log
+	include_raw_data: yes
+	run_from_scratch: Process RNA-seq reads
+	perform_alt_analysis: yes
+	calculate_gene_expression_using: core
+Alternative Exon Analysis Parameters Being Used...
+	analysis_method: ASPIRE
+	p_threshold: 0.05
+	filter_data_types: all
+	alt_exon_fold_variable: 0.2
+	gene_expression_cutoff: 10.0
+	remove_intronic_junctions: no
+	avg_all_for_ss: yes
+	permute_p_threshold: 0.05
+	perform_permutation_analysis: no
+	export_NI_values: yes
+	run_MiDAS: no
+	use_direct_domain_alignments_only: inferred comparison
+	microRNA_prediction_method: any
+	analyze_all_conditions: pairwise
+	filter_for_AS: no
+	run_GOElite: run-immediately
+Running command line mode: yes
+multiThreading: True
+Writing AltDatabase/Hs/RNASeq/Hs_Ensembl_exons.txt
+Processing exon/junction coordinates sequentially by chromosome
+Note: this step is time intensive (can be hours) and no print statements may post for a while
+Using 32 processes
+Read exon and junction mapping complete
+...RNA-seq import completed in 469 seconds
+
+RPKM normalization complete
+Imported Junction Statistics:
+     217556 junctions found in Ensembl/UCSC and 288701 are novel
+     26092 trans-splicing junctions found (two aligning Ensembl genes)
+     43784 junctions where neither splice-site aligned to a gene
+User databases and read counts written to: /data/salomonis2/Leucegene_project/AltAnalyze_run/ExpressionInput
+Beginning to Process the Hs RNASeq dataset
+21168 Ensembl GO/pathway annotations imported in 1 seconds
+63193 constitutive genes and 1002930 junction IDs imported out of 1002931 lines.
+63193 constitutive genes and 1528490 junction IDs imported out of 525667 lines.
+Exon data imported in 4 seconds
+Reorganizing expression data into comparison groups for export to down-stream splicing analysis software
+Exon data imported in 4672 seconds
+Exon data imported in 202 seconds
+Pairwise comparisons for AltAnalyze exported...
+1528490 junction IDs after detection RPKM and read count filtering.
+Exon data imported in 3 seconds
+Exon data imported in 5 seconds
+441563 junction IDs imported with expression values
+462367 junction IDs after detection RPKM and read count filtering.
+Exon data imported in 1 seconds
+Steady-state data exported to /data/salomonis2/Leucegene_project/AltAnalyze_run/ExpressionInput/exp.Leucegene-steady-state.txt
+Reorganizing expression data into comparison groups for export to down-stream splicing analysis software
+Exon data imported in 4692 seconds
+Exon data imported in 202 seconds
+Pairwise comparisons for AltAnalyze exported...
+Reorganizing expression data into comparison groups for export to down-stream splicing analysis software
+Exon data imported in 4980 seconds
+Exon data imported in 216 seconds
+Pairwise comparisons for AltAnalyze exported...
+Processing the expression file: /data/salomonis2/Leucegene_project/AltAnalyze_run/ExpressionInput/counts.Leucegene-steady-state.txt
+20731 IDs imported...beginning to calculate statistics for all group comparisons
+
+
+PS:
+
+Read file </data/salomonis1/software/AltAnalyze/logs/386685.err> for stderr output of this job.
+

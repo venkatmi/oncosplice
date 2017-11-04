@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 7939, in <module>
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 7853, in runCommandLineVersion
+  File "/data/salomonis1/software/AltAnalyze/AltAnalyze.py", line 7926, in write
+IOError: [Errno 23] Too many open files in system: '/data/salomonis2/SRP042161_GBM/bams/AltAnalyze_report-20160712-125017.log'

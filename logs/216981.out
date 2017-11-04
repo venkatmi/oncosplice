@@ -1,0 +1,57 @@
+Sender: LSF System <srv-lsf@bmi-460g8-22>
+Subject: Job 216981: <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 16000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load python/2.7.5; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir pwd --output pwd --platform RNASeq --species Mm --expname GG1> Done
+
+Job <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 16000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load python/2.7.5; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir pwd --output pwd --platform RNASeq --species Mm --expname GG1> was submitted from host <bmiclusterp1> by user <kuln3v> in cluster <BMICluster>.
+Job was executed on host(s) <4*bmi-460g8-22>, in queue <normal>, as user <kuln3v> in cluster <BMICluster>.
+                            <4*bmi-460g8-19>
+                            <4*bmi-460g7-03>
+                            <4*bmi-460g8-11>
+</users/kuln3v> was used as the home directory.
+</data/salomonis1/projects/Grimes/050515_37_IG2_11_GG1/bams> was used as the working directory.
+Started at Sun Sep  6 21:23:12 2015
+Results reported at Sun Sep  6 21:23:50 2015
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -L /bin/bash
+#BSUB -W 48:00
+#BSUB -n 16
+#BSUB -R "span[ptile=4]"
+#BSUB -M 16000
+#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err
+#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out
+
+module load python/2.7.5
+
+python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --bedDir pwd --output pwd --platform RNASeq --species Mm --expname GG1
+
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time   :      6.48 sec.
+    Max Memory :        49 MB
+    Max Swap   :       686 MB
+
+    Max Processes  :         5
+    Max Threads    :         6
+
+The output (if any) follows:
+
+Running commandline options
+
+Arguments input: ['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--bedDir', 'pwd', '--output', 'pwd', '--platform', 'RNASeq', '--species', 'Mm', '--expname', 'GG1'] 
+
+[Errno 2] No such file or directory: '/data/salomonis1/software/AltAnalyze/pwd/AltAnalyze_report-20150906-212350.log'
+Please designate an output directory before proceeding (e.g., --output "C:\RNASeq)
+
+
+PS:
+
+Read file </data/salomonis1/software/AltAnalyze/logs/216981.err> for stderr output of this job.
+

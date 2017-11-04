@@ -1,0 +1,92 @@
+Sender: LSF System <srv-lsf@bmi-460g7-01>
+Subject: Job 447230: <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 16000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform exon --celdir /data/salomonis2/Matthew_weirauch/GSE-samples --groupdir /data/salomonis2/Matthew_weirauch/GSE-samples/groups.EBV.txt --output /data/salomonis2/Matthew_weirauch/GSE-samples/AltAnalyze_output --expname EBV> Exited
+
+Job <#BSUB -L /bin/bash;#BSUB -W 48:00;#BSUB -n 16;#BSUB -R "span[ptile=4]";#BSUB -M 16000;#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err;#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out; module load samtools python; python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform exon --celdir /data/salomonis2/Matthew_weirauch/GSE-samples --groupdir /data/salomonis2/Matthew_weirauch/GSE-samples/groups.EBV.txt --output /data/salomonis2/Matthew_weirauch/GSE-samples/AltAnalyze_output --expname EBV> was submitted from host <bmiclusterp1> by user <venz6v> in cluster <BMICluster>.
+Job was executed on host(s) <4*bmi-460g7-01>, in queue <normal>, as user <venz6v> in cluster <BMICluster>.
+                            <4*bmi-460g8-11>
+                            <4*bmi-460g8-05>
+                            <4*bmi-460g8-12>
+</users/venz6v> was used as the home directory.
+</data/salomonis2/Matthew_weirauch/GSE-samples> was used as the working directory.
+Started at Mon Aug  8 15:29:12 2016
+Results reported at Wed Aug 10 13:25:26 2016
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#BSUB -L /bin/bash
+#BSUB -W 48:00
+#BSUB -n 16
+#BSUB -R "span[ptile=4]"
+#BSUB -M 16000
+#BSUB -e /data/salomonis1/software/AltAnalyze/logs/%J.err
+#BSUB -o /data/salomonis1/software/AltAnalyze/logs/%J.out
+
+module load samtools python
+
+python /data/salomonis1/software/AltAnalyze/AltAnalyze.py --species Hs --platform exon --celdir /data/salomonis2/Matthew_weirauch/GSE-samples --groupdir /data/salomonis2/Matthew_weirauch/GSE-samples/groups.EBV.txt --output /data/salomonis2/Matthew_weirauch/GSE-samples/AltAnalyze_output --expname EBV
+
+
+------------------------------------------------------------
+
+TERM_OWNER: job killed by owner.
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time   : 141742.08 sec.
+    Max Memory :      1476 MB
+    Max Swap   :      2455 MB
+
+    Max Processes  :         6
+    Max Threads    :         7
+
+The output (if any) follows:
+
+3 [['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--species', 'Hs', '--platform', 'exon', '--celdir', '/data/salomonis2/Matthew_weirauch/GSE-samples', '--groupdir', '/data/salomonis2/Matthew_weirauch/GSE-samples/groups.EBV.txt', '--output', '/data/salomonis2/Matthew_weirauch/GSE-samples/AltAnalyze_output', '--expname', 'EBV']] Running commandline options
+
+Arguments input: ['/data/salomonis1/software/AltAnalyze/AltAnalyze.py', '--species', 'Hs', '--platform', 'exon', '--celdir', '/data/salomonis2/Matthew_weirauch/GSE-samples', '--groupdir', '/data/salomonis2/Matthew_weirauch/GSE-samples/groups.EBV.txt', '--output', '/data/salomonis2/Matthew_weirauch/GSE-samples/AltAnalyze_output', '--expname', 'EBV'] 
+
+Beginning AltAnalyze Analysis... Format: log
+AltAnalyze version 2.0.9.4 - Expression Analysis Parameters Being Used...
+	database: EnsMart72
+	species: Hs
+	method: exon
+	manufacturer: Affymetrix
+	probability_statistic: moderated t-test
+	constitutive_source: Ensembl
+	dabg_p: 0.05
+	raw_expression_threshold: 1.0
+	avg_all_for_ss: no
+	expression_data_format: log
+	include_raw_data: yes
+	run_from_scratch: Process CEL files
+	perform_alt_analysis: yes
+	calculate_gene_expression_using: constitutive
+Alternative Exon Analysis Parameters Being Used...
+	analysis_method: splicing-index
+	p_threshold: 0.05
+	filter_data_types: core
+	alt_exon_fold_variable: 2.0
+	gene_expression_cutoff: 3.0
+	remove_intronic_junctions: NA
+	avg_all_for_ss: no
+	permute_p_threshold: NA
+	perform_permutation_analysis: NA
+	export_NI_values: yes
+	run_MiDAS: yes
+	use_direct_domain_alignments_only: inferred comparison
+	microRNA_prediction_method: any
+	analyze_all_conditions: pairwise
+	filter_for_AS: no
+	run_GOElite: run-immediately
+Running command line mode: yes
+Processor architecture set = 64bit x86_64
+Beginning probeset summarization of input CEL files with Affymetrix Power Tools (APT)...
+
+
+PS:
+
+Read file </data/salomonis1/software/AltAnalyze/logs/447230.err> for stderr output of this job.
+

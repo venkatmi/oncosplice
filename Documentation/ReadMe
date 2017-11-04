@@ -1,0 +1,4 @@
+AltAnalyze processes RNA-Seq or relatively raw microarray to evaluate differential gene and alternative exon expression. Following alternative exon analysis, AltAnalyze determines how these changes may affect protein sequence, domain composition, and microRNA targeting. Operating system-specific binaries are provided for selected configurations and the source-code version can be run from any operating system with Python language support (http://python.org). 
+
+Please see the user manual PDF in the directory Documentation or http://code.google.com/p/altanalyze/wiki/Installation for more information and installation directions. 
+

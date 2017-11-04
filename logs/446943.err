@@ -1,0 +1,25 @@
+Read 2650 cel files from: cel_files.txt
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736476.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736476.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736477.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736477.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736478.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736478.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736479.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736479.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736480.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736480.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736481.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736481.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736482.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736482.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736483.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736483.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736484.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736484.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736485.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736485.CEL is: 'HG-U133_Plus_2'
+Wrong number of cells in channel 0: Expecting: 6553600 and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736486.CEL has: 1354896
+Wrong CEL ChipType: expecting: 'HuEx-1_0-st-v2' and /data/salomonis2/Matthew_weirauch/GSE-samples/GSM736486.CEL is: 'HG-U133_Plus_2'
+
+FATAL ERROR:Different chiptypes or probe counts found. Only first 10 errors printed, see log for rest.
