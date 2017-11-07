@@ -1,4 +1,4 @@
-**Oncosplice**
+# Oncosplice # 
 
 Unsupervised Detection of Splicing Subtypes from RNA-Seq
 
@@ -6,7 +6,7 @@ Unsupervised Detection of Splicing Subtypes from RNA-Seq
 
 Oncosplice is an automated pipeline to identify sample subtypes in an unsupervised manner for splicing data. It is mainly written in python and makes some calls to R scripts. It usually takes input files generated from the AltAnalyze splicing pipeline. 
 
-***How to run the workflow***
+ # How to run the workflow # 
 
 ```javascript
 python CompleteWorkflow.py -—Inputfile psifile.txt —-EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt
