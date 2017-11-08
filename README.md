@@ -19,9 +19,10 @@ Oncosplice is an automated pipeline to identify sample subtypes in an unsupervis
 ```javascript
 python MetaSpliceCompleteWorkflow.py —-EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt
 ```
-
  # Generating the input files #
 
-The input to this workflow can be obtained through AltAnalyze (http://www.altanalyze.org). The option to run the Oncosplice pipeline directly from BAM files will be added in the release version of this pipeline. Using the GUI, users can enter the path where their RNA-Seq BAMs are stored and run the tool with default parameters. The input PSI results file can be found in the folder *YourExpDirectory*/AltResults/AlternateOutput with the name “Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt” in the folder.
+The input to this workflow can be obtained through AltAnalyze version 2.1.0 or greater (http://www.altanalyze.org) using the default analysis workflow described [http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm](here). The option to run the Oncosplice pipeline directly from RNA-Seq aligned BAM files will be added in the release version of this pipeline. Using the GUI, users can enter the path where their RNA-Seq BAMs are stored and run the tool with default parameters. The input PSI results file can be found in the folder *YourExpDirectory*/AltResults/AlternateOutput with the name “Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt” in the folder.
 
  # Additional Details Coming Soon # 
+
+See our wiki pages for additional details on the pipeline algorithms and available functions.
