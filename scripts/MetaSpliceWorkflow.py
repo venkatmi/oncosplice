@@ -1,16 +1,35 @@
 #!/usr/bin/env python
 
+#Copyright 2017 Cincinnati Children's Hospital Medical Center, Research Foundation
+#Author Meenakshi Venkatasubramanian - altanalyze@gmail.com
 
-""" Steps involved:
-run splice icgs
-block identification
-NMF Analysis
-filter Event Annotation
-Meta data analysis
-expand clusters
-mutation enrichment
-correlation depletion
+#Permission is hereby granted, free of charge, to any person obtaining a copy 
+#of this software and associated documentation files (the "Software"), to deal 
+#in the Software without restriction, including without limitation the rights 
+#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+#copies of the Software, and to permit persons to whom the Software is furnished 
+#to do so, subject to the following conditions:
+
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+#INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+#PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+#HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION 
+#OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+#SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+""" MetaSpliceWorkflow Module
+https://github.com/venkatmi/oncosplice
+Steps applied in this workflow:
+1 - Run splice-ICGS (Feature Selection)
+2 - Block identification (Rank analysis)
+3 - NMF Analysis (Initial subtype identification)
+4 - Filter Event Annotation
+5 - Meta data analysis (differential expression)
+6 - Expand clusters (SVM sample classification)
+7 - Mutation enrichment (MAF or VCF - optional)
+8 - Correlation depletion (excluded biological confounding signatures)
 """
+
 import sys, string, os
 import RNASeq
 import RNASeq_blockIdentification
@@ -250,18 +269,22 @@ def CompleteWorkflow(InputFile,EventAnnot,turn):
         return flag,InputFile,FilteredEventAnnot
 if __name__ == '__main__':
     import getopt
+    PSIinputFile = None
+    EventAnnot = None
     if len(sys.argv[1:])<=1:  ### Indicates that there are insufficient number of command-line arguments
         print "Warning! Insufficient command line flags supplied."
         sys.exit()
     else:
         options, remainder = getopt.getopt(sys.argv[1:],'', ['InputFile=','EventAnnotation='])
         for opt, arg in options:
-            if opt == '--InputFile': InputFile=arg
-            elif opt=='--EventAnnotation':EventAnnot=arg
+            if opt == '--InputFile': PSIinputFile=arg ### Input AltAnalyze PSI file (redundant with event annotation)
+            elif opt=='--EventAnnotation':EventAnnot=arg ### Input AltAnalyze PSI file(EventAnnotation suffix)
     flag=True
     turn=1
+    if PSIinputFile == None:
+        PSIinputFile = EventAnnot
     while flag:
-        flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn)
+        flag,PSIinputFile,EventAnnot=CompleteWorkflow(PSIinputFile,EventAnnot,turn)
         turn+=3
         if flag==False:
             break
