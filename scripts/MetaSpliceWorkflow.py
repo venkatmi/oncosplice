@@ -36,7 +36,7 @@ import RNASeq_blockIdentification
 import NMF_Analysis
 import filterEventAnnotation
 import metaDataAnalysis
-import ExpandClusters_v2_test as ExpandSampleClusters
+import ExpandClusters as ExpandSampleClusters
 import sampleIndexSelection
 import Correlationdepletion
 import UI
