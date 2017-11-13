@@ -25,4 +25,4 @@ The input to this workflow can be obtained through AltAnalyze version 2.1.0 or g
 
  # Additional Information # 
 
-See our wiki pages for additional details on the pipeline algorithms and available functions.
+See our [wiki](https://github.com/venkatmi/oncosplice/wiki) pages for additional details on the pipeline algorithms and available functions.
