@@ -27,7 +27,7 @@ def header_file(fname, delimiter=None):
             else:break
     return header
 
-def KmeansAnalysis(filename,header):
+def KmeansAnalysis(inputfile,filename,header):
     X=defaultdict(list)
     prev=""
     head=0
@@ -52,8 +52,9 @@ def KmeansAnalysis(filename,header):
         X[key]=np.array(X[key])
         print X[key].shape
         mat=[]
-        exportname=filename[:-4]+key+'.txt'
-        export_results=open(exportname,"w")
+        #exportname=filename[:-4]+key+'.txt'
+        exportnam2=os.path.join(findParentDir(inputfile),'SVC_test_50cor_decision_bin.txt')
+        export_results=open(exportname,"a")
         mat=zip(*X[key])
         mat=np.array(mat)
         print mat.shape
@@ -70,18 +71,20 @@ def KmeansAnalysis(filename,header):
             count=2
             for j in y:
                 if j==0:
-                    export_results.write(header[count]+"\t"+"1"+"\n")
+                    export_results.write(header[count]+"\t"+"1")
                 else:
-                    export_results.write(header[count]+"\t"+"0"+"\n")
+                    export_results.write(header[count]+"\t"+"0")
                 count+=1
         else:
             count=2
             for j in y:
                 if j==1:
-                    export_results.write(header[count]+"\t"+"1"+"\n")
+                    export_results.write(header[count]+"\t"+"1")
                 else:
-                    export_results.write(header[count]+"\t"+"0"+"\n")
+                    export_results.write(header[count]+"\t"+"0")
+        
                 count+=1
+        export_results.write("\n")
                 
 if __name__ == '__main__':
 

@@ -115,7 +115,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     export_enrich=open(exportnam,"w")
     #exportnam1=Inputfile[:-4]+mut[:-4]+'enrichmentmatrix.txt'
     #export_enrich1=open(exportnam1,"w")
-    #export_enrich.write("Mutations"+"\t"+"Cluster"+"\t"+"Pvalue"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"z-score"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\n")
+    export_enrich.write("Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n")
     if Expand=="yes":
         header2=header_file(Inputfile)
         
@@ -125,7 +125,8 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
                 q= string.split(line,'\t')
                 for i in range(1,len(q)):
                     if q[i]==str(1):
-                        group[q[0]].append(header2[i-1])
+                        #group[q[0]].append(header2[i-1])
+                        group[header2[i-1]].append(q[0])
            
             else:
                 head+=1
