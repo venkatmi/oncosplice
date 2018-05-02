@@ -29,14 +29,13 @@ Steps applied in this workflow:
 7 - Mutation enrichment (MAF or VCF - optional)
 8 - Correlation depletion (excluded biological confounding signatures)
 """
-
 import sys, string, os
 import RNASeq
 import RNASeq_blockIdentification
-import NMF_Analysis
+import NMF_Analysis as NMF_Analysis
 import filterEventAnnotation
 import metaDataAnalysis
-import ExpandClusters as ExpandSampleClusters
+import ExpandSampleClusters as ExpandSampleClusters
 import sampleIndexSelection
 import Correlationdepletion
 import UI
@@ -46,6 +45,69 @@ upd_guides=[]
 import operator
 from collections import OrderedDict
 from collections import defaultdict
+import Kmeans
+
+def filterPSIValues(filename):
+    fn = filepath(filename)
+    firstRow=True
+          
+    header = True
+    rows=0
+    filtered=0
+    new_file = filename[:-4]+'-75p.txt'
+    #new_file_clust = new_file[:-4]+'-clustID.txt'
+    ea = export.ExportFile(new_file)
+    #eac = export.ExportFile(new_file_clust)
+   # added=[]
+    for line in open(fn,'rU').xreadlines():
+        data = line.rstrip()
+        t = string.split(data,'\t')
+        if header:
+            header = False
+            eventindex=t.index('EventAnnotation')
+            t = [t[1]]+t[eventindex+1:]
+            header_length = len(t)-1
+            minimum_values_present = int(header_length)-1
+            not_detected = header_length-minimum_values_present
+            new_line = string.join(t,'\t')+'\n'
+            ea.write(new_line)
+        else:
+            #cID = t[5]
+            t = [t[1]]+t[eventindex+1:]
+            missing_values_at_the_end = (header_length+1)-len(t)
+            missing = missing_values_at_the_end+t.count('')
+            if missing<not_detected:
+                #if cID not in added:
+                #added.append(cID)
+                new_line = string.join(t,'\t')+'\n'
+                ea.write(new_line)
+                #eac.write(t[0]+'\t'+cID+'\n')
+                filtered+=1
+        rows+=1
+    #print rows, filtered
+    ea.close()
+    return newfile
+    #eac.close()
+    #removeRedundantCluster(new_file,new_file_clust)
+
+def header_list(EventAnnot):
+    head=0
+    header=[]
+    with open(EventAnnot, 'rU') as fin:
+        for line in fin:
+            if head==0:
+                line = line.rstrip(os.linesep)
+                line=string.split(line,'\t')
+                startpos=line.index('EventAnnotation')
+                header.append('UID')
+                for i in range(startpos+1,len(line)):
+                    
+                        header.append(line[i])
+                
+                #del header[:1]
+                head=1
+            else:break
+    return header
 
 
 def FindTopUniqueEvents(Guidefile,psi,Guidedir):
@@ -63,16 +125,30 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
 
     for line in open(Guidefile,'rU').xreadlines():
         if head==0:
+            line1=line.rstrip('\r\n')
+            q= string.split(line1,'\t')
             head=1
-            continue
+            try:
+                uid=q.index('UID')
+                adjp=q.index('rawp')
+                dpsi=q.index('dPSI')
+                Clusterid=q.index('UpdatedClusterID')
+                cutoff=0.1
+                continue
+            except Exception:
+                uid=q.index('GeneID')
+                adjp=q.index('rawp')
+                dpsi=q.index('LogFold')
+                Clusterid=q.index('GeneID')
+                cutoff=0.58
         else:
             line1=line.rstrip('\r\n')
             q= string.split(line1,'\t')
-            if abs(float(q[8]))>0.1 and float(q[10])<0.01:
+            if abs(float(q[dpsi]))>cutoff and float(q[adjp])<0.01:
                 try:
-                    tempkeys[q[2]].append([q[0],float(q[10]),q[11]])
+                    tempkeys[q[Clusterid]].append([q[uid],float(q[adjp]),q[adjp+1]])
                 except KeyError:
-                    tempkeys[q[2]]=[[q[0],float(q[10]),q[11]],]
+                    tempkeys[q[Clusterid]]=[[q[uid],float(q[adjp]),q[adjp+1]],]
     for i in tempkeys:
         
         if len(tempkeys[i])>1:
@@ -93,21 +169,11 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     try:
         if len(unique_clusters[0])>1:     
             unique_clusters[0].sort(key=operator.itemgetter(1))
-  
-            if len(unique_clusters[0])>100:
-                guidekeys=unique_clusters[0]
+            if len(unique_clusters[0])>90:
+                guidekeys=unique_clusters[0][0:150]
                 for i in range(0,len(guidekeys)):
-            
-            #upd_guides[i]=[upd_guides[i][3],upd_guides[i][4]]
                     upd_guides.append(guidekeys[i][0])
             else:
-            #        #if len(unique_clusters[0])>50:
-            #            guidekeys=unique_clusters[0][0:25]
-            #            for i in range(0,len(guidekeys)):
-            #
-            ##upd_guides[i]=[upd_guides[i][3],upd_guides[i][4]]
-            #                upd_guides.append(guidekeys[i][0])
-                    #else:
                         omitcluster=1
             export_class.write(psi+"\t"+str(len(unique_clusters[0]))+"\n")
     except Exception:
@@ -115,8 +181,8 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     
     print len(upd_guides)
     return omitcluster
-def CompleteWorkflow(InputFile,EventAnnot,turn):
-    
+def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
+        
         species="Hs"
         row_method = 'hopach'
         column_method = 'hopach'
@@ -129,18 +195,18 @@ def CompleteWorkflow(InputFile,EventAnnot,turn):
         PathwaySelection = ''
         GeneSetSelection = 'None Selected'
         excludeCellCycle = False
-        rho_cutoff = 0.4
+        #rho_cutoff = 0.4
         restrictBy = 'protein_coding'
-        featurestoEvaluate = 'AltExon'
+        featurestoEvaluate = 'Genes'
         ExpressionCutoff = 0
         CountsCutoff = 0
-        FoldDiff = 1.3
+        FoldDiff = 1.2
         SamplesDiffering = 4
         JustShowTheseIDs=''
         removeOutliers = False
         PathwaySelection=[]
         array_type="RNASeq"
-        rho_cutoff=0.4
+        #rho_cutoff=0.4
         gsp = UI.GeneSelectionParameters(species,array_type,vendor)
         gsp.setGeneSet(GeneSetSelection)
         gsp.setPathwaySelect(PathwaySelection)
@@ -160,74 +226,39 @@ def CompleteWorkflow(InputFile,EventAnnot,turn):
         gsp.setNormalize('median')
         gsp.setSampleDiscoveryParameters(0,0,1.5,3,
         False,'PSI','protein_coding',False,'cosine','hopach',0.35)"""
-    
-        #Guidefile="/Volumes/Pass/MOdifiedNMF/ExpressionInput/amplify/DataPlots/Clustering-exp.splicing-filteredcor_depleted-filteredcor_depleted-Guide3 RGPD4 ENSG00000196862 E9.1-E10.1 ENSG000001-hierarchical_euclidean_correlation.txt"
-    
+        
+        FilteredEventAnnot=""        
+        #try:
         graphic_links3 = RNASeq.singleCellRNASeqWorkflow(species, 'exons', InputFile,mlp,exp_threshold=0, rpkm_threshold=0, parameters=gsp)
         Guidefile=graphic_links3[-1][-1]
-        ##print Guidefile
-        Guidefile=Guidefile[:-4]+'.txt'
-        #Guidefile
-        ##Guidefile="/Volumes/Pass/Leucegene_Complete/ICGS/Clustering-exp.splicing-filteredcor_depleted-Guide3 DYNLL1 ENSG00000088986 E2.1-I2.1 ENSG000000-hierarchical_euclidean_correlation.txt"
-        FilteredEventAnnot=filterEventAnnotation.FilterFile(InputFile,EventAnnot,turn)
-        ##Guidefile='/Users/meenakshi/Documents/testdata/ExpressionInput/amplify//DataPlots/Clustering-exp.testdata-Guide3 TTC27 ENSG00000018699 I1.1_32854940-E2.1 EN-hierarchical_euclidean_correlation-BlockIDs.txt'
         try:
-            RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True)
+            Guidefile=Guidefile[:-4]+'.txt'
+            RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=rho_cutoff,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True)
         ##    
             Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
+       
         ###Guidefile="/Users/meenakshi/Documents/testdata/ICGS/Clustering-exp.testdata-filteredcor_depleted-Guide3 ANKS1A ENSG00000064999 I17.1-E18.1 ENSG0000-hierarchical_euclidean_correlation.txt"
             NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile)
-        ##    print Rank
+           
+            FilteredEventAnnot=filterEventAnnotation.FilterFile(InputFile,EventAnnot,turn)
         except Exception:Rank=0
         
-        if Rank>0:
-            if Rank>3:Rank=30
+        if Rank>1:
+         
+            if Rank>2:Rank=30
             else: Rank=2
-            NMFResult,BinarizedOutput,Metadata,Annotation=NMF_Analysis.NMFAnalysis(NMFinput,Rank,turn)
-            FilteredEventAnnot=filterEventAnnotation.FilterFile(InputFile,EventAnnot,turn)
-            #FilteredEventAnnot="/Volumes/Pass/Leucegene_Test22/Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt-filtered.txt"
-            splicingEventTypes={}
-            all_groups_db={}
-            all_comps_db={}
-            platform='PSI'
-            PercentExp=75
-            use_adjusted_p=True
-            CovariateQuery = 'Events'
-            #Annotation="/Volumes/Pass/Leucegene_Test22/Annotation.txt"
-            #Metadata="/Volumes/Pass/Leucegene_Test22/Combined_Decision_bin.txt"
-            metadata_filters = metaDataAnalysis.importMetaDataDescriptions(Annotation)
-            all_groups_db, all_comps_db = metaDataAnalysis.prepareComparisonData(Metadata,metadata_filters,all_groups_db, all_comps_db)
-            
-            for i in all_groups_db:
-                print i
-                for k in all_groups_db[i]: print '  ',k,'\t',len(all_groups_db[i][k])
-            print all_comps_db
-            
-            if platform == 'PSI':
-                result_type = 'dPSI'
+            if seq=="bulk":
+               use_adjusted_p=True
             else:
-                result_type = 'LogFold'
-            logfold_threshold=0.1
-            if use_adjusted_p:
-                CovariateQuery += '-'+result_type+'_'+str(logfold_threshold)[:4]+'_adjp'
-            else:
-                CovariateQuery += '-'+result_type+'_'+str(logfold_threshold)+'_rawp'
-            
-            for specificCovariate in all_groups_db:
-                comps_db = all_comps_db[specificCovariate]
-                groups_db = all_groups_db[specificCovariate]
-                rootdir,splicingEventTypes = metaDataAnalysis.performDifferentialExpressionAnalysis(species,platform,FilteredEventAnnot,groups_db,comps_db,CovariateQuery,splicingEventTypes)
-            
-            if platform == 'PSI':
-                metaDataAnalysis.outputSplicingSummaries(rootdir,splicingEventTypes)
+               use_adjusted_p=False
+         
+           
+            NMFResult,BinarizedOutput,Metadata,Annotation=NMF_Analysis.NMFAnalysis(NMFinput,Rank,turn,strategy)
+          
+            rootdir,CovariateQuery=metaDataAnalysis.remoteAnalysis('Hs',FilteredEventAnnot,Metadata,'PSI',0.1,use_adjusted_p,0.05,Annotation)
             counter=1
             Guidedir=rootdir+CovariateQuery
             PSIdir=rootdir+'ExpressionProfiles'
-            #Guidedir="/Users/meenakshi/Documents/testdata/Events-dPSI_0.1_adjp"
-            #PSIdir="/Users/meenakshi/Documents/testdata/ExpressionProfiles"
-            #Guidedir="/Volumes/Pass/Leucegene_Complete/round1/round2/Events-dPSI_0.1_adjp"
-            #PSIdir="/Volumes/Pass/Leucegene_Complete/round1/round2/ExpressionProfiles"
-            #BinarizedOutput="/Volumes/Pass/Leucegene_Complete/ExpressionInput/exp.splicing-filteredcor_depleted-filteredNMFsnmf_binary30.txt"
             global upd_guides
             upd_guides=[]
             name=[]
@@ -257,35 +288,61 @@ def CompleteWorkflow(InputFile,EventAnnot,turn):
             header=Correlationdepletion.header_file(NMFResult)
             output_file=InputFile[:-4]+"-filtered.txt"
             sampleIndexSelection.filterFile(InputFile,output_file,header)
-            commonkeys,count=Correlationdepletion.FindCorrelations(NMFResult,output_file)
+            commonkeys,count=Correlationdepletion.FindCorrelations(NMFResult,output_file,name)
             Depleted=Correlationdepletion.DepleteSplicingevents(commonkeys,output_file,count)
             InputFile=Depleted
             
             flag=True
         else:
-            flag=False
+            try:
+                header=[]
+                header=Kmeans.header_file(Guidefile_block)
+                Kmeans.KmeansAnalysis(Guidefile_block,header)
+            
+                flag=False
+            except Exception:
+                flag=False
         #    
             
         return flag,InputFile,FilteredEventAnnot
 if __name__ == '__main__':
     import getopt
-    PSIinputFile = None
-    EventAnnot = None
+    seq="bulk"
+    rho_cutoff=0.4
+    strategy="stringent"
+    filters=False
     if len(sys.argv[1:])<=1:  ### Indicates that there are insufficient number of command-line arguments
         print "Warning! Insufficient command line flags supplied."
         sys.exit()
     else:
-        options, remainder = getopt.getopt(sys.argv[1:],'', ['InputFile=','EventAnnotation='])
+        options, remainder = getopt.getopt(sys.argv[1:],'', ['EventAnnotation=','rho=','strategy=','seq=','filter='])
         for opt, arg in options:
-            if opt == '--InputFile': PSIinputFile=arg ### Input AltAnalyze PSI file (redundant with event annotation)
-            elif opt=='--EventAnnotation':EventAnnot=arg ### Input AltAnalyze PSI file(EventAnnotation suffix)
+            #if opt == '--InputFile': InputFile=arg
+            if opt=='--EventAnnotation':EventAnnot=arg
+            if opt=='--rho':rho_cutoff=arg
+            if opt=='--strategy':strategy=arg
+            if opt=='--seq':seq=arg
+            if opt=='--filter':filters=arg
+            
+    dire = export.findParentDir(EventAnnot)
+   
+    output_dir = dire+'ExpressionInput'
+    export.createExportFolder(output_dir)
+    InputFile=output_dir+"/exp.input.txt"
+    
+    header=header_list(EventAnnot)
+   
+    sampleIndexSelection.filterFile(EventAnnot,InputFile,header,FirstCol=False)
     flag=True
     turn=1
-    if PSIinputFile == None:
-        PSIinputFile = EventAnnot
+    
     while flag:
-        flag,PSIinputFile,EventAnnot=CompleteWorkflow(PSIinputFile,EventAnnot,turn)
-        turn+=3
+        if turn==1 and filters==True:
+            InputFile=filterPSIValues(InputFile)
+       
+        flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq)
+      
+        turn+=1
         if flag==False:
             break
     print "completed"

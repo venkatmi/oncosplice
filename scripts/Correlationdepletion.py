@@ -65,7 +65,7 @@ def DepleteSplicingevents(commonkeys,keylabel,count):
                 export_res1.write(line)
     return exportdep
             
-def FindCorrelations(filename,PSIfile):
+def FindCorrelations(filename,PSIfile,name):
     X=defaultdict(list)
     prev=""
     head=0
@@ -75,12 +75,21 @@ def FindCorrelations(filename,PSIfile):
             line=line.rstrip('\r\n')
             q= string.split(line,'\t')
             for i in range(1,len(q)):
-                val.append(float(q[i]))  
-            if q[0]==prev:
-                X[prev].append(val)
-            else:
-                prev=q[0]
-                X[prev].append(val)
+                val.append(float(q[i]))
+            flag=0
+            for i in range(len(name)):
+                key1=q[0]+"_vs"
+                key2="vs_"+q[0]+".txt"
+            
+                if key1 in name[i] or key2 in name[i]:
+                    flag=1
+            
+            if flag==1:
+                if q[0]==prev:
+                    X[prev].append(val)
+                else:
+                    prev=q[0]
+                    X[prev].append(val)
         else:
             #print line
             head+=1

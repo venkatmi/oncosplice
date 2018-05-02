@@ -3163,7 +3163,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
     else:
         print 'Finding an optimal number of genes based on differing thresholds to include for clustering...'
         #fold=1; samplesDiffering=1
-	#fold=1.4
+	fold=1.4
         expressed_values, fold, samplesDiffering, headers = optimizeNumberOfGenesForDiscovery(expFile,platform,expressed_uids,fold=fold,samplesDiffering=samplesDiffering,guideGenes=driver_genes) #fold=2,samplesDiffering=2
         print 'Evaluating',len(expressed_values),'genes, differentially expressed',fold,'fold for at least',samplesDiffering*2,'samples'
     #sys.exit()

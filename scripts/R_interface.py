@@ -33,9 +33,10 @@ except Exception:
     try:
         try:
             if 'Xdarwin' in sys.platform:
+                path = '/usr/local/bin/R'
                 #print 'Using AltAnalyze local version of R'
                 #print 'A'
-                path = unique.filepath("AltDatabase/tools/R/Mac/R")
+                #path = unique.filepath("AltDatabase/tools/R/Mac/R")
                 r = R(RCMD=path,use_numpy=True)
             elif os.name == 'nt':
                 path = unique.filepath("AltDatabase/tools/R/PC/bin/x64/R.exe")

@@ -13,7 +13,7 @@ def makeTestFile():
     export_object.close()
     return input_file
 
-def filterFile(input_file,output_file,filter_names):
+def filterFile(input_file,output_file,filter_names,FirstCol=True):
     export_object = open(output_file,'w')
     firstLine = True
     for line in open(input_file,'rU').xreadlines():
@@ -34,7 +34,10 @@ def filterFile(input_file,output_file,filter_names):
             filtered_values = map(lambda x: values[x], sample_index_list) ### simple and fast way to reorganize the samples
             #print values[0]; print sample_index_list; print values; print len(values); print len(prior_values);kill
         prior_values=values
-        export_object.write(string.join([values[0]]+filtered_values,'\t')+'\n')
+        if FirstCol:
+            export_object.write(string.join([values[0]]+filtered_values,'\t')+'\n')
+        else:
+            export_object.write(string.join(filtered_values,'\t')+'\n')
     export_object.close()
     print 'Filtered columns printed to:',output_file
 
@@ -45,11 +48,12 @@ def filterRows(input_file,output_file,filterDB=None):
         data = line.rstrip()
         values = string.split(data,'\t')
         if firstLine:
+            uid=values.index('UID')
             firstLine = False
             export_object.write(line)
         else:
             if filterDB!=None:
-                if values[0] in filterDB:
+                if values[uid] in filterDB:
                     export_object.write(line)
             else:
                 max_val = max(map(float,values[1:]))
@@ -135,7 +139,8 @@ if __name__ == '__main__':
             
     output_file = input_file[:-4]+'-filtered.txt'
     if filter_rows:
-        filterRows(input_file,output_file)
+        filter_names = getFilters(filter_file)
+        filterRows(input_file,output_file,filter_names)
     else:
         filter_names = getFilters(filter_file)
         filterFile(input_file,output_file,filter_names)
