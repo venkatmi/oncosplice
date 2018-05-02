@@ -297,7 +297,7 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
             try:
                 header=[]
                 header=Kmeans.header_file(Guidefile_block)
-                Kmeans.KmeansAnalysis(InputFile,Guidefile_block,header)
+                Kmeans.KmeansAnalysis(Guidefile_block,header)
             
                 flag=False
             except Exception:
