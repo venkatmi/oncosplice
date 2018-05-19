@@ -15,8 +15,11 @@ try:
     useStaticLocation=s.read()
     #print useStaticLocation
     #print 'Using the Config designated location
-    if '/data/salomonis' in loc: ### This is not ideal - need to use system R on some clusters
-        useStaticLocation = False
+    for p in os.environ['PATH'].split(':'): ### For Unix cluster environments
+        if os.path.exists(p + '/R'):
+            #path = p + '/R'
+            useStaticLocation = False
+            
 except Exception:
     #print 'NOT using the Config designated location'
     useStaticLocation = False
@@ -29,7 +32,7 @@ try:
 except Exception:
     from pyper import *
     #print "\n---------Using PypeR---------\n"
-    ### Running the wrong one once is fine, but multiple times causes it to stall in a single session
+    ## Running the wrong one once is fine, but multiple times causes it to stall in a single session
     try:
         try:
             if 'Xdarwin' in sys.platform:
@@ -42,10 +45,11 @@ except Exception:
                 path = unique.filepath("AltDatabase/tools/R/PC/bin/x64/R.exe")
                 r = R(RCMD=path,use_numpy=True)    
             else:
-                #print 'B'
+               
                 if useStaticLocation == False or useStaticLocation=='no':
-                    print 'NOT using static location'
-                    r = R(use_numpy=True)
+                    #print 'NOT using static location'
+                    r = R()
+                    
                 else:
                     print 'Using static location'
                     path = '/usr/local/bin/R'
@@ -60,26 +64,27 @@ except Exception:
                         R_present=False
                         print 'R does not appear to be installed... Please install first.'
         except Exception:
-            #print 'C'
+            
             r = R(use_numpy=True)
-
+    
     except Exception:
-        #print traceback.format_exc()
+        
+       # print traceback.format_exc()
         r = None
         R_present=False
         pass
-    
-LegacyMode = True
-### Create a Directory for R packages in the AltAnalyze program directory (in non-existant)
-r_package_path = string.replace(os.getcwd()+'/Config/R','\\','/') ### R doesn't link \\
-r_package_path = unique.filepath(r_package_path) ### Remove the AltAnalyze.app location
-try: os.mkdir(r_package_path)
-except Exception: None
-
-if R_present:
-    ### Set an R-package installation path
-    command = '.libPaths("'+r_package_path+'")'; r(command) ### doesn't work with %s for some reason
-    #print_out = r('.libPaths()');print print_out; sys.exit()
+#print r  
+#LegacyMode = True
+#### Create a Directory for R packages in the AltAnalyze program directory (in non-existant)
+#r_package_path = string.replace(os.getcwd()+'/Config/R','\\','/') ### R doesn't link \\
+#r_package_path = unique.filepath(r_package_path) ### Remove the AltAnalyze.app location
+#try: os.mkdir(r_package_path)
+#except Exception: None
+#
+#if R_present:
+#    ### Set an R-package installation path
+#    command = '.libPaths("'+r_package_path+'")'; r(command) ### doesn't work with %s for some reason
+#    #print_out = r('.libPaths()');print print_out; sys.exit()
 
 def remotecorrelations(input_file):
     setWorkingDirectory(findParentDir(input_file))
@@ -331,57 +336,57 @@ class RScripts:
         expfile=self.format_value_for_R(expfile)
        # filtered_file = export.findParentDir(expfile)+'/amplify/'+export.findFilename(expfile)
         
-        print "Begining to process",expfile
+        #print "Begining to process",expfile
         data_import = 'expressed<-read.table(%s,sep="\t",header=T,row.names=1,as.is=T)' % expfile
         #data_import=r.assign('expressed',expressed
         #data_import=r.assign('expressed',inputv)
         print_out = r(data_import);
-        print print_out
+        #print print_out
         data_import='expressed<-data.frame(Reduce(rbind, expressed))'
-        print [data_import]
+        #print [data_import]
         print_out = r(data_import);
        
         #print print_out
         data_import='dim(expressed)'
-        print [data_import]
+        #print [data_import]
         print_out = r(data_import);
-        print print_out
+        #print print_out
         #data_import='expressed<-as.matrix(as.numeric(%s))' %inputv
         data_import='expressed[expressed==0.0001]<-NA'
-        print [data_import]
+        #print [data_import]
         print_out = r(data_import);
         #print print_out
         data_import='sum(is.na(expressed))'
         print_out = r(data_import);
-        print print_out
+        #print print_out
         #data_import='expressed=t(expressed)'
         #print [data_import]
         #print_out = r(data_import);
         #print print_out
         data_import='expressedcor<-cor(expressed,use="pairwise.complete.obs")'
-        print [data_import]
+        #print [data_import]
         print_out = r(data_import);
         #print print_out
         data_import='expressedcor[is.na(expressedcor)]=0'
-        print [data_import]
+        #print [data_import]
         print_out = r(data_import);
         #print print_out
         data_import='expressedcor=round(expressedcor,digits=2)'
-        print [data_import]
+        #print [data_import]
         print_out=r(data_import)
         
         data_import='expressedcor=as.matrix(expressedcor)'
-        print [data_import]
+        #print [data_import]
         print_out=r(data_import)
         #mat=r.get('expressedcor)')
         #print mat
         #mat = r(data_import);
         data_import='write.table(expressedcor,file="corr_matrix.txt",row.names=F, col.names=F,sep="\t")'
-        print [data_import]
+        #print [data_import]
         print_out = r(data_import);
         #print print_out
         
-        print "completed"
+        #print "completed"
     
     def Monocle(self,samplelogfile,expPercent,p_val,numGroups):
         #samplelogfile='C:/Users/venz6v/Documents/Altanalyze R/data.txt' 
@@ -1122,7 +1127,7 @@ if __name__ == '__main__':
     No_of_Timepoints = '24'
     No_of_replicates = '1'
     timepoint_difference = '2'
-    run_JTKcycle(expFile,annotFile,Time_range1, Time_range2,No_of_Timepoints,No_of_replicates,timepoint_difference);sys.exit()
+    #run_JTKcycle(expFile,annotFile,Time_range1, Time_range2,No_of_Timepoints,No_of_replicates,timepoint_difference);sys.exit()
  
     
     
@@ -1138,13 +1143,13 @@ if __name__ == '__main__':
     #rawExpressionFile = '/Volumes/SEQ-DATA/SingleCell-Churko/Filtered/Unsupervised-AllExons/NewCardiacMarkers1/FullDataset/ExpressionInput/exp.CM-steady-state.txt'
     #filename = '/Users/saljh8/Desktop/Stanford/ExpressionInput/amplify/DataPlots/Clustering-exp.EB-SingleCell-GPCR-hierarchical_cosine_correlation.txt'
     #rawExpressionFile = '/Users/saljh8/Desktop/Stanford/ExpressionInput/exp.EB-SingleCell.txt'
-    performMonocleAnalysisFromHeatmap('Hs',filename,rawExpressionFile);sys.exit()
-    CreateFilesMonocle(filename,rawExpressionFile)
-    remoteMonocle(filename,expPercent=0,pval=0.01,numGroups=5);sys.exit()
+    #performMonocleAnalysisFromHeatmap('Hs',filename,rawExpressionFile);sys.exit()
+    #CreateFilesMonocle(filename,rawExpressionFile)
+    #remoteMonocle(filename,expPercent=0,pval=0.01,numGroups=5);sys.exit()
     
-    filename = '/Users/nsalomonis/Downloads/GSE9440_RAW/ExpressionInput/exp.differentiation.txt'
-    remoteAffyNormalization(filename,'rma',True,'remove'); sys.exit()
-    
+    #filename = '/Users/nsalomonis/Downloads/GSE9440_RAW/ExpressionInput/exp.differentiation.txt'
+    #remoteAffyNormalization(filename,'rma',True,'remove'); sys.exit()
+    sys.exit()
     print "******Analysis Method*******"
     print "Options:"
     print "1) Multtest (permutation ftest/ttest)"

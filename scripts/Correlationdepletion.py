@@ -6,11 +6,10 @@ import sys,string
 import os
 import os.path
 import scipy
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
 from collections import defaultdict
 from sklearn.cluster import KMeans
 import sampleIndexSelection
+import export
 
 
 def strip_first_col(fname, delimiter=None):
@@ -41,17 +40,17 @@ def header_file(fname, delimiter=None):
             else:break
     return header
 
-def DepleteSplicingevents(commonkeys,keylabel,count):
+def DepleteSplicingevents(commonkeys,keylabel,count,InputFile):
     eventlist=[]
-    exportname=keylabel[:-4]+'correlationSelected_0.3.txt'
-    export_res=open(exportname,"w")
-    exportdep=keylabel[:-4]+'cor_depleted.txt'
+    #exportname=keylabel[:-4]+'correlationSelected_0.3.txt'
+    #export_res=open(exportname,"w")
+    exportdep=InputFile[:-4]+'cor_depleted.txt'
     export_res1=open(exportdep,"w")
-    export_res.write("splicingevent"+"\t"+"key"+"\n")
+    #export_res.write("splicingevent"+"\t"+"key"+"\n")
     for event in commonkeys:
         if commonkeys[event]==count:
             eventlist.append(event)
-            export_res.write(event+"\t"+str(1)+"\n")
+     #       export_res.write(event+"\t"+str(1)+"\n")
     head=0
     for line in open(keylabel,'rU').xreadlines():
         if head==0:
@@ -103,13 +102,13 @@ def FindCorrelations(filename,PSIfile,name):
     commonkeys=defaultdict(int)
     count=len(X)
     for key in X:
-        print key
+        #print key
         X[key]=np.array(X[key])
-        print X[key].shape
+        #print X[key].shape
         mat=[]
         mat=zip(*X[key])
         mat=np.array(mat)
-        print mat.shape
+        #print mat.shape
         mat=np.mean(mat,axis=1)
         
         Y[key]=np.array(mat)
@@ -150,11 +149,11 @@ def FindCorrelations(filename,PSIfile,name):
             head+=1
                 
             continue
-    for key in counter:
-        print counter[key]
-        export_key=open(PSIfile[:-4]+str(key)+'.txt',"w")
-        for i,j in eventkeys[key]:
-            export_key.write(i+"\t"+str(j)+"\n")
+    #for key in counter:
+        #print counter[key]
+     #   export_key=open(PSIfile[:-4]+str(key)+'.txt',"w")
+      #  for i,j in eventkeys[key]:
+       #     export_key.write(i+"\t"+str(j)+"\n")
         
     return commonkeys,count
 

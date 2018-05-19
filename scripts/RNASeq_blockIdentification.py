@@ -3913,7 +3913,7 @@ def exportReDefinedClusterBlocks(results_file,block_db,rho_cutoff):
                 
     ### Add blocks not correlated to other blocks (not in correlated_blocks)
     #print len(existing),len(centroid_blocks)
-    print updated_blocks
+    #print updated_blocks
     for block in centroid_blocks:
         if block not in existing:
             newBlock+=1
@@ -3933,7 +3933,7 @@ def exportReDefinedClusterBlocks(results_file,block_db,rho_cutoff):
                     #if newBlock==3:
                     #if row_header[i]=='TAF2&ENSG00000064313&E9.1-I9.1_120807184__ENSG00000064313&E9.1-E10.1':
                     #print row_header[i]
-    print updated_blocks
+    #print updated_blocks
 
     ### Non-clustered block results - Typically not used by good to refer back to when testing
     original_block_order = collections.OrderedDict()

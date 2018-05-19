@@ -10,8 +10,10 @@ import operator
 from collections import OrderedDict
 from collections import defaultdict
 from operator import itemgetter
+import clustering
+import export
 
-def Classify(filename):
+def Classify(filename,Mutlabels={},dire="",flag=True):
     count=0
     start=1
     orderdict=OrderedDict()
@@ -25,7 +27,15 @@ def Classify(filename):
     colnames=[]
     q=[]
     Z=[]
-    output_file=filename[:-4]+"-filtered.txt"
+    if dire!="":
+        output_dir = dire+'Results'
+        export.createExportFolder(output_dir)
+        if flag:
+            output_file=output_dir+"/Consolidated-Increasing"+".txt"
+        else:
+            output_file=output_dir+"/Consolidated-Decreasing"+".txt"
+    else:
+        output_file=filename[:-4]+"-ordered.txt"
     export_object = open(output_file,'w')
     for line in open(filename,'rU').xreadlines():
         if head >0:
@@ -38,6 +48,8 @@ def Classify(filename):
             
             q= string.split(line,'\t')
            # rownames.append(q[0])
+            if q[0]=="":
+                continue
             orderdict[q[0]]=[q[0],]
             for i in range(start,len(q)):
                 try:
@@ -67,21 +79,21 @@ def Classify(filename):
     for i in countdict:
        
         countlst.append(sum(countdict[i]))
-    print countlst
+    #print countlst
     
-    B=sorted(range(len(countlst)),key=lambda x:countlst[x],reverse=True)
+    B=sorted(range(len(countlst)),key=lambda x:countlst[x],reverse=flag)
     C=sorted(range(len(countlst)),key=lambda x:B[x])
-    print C
+    
     qu=0
     for i in orderdict.keys():
         Y.append(orderdict[i])
         qu+=1
-        print qu
+        #print Y
     
     for i in range(0,len(C)):
         jk= C.index(i)+1
-        print jk
-        print Y[jk]
+        #print jk
+        #print Y[jk]
         Y=sorted(Y,key=itemgetter(jk))
         
         #orderdict=OrderedDict(sorted(orderdict,key=itemgetter(jk)))
@@ -96,8 +108,8 @@ def Classify(filename):
         Z.append(Y[jk,:])
     Z=np.array(Z)
     q= Z.shape
-    print Z.shape
-    print len(header)
+    #print Z.shape
+    #print len(header)
     #print header[24]
     #print q[0]
     #print q[1]
@@ -113,16 +125,24 @@ def Classify(filename):
     export_object.write("\n")
     for ij in range(1,q[0]):
         jk= C.index(ij-1)+1
-        export_object.write(header[jk])
+        if header[jk] in Mutlabels:
+           export_object.write(Mutlabels[header[jk]]) 
+        else:
+            export_object.write(header[jk])
         for jq in range(0,q[1]):
             export_object.write("\t"+str(Z[ij][jq]))
         export_object.write("\n")
+    export_object.close()
         
-    
-    
-    
-    
-            
+    graphic_links=[]
+    row_method = None
+    column_method=None
+    column_metric='cosine'
+    row_metric='cosine'
+    color_gradient = 'yellow_black_blue'
+    transpose=False
+    graphic_links = clustering.runHCexplicit(output_file,graphic_links, row_method, row_metric, column_method, column_metric, color_gradient, transpose, display=False, Normalize=False)
+        
 if __name__ == '__main__':
 
     import getopt

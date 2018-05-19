@@ -18,14 +18,18 @@ Oncosplice is an automated pipeline to identify sample subtypes in an unsupervis
  # How to run the workflow # 
 
 ```javascript
-python MetaSpliceWorkflow.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt"
+python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt"
 ```
+
+For the Event Annotation file provide the full path.
 
 Before running this workflow, you will need to install the appropriate species RNA-Seq database using the associated command-line:
 
 ```javascript
 python AltAnalyze.py --species Hs --platform RNASeq --update Official --version EnsMart72
 ```
+
+Replace the existing AltDatabase folder in oncosplice/scripts with the downloaded AltDatabase folder. This will update all the reference files required for running Oncosplice pipeline.
 
  # Generating the input files #
 
@@ -34,3 +38,5 @@ The input to this workflow can be obtained through AltAnalyze version 2.1.0 or g
  # Additional Information # 
 
 See our [wiki](https://github.com/venkatmi/oncosplice/wiki) pages for additional details on the pipeline algorithms and available functions.
+
+

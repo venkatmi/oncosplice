@@ -83,7 +83,15 @@ def FilterFile(Guidefile,PSI,turn=0):
         else:
             head+=1
             continue
-    output_file = export.findParentDir(PSI)+'/round'+str(turn)+'/'+export.findFilename(PSI)+'-filtered.txt'
+   
+    dire = export.findParentDir(export.findParentDir(Guidefile)[:-1])
+   
+    output_dir = dire+'SubtypeAnalyses-Results'
+    if os.path.exists(output_dir)==False:
+        export.createExportFolder(output_dir)
+    
+    #output_file = output_dir+'/round'+str(turn)+'/'+export.findFilename(PSI)+'-filtered.txt'
+    output_file = output_dir+'/round'+str(turn)+'/'+export.findFilename(PSI)[:-4]+'-filtered.txt'
     filterRows(PSI,output_file,filterDB=val)
     
     return output_file

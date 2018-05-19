@@ -18,6 +18,7 @@ import fishers_exact_test
 import traceback
 import warnings
 import math
+import export
 
 def FishersExactTest(r,n,R,N):
     z=0.0
@@ -99,7 +100,7 @@ def header_file(fname, delimiter=None):
                
                 if header[0] not in newheader:
                     newheader.append(header[0]) 
-    print len(newheader)           
+    #print len(newheader)           
     return newheader
 
 def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
@@ -111,8 +112,14 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     group=defaultdict(list)
     enrichdict=defaultdict(float)
     mut=export.findFilename(mutfile)
-    exportnam=Inputfile[:-4]+mut[:-4]+'enrichment.txt'
+    dire=export.findParentDir(Inputfile)
+    output_dir = dire+'MutationEnrichment'
+    export.createExportFolder(output_dir)
+    #output_file=output_dir+"/Consolidated.txt"
+    exportnam=output_dir+'/Enrichment_Results.txt'
     export_enrich=open(exportnam,"w")
+    exportnam=output_dir+'/Enrichment_tophits.txt'
+    export_hit=open(exportnam,"w")
     #exportnam1=Inputfile[:-4]+mut[:-4]+'enrichmentmatrix.txt'
     #export_enrich1=open(exportnam1,"w")
     export_enrich.write("Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n")
@@ -137,7 +144,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
             line=string.split(line,'\t')
             #for i in range(1,len(line)):
             group[line[2]].append(line[0])
-    print group
+    #print group
    # export_enrich1.write("uid")    
     #for key2 in group:
     #    export_enrich1.write("\t"+key2)
@@ -183,8 +190,10 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
             else:
                     signature_db={key2:zsd}
                     total_Scores[kiy] = signature_db
+    sorted_results=[]
+    mutlabels={}
     for kiy in total_Scores:
-        sorted_results=[]
+        
         signature_db = total_Scores[kiy]
         ### Updates the adjusted p-value instances
         mappfinder.adjustPermuteStats(signature_db)
@@ -192,15 +201,26 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
             zsd = signature_db[signature]
             #if float(zsd.ZScore())>1.96 and float(zsd.Changed())>2 and float(zsd.PermuteP())<0.05:
                # enriched_SFs={}
-            results = [kiy,signature,zsd.Changed(),zsd.Measured(),zsd.InPathway(),zsd.PercentChanged(), zsd.PercentPresent(), zsd.ZScore(), zsd.PermuteP(), zsd.AdjP()] #string.join(zsd.AssociatedIDs(),'|')
-            sorted_results.append([float(zsd.PermuteP()),results])
-        sorted_results.sort() ### Sort by p-value
-        for (p,values) in sorted_results:
-            export_enrich.write(string.join(values,'\t')+'\n')
-        if len(sorted_results)==0:
+            results = [kiy,signature,zsd.Changed(),zsd.Measured(),zsd.InPathway(),str(float(zsd.PercentChanged())/100.0),str(float(float(zsd.Changed())/float(zsd.InPathway()))), zsd.ZScore(), zsd.PermuteP(), zsd.AdjP()] #string.join(zsd.AssociatedIDs(),'|')
+            sorted_results.append([signature,float(zsd.PermuteP()),results])
+    sorted_results.sort() ### Sort by p-value
+    prev=""
+    for (sig,p,values) in sorted_results:
+        if sig!=prev:
+            flag=True
+            export_hit.write(string.join(values,'\t')+'\n')
+        if flag:
+            if (float(values[5])>=0.5 and float(values[6])>=0.5) or float(values[5])>=0.6 :
+                mutlabels[values[1]]=values[0]
+                flag=False
+                export_hit.write(string.join(values,'\t')+'\n')
+        export_enrich.write(string.join(values,'\t')+'\n')
+        prev=sig
+    if len(sorted_results)==0:
             export_enrich.write(string.join([splicing_factor,'NONE','NONE','NONE','NONE','NONE','NONE'],'\t')+'\n')
     export_enrich.close()
-            
+    #print mutlabels
+    return mutlabels
             
         
 def findsiggenepermut(mutfile):
@@ -229,7 +249,7 @@ def findsiggenepermut(mutfile):
                         
         else:
             mutdict[lin[1]].append(lin[0])
-    print mutdict    
+    #print mutdict    
     return  mutdict
 
 def Zscore(r,n,N,R):

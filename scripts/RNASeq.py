@@ -35,10 +35,10 @@ import traceback
 import warnings
 import bisect
 import clustering; reload(clustering)
-#Meenakshi 
+##Meenakshi 
 import operator
+#
 
-import R_interface
 correlated_genes={}
 try:
     import scipy
@@ -3253,7 +3253,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
     
     if useNumpyCorr:
         count=0
-        print filtered_file
+        #print filtered_file
         row_ids=[]
         x = []
         #export_new=open(filtered_file,"w")
@@ -3277,13 +3277,14 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
     #    #D1 = numpy.corrcoef(x)
         D1=[]
         global correlated_genes
+        import R_interface
         correlated_genes={}
         if platform=="exons":
             #perform pairwise correlations in R
             R_interface.remotecorrelations(filtered_file)
             #Need to create a temporary file 
             correlfile=export.findParentDir(filtered_file)+'corr_matrix.txt'
-            print 'initial correlations obtained'
+            #print 'initial correlations obtained'
             iterator=0
             #global correlated_genes
             correlated_genes2={}
@@ -3350,7 +3351,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
                 if iterator%500==0:
                     print iterator
         
-            print dupgenes,counter
+            #print dupgenes,counter
             counter2=0;counter=0
             
             for keyevent in correlated_genes2:
@@ -3388,16 +3389,17 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
             expressed_values=expressed_values2
             print len(expressed_values)
             writeFilteredFile(filtered_file,platform,headers,{},expressed_values,[])
-            outfile=export.findParentDir(expFile)+'corr_Relat_uncorr2.txt'
-            export_in=open(outfile,'w')
+            #outfile=export.findParentDir(expFile)+'corr_Relat_uncorr2.txt'
+            #export_in=open(outfile,'w')
             for geneevent in correlated_genes:
-                export_in.write(geneevent+'\t')
+                #export_in.write(geneevent+'\t')
                
                 for k in range(len(correlated_genes[geneevent])):
                     
                     vd=correlated_genes[geneevent][k]
-                    export_in.write(vd+'\t')
-                export_in.write('\n')
+             #       export_in.write(vd+'\t')
+                
+                #export_in.write('\n')
             expressed_values2={}
         
         else:
@@ -3448,7 +3450,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
                 if x<30: ### cap it at 30
                     atleast_10[k]=correlated_genes[k] ### add all correlated keys and values
                 x+=1
-    print len(atleast_10)
+   # print len(atleast_10)
    
     if len(atleast_10)<30:
         print 'Initial correlated set too small, getting anything correlated'
@@ -3463,7 +3465,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
         atleast_10 = expressed_values
         
     #eo.close()
-    print len(atleast_10), 'genes correlated to multiple other members (initial filtering)'
+    #print len(atleast_10), 'genes correlated to multiple other members (initial filtering)'
     ### go through the list from the most linked to the least linked genes, only reported the most linked partners
     #Meenakshi
     if platform=="exons":
@@ -3567,7 +3569,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
     results_file = string.replace(expFile[:-4]+'-CORRELATED-FEATURES.txt','exp.','/SamplePrediction/')
     writeFilteredFile(results_file,platform,headers,gene_to_symbol_db,expressed_values,atleast_10)
     
-    print len(atleast_10),'final correlated genes'
+    #print len(atleast_10),'final correlated genes'
    # end_time = time.time()
     #print 'Initial clustering completed in',int(end_time-begin_time),'seconds'
     
@@ -3649,7 +3651,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
             parameters.setGeneSelection(newDriverGenes1_str) ### force correlation to these targetGenes
         else:
             #Meenakshi
-            print ("calculating correlated genes from dictionary")
+            #print ("calculating correlated genes from dictionary")
             genelist=[];correlatedevents=[]
             for gene in newDriverGenes1:
                 guidegenelst.append(gene)
@@ -3660,7 +3662,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
                 for corrgene in correlatedevents:
                     if corrgene not in genelist:
                         genelist.append(corrgene)
-            print len(genelist)
+            #print len(genelist)
             newDriverGenes1_str = 'Guide1 '+string.join(genelist,' ')
             parameters.setGeneSelection(newDriverGenes1_str)
             guidegenelst = string.join(guidegenelst,' ')
@@ -3691,7 +3693,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
                 for corrgene in correlatedevents:
                     if corrgene not in genelist:
                         genelist.append(corrgene)
-            print len(genelist)
+            #print len(genelist)
             newDriverGenes2_str = 'Guide2 '+string.join(genelist,' ')
             parameters.setGeneSelection(newDriverGenes2_str)
             guidegenelst = string.join(guidegenelst,' ')
@@ -3709,12 +3711,12 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
             #Meenakshi
             guidegenelst=[]
             genelist=[];correlatedevents=[]
-            exportnam=open("guidefile.txt","w")
+            #exportnam=open("guidefile.txt","w")
             for gene in newDriverGenes3:
-                exportnam.write(gene+"\t")
+                #exportnam.write(gene+"\t")
                 correlatedevents=correlated_genes[gene]
-                exportnam.write("\t".join(correlatedevents))
-                exportnam.write("\n")
+                #exportnam.write("\t".join(correlatedevents))
+                #exportnam.write("\n")
                 #changed 26oct-meenakshi -change back
                 #correlatedevents=correlatedevents[1:140]
                 if gene not in genelist:
@@ -3723,14 +3725,14 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
                 for corrgene in correlatedevents:
                     if corrgene not in genelist:
                         genelist.append(corrgene)
-            print len(genelist)
+            #print len(genelist)
             newDriverGenes3_str = 'Guide3 '+string.join(genelist,' ')     
             parameters.setGeneSelection(newDriverGenes3_str)
             guidegenelst = string.join(guidegenelst,' ')
             parameters.setJustShowTheseIDs(guidegenelst)
         
-        try: parameters.setClusterGOElite('BioMarkers')
-        except Exception: pass
+        #try: parameters.setClusterGOElite('BioMarkers')
+        #except Exception: pass
         graphic_links = clustering.runHCexplicit(filtered_file, graphic_links, row_method, row_metric, column_method, column_metric, color_gradient, parameters, display=False, Normalize=True)
     except Exception:
         print traceback.format_exc()
@@ -3950,26 +3952,26 @@ def correlateClusteredGenes(platform,results_file,stringency='medium',numSamples
     if stringency == 'strict':
         medVarLowComplexity, column_header = correlateClusteredGenesParameters(results_file,rho_cutoff=0.3,hits_cutoff=4,hits_to_report=50,filter=True,numSamplesClustered=numSamplesClustered)
         medVarHighComplexity, column_header = correlateClusteredGenesParameters(results_file,rho_cutoff=0.1,hits_cutoff=4,hits_to_report=50,filter=True,numSamplesClustered=numSamplesClustered) #hits_cutoff=6
-        print 1
+        #print 1
         highVarLowComplexity, column_header = correlateClusteredGenesParameters(results_file,rho_cutoff=0.5,hits_cutoff=3,hits_to_report=50,filter=True,numSamplesClustered=numSamplesClustered)
-        print 2
+       # print 2
         highVarHighComplexity, column_header = correlateClusteredGenesParameters(results_file,rho_cutoff=0.3,hits_cutoff=3,hits_to_report=50,filter=True,numSamplesClustered=numSamplesClustered)
         #combined_results = dict(medVarLowComplexity.items() + medVarLowComplexity.items() + highVarLowComplexity.items() + highVarHighComplexity.items())
-        print 3, len(highVarHighComplexity)
+        #print 3, len(highVarHighComplexity)
         combined_results={}
         for i in medVarLowComplexity: combined_results[i]=[]
         for i in medVarHighComplexity: combined_results[i]=[]
         for i in highVarLowComplexity: combined_results[i]=[]
         for i in highVarHighComplexity: combined_results[i]=[]
-        print  len(combined_results)
+        #print  len(combined_results)
         guideGenes = correlateClusteredGenesParameters(results_file,rho_cutoff=rhoCuttOff,hits_cutoff=0,hits_to_report=1,geneFilter=combined_results,excludeCellCycle=excludeCellCycle)
-        print 4
+        #print 4
         if guideGenes == 'TooFewBlocks':
             guideGenes = correlateClusteredGenesParameters(results_file,rho_cutoff=rhoCuttOff+0.1,hits_cutoff=0,hits_to_report=1,geneFilter=combined_results,excludeCellCycle=excludeCellCycle)
             if guideGenes == 'TooFewBlocks':
                 guideGenes = correlateClusteredGenesParameters(results_file,rho_cutoff=rhoCuttOff+0.2,hits_cutoff=0,hits_to_report=1,geneFilter=combined_results,excludeCellCycle=excludeCellCycle,forceOutput=True)
         if len(guideGenes)>200:
-            print 'Too many drivers (>200)... performing more stringent filtering...'
+           # print 'Too many guides (>200)... performing more stringent filtering...'
             guideGenes = correlateClusteredGenesParameters(results_file,rho_cutoff=0.1,hits_cutoff=0,hits_to_report=1,geneFilter=combined_results,excludeCellCycle=excludeCellCycle,restrictTFs=True)
         return guideGenes
     #B4galt6, Prom1
@@ -4180,13 +4182,13 @@ def correlateClusteredGenesParameters(results_file,rho_cutoff=0.3,hits_cutoff=4,
                     if corr_gene in cell_cycle: cell_cycle_count.append(corr_gene)
                 #print gene, len(cell_cycle_count),len(guideCorrelated[gene])
                 if (float(len(cell_cycle_count))/len(guideCorrelated[gene]))>.15 or (len(guideCorrelated[gene])<4 and (len(cell_cycle_count)>0)):
-                    print gene, cell_cycle_count
+                    #print gene, cell_cycle_count
                     addition_cell_cycle_associated.append(gene)
                     pass
                 else:
                     guideGenes[gene]=[]
-            print 'additional Cell Cycle guide genes removed:',addition_cell_cycle_associated
-        print len(guideGenes), 'novel guide genes discovered:', guideGenes.keys()
+            #print 'additional Cell Cycle guide genes removed:',addition_cell_cycle_associated
+        #print len(guideGenes), 'novel guide genes discovered:', guideGenes.keys()
         return guideGenes
         
     def greaterThan(x,results_file,numSamplesClustered):
@@ -5196,8 +5198,6 @@ def getFASTAFile(species):
     return fasta_file
 
 if __name__ == '__main__':
-    
-    
     species='Mm'; platform = "3'array"; vendor = "3'array"
     import UI; import multiprocessing as mlp
     gsp = UI.GeneSelectionParameters(species,platform,vendor)

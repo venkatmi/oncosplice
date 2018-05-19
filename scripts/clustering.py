@@ -135,6 +135,8 @@ def heatmap(x, row_header, column_header, row_method, column_method, row_metric,
         pylab.figure() ### Add this to avoid a Tkinter bug after running MarkerFinder (not sure why it is needed) - creates a second empty window when display == True
                 
     if row_method == 'hopach' or column_method == 'hopach':
+        ### Test R and hopach
+        """
         try:
             import R_test
         except Exception,e:
@@ -143,6 +145,8 @@ def heatmap(x, row_header, column_header, row_method, column_method, row_metric,
             row_method = 'average'; column_method = 'average'
         if len(column_header)==2: column_method = 'average'
         if len(row_header)==2: row_method = 'average'
+        """
+        pass
     """
     Prototype methods:
     http://old.nabble.com/How-to-plot-heatmap-with-matplotlib--td32534593.html
@@ -962,7 +966,7 @@ def heatmap(x, row_header, column_header, row_method, column_method, row_metric,
                 proceed = False
         except Exception: pass
         if proceed:
-            print 'Exporting:',filename
+            #print 'Exporting:',filename
             try: pylab.show()
             except Exception: None ### when run in headless mode
     fig.clf()

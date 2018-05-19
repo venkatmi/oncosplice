@@ -3,47 +3,6 @@
 #!/usr/bin/env python
 import traceback
 import export
-try:
-    import math
-    import warnings
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore",category=UserWarning) ### hides import warnings
-        import matplotlib
-        matplotlib.use('TkAgg')
-        if commandLine==False:
-            try: matplotlib.rcParams['backend'] = 'TkAgg'
-            except Exception: pass
-        try:
-            import matplotlib.pyplot as pylab
-            import matplotlib.colors as mc
-            import matplotlib.mlab as mlab
-            from matplotlib import mpl
-            from matplotlib.patches import Circle
-            from mpl_toolkits.mplot3d import Axes3D
-            mpl.rcParams['axes.linewidth'] = 0.5
-            mpl.rcParams['pdf.fonttype'] = 42
-            mpl.rcParams['font.family'] = 'sans-serif'
-            mpl.rcParams['font.sans-serif'] = 'Arial'
-        except Exception:
-            print 'Matplotlib support not enabled'
-        import scipy
-        from scipy.linalg import svd
-        import scipy.cluster.hierarchy as sch
-        import scipy.spatial.distance as dist
-        try: import numpy; np = numpy
-        except Exception:
-            print 'Numpy import error...'
-            print traceback.format_exc()
-        try:
-            import igraph.vendor.texttable
-        except ImportError: pass
-        try:
-            from sklearn.decomposition import PCA, FastICA
-        except Exception: pass
-        #pylab.ion() # closes Tk window after show - could be nice to include
-except Exception:
-    print traceback.format_exc()
-    pass
 import numpy as np
 #import pylab as pl
 import sys,string
@@ -52,6 +11,7 @@ import os.path
 from collections import defaultdict
 from sklearn.cluster import KMeans
 import nimfa
+import Orderedheatmap
 #import statistics
 
 from sklearn.decomposition import NMF
@@ -122,7 +82,7 @@ def filterRows(input_file,output_file,filterDB=None,logData=False):
     export_object.close()
     print 'Filtered rows printed to:',output_file
 
-def FilterFile(Guidefile,Guidefile_block,PSI):
+def FilterFile(Guidefile,Guidefile_block,PSI,turn):
     if 'Clustering' in Guidefile:
         count=1
         flag=True
@@ -161,7 +121,12 @@ def FilterFile(Guidefile,Guidefile_block,PSI):
         else:
             head+=1
             continue
-    output_file = PSI[:-4]+'-filtered.txt'
+    dire = export.findParentDir(PSI)
+    output_dir = dire+'OncoInputs'
+    if os.path.exists(output_dir)==False:
+        export.createExportFolder(output_dir)
+    
+    output_file = output_dir+'/NMFInput-Round'+str(turn)+'.txt'
     filterRows(PSI,output_file,filterDB=val)
     
     return output_file,rank_Count
@@ -172,16 +137,18 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     X=[]
     header=[]
     head=0
-    exportnam=filename[:-4]+'NMFsnmf_versionr'+str(Rank)+'.txt'
-    export_res=open(exportnam,"w")
-    exportnam_bin=filename[:-4]+'NMFsnmf_binary'+str(Rank)+'.txt'
-    export_res1=open(exportnam_bin,"w")
+    exportnam=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_versionr'+str(Rank)+'.txt'
+    export_res=export.ExportFile(exportnam)
+    exportnam_bin=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_binary'+str(Rank)+'.txt'
+    export_res1=export.ExportFile(exportnam_bin)
+    exportnam_bint=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_binary_t_'+str(Rank)+'.txt'
+    export_res5=export.ExportFile(exportnam_bint)
     #exportnam_spec=filename[:-4]+'NMFsnmf_binary_specific'+str(Rank)+'.txt'
     #export_res4=open(exportnam_spec,"w")
-    exportnam2=export.findParentDir(filename)+'/round'+str(turn)+'/'+'Metadata'+str(Rank)+'.txt'
+    exportnam2=export.findParentDir(filename)+'/SubtypeAnalyses/round'+str(turn)+'Metadata'+str(Rank)+'.txt'
     #exportnam2=filename[:-4]+'Metadata'+str(Rank)+'.txt'
     export_res2=export.ExportFile(exportnam2)
-    exportnam3=export.findParentDir(filename)+'/round'+str(turn)+'/'+'Annotation'+str(Rank)+'.txt'
+    exportnam3=export.findParentDir(filename)+'/SubtypeAnalyses/round'+str(turn)+'Annotation'+str(Rank)+'.txt'
     #exportnam3=filename[:-4]+'Annotation'+str(Rank)+'.txt'
     export_res3=export.ExportFile(exportnam3)
     if 'Clustering' in filename:
@@ -190,7 +157,7 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     else:
         count=0
         start=1
-    print Rank
+    #print Rank
     for line in open(filename,'rU').xreadlines():
         line=line.rstrip('\r\n')
         q= string.split(line,'\t')
@@ -229,23 +196,23 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
         
     sh=[]
     X=np.array(X)
-    print X.shape
+    #print X.shape
     mat=[]
     #mat=X
     mat=zip(*X)
     mat=np.array(mat)
-    print mat.shape
+    #print mat.shape
     #model = NMF(n_components=15, init='random', random_state=0)
     #W = model.fit_transform(mat)
     nmf = nimfa.Snmf(mat,seed="nndsvd", rank=int(Rank), max_iter=20,n_run=10,track_factor=True)
     nmf_fit = nmf()
     W = nmf_fit.basis()
     W=np.array(W)
-    np.savetxt("basismatrix2.txt",W,delimiter="\t")
+    #np.savetxt("basismatrix2.txt",W,delimiter="\t")
     H=nmf_fit.coef()
     H=np.array(H)
-    np.savetxt("coefficientmatrix2.txt",H,delimiter="\t")
-    print W.shape
+   # np.savetxt("coefficientmatrix2.txt",H,delimiter="\t")
+    #print W.shape
     sh=W.shape
     export_res3.write("uid\tUID\tUID\n")
     if int(Rank)==2:
@@ -279,7 +246,7 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
             compstd=False
         me=np.mean(val)
         st=np.std(val)
-        print 'V'+str(i)
+        #print 'V'+str(i)
         export_res.write('V'+str(i))
         export_res1.write('V'+str(i))
        
@@ -314,6 +281,7 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     Z1=[]
     dellst=[]
     export_res2.write("uid")
+    export_res5.write("uid")
     for i in range(sh[0]):
         indices=[]
         val1=Z[i,:]
@@ -332,17 +300,18 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
                     if float(sum2)/float(sum1)>0.5:
                         if summ2>sum1:
                             flag=True
-                            print str(i)
+                            #print str(i)
                 except Exception:
                     continue
         if flag==False:
 
             Z1.append(val1)
             export_res2.write("\t"+'V'+str(i))
-           
+            export_res5.write("\t"+'V'+str(i))
             export_res3.write('V'+str(i)+"\t"+"Covariate"+"\t"+str(1)+"\n")
     
     export_res2.write("\n")
+    export_res5.write("\n")
     Z1=np.array(Z1)
     Z=Z1
     Z=zip(*Z)
@@ -360,12 +329,16 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
         me=np.mean(val)
         st=np.std(val)
         export_res2.write(header[i+1])
+        export_res5.write(header[i+1])
         for j in range(sh[1]):
             if strategy=="conservative":
                 export_res2.write("\t"+str(val1[j]))
+                export_res5.write("\t"+str(val1[j]))
             else:
-               export_res2.write("\t"+str(val[j])) 
+               export_res2.write("\t"+str(val[j]))
+               export_res5.write("\t"+str(val[j])) 
         export_res2.write("\n")
+        export_res5.write("\n")
         Z_new.append(val)
     Z_new=zip(*Z_new)
     Z_new=np.array(Z_new)
@@ -379,11 +352,13 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     #        export_res4.write("\t"+str(Z_new[i][j]))
     #    export_res4.write("\n")
     
-        
+    export_res5.close()
+    Orderedheatmap.Classify(exportnam_bint)    
     if strategy=="conservative":
         return exportnam,exportnam_bin,exportnam2,exportnam3
     else:
-        return exportnam,exportnam_bin,exportnam2,exportnam3   
+        return exportnam,exportnam_bin,exportnam2,exportnam3
+    
 
                            
                 
@@ -415,7 +390,7 @@ if __name__ == '__main__':
     inputfile=Guidefile
     input
     Rank=30
-    print Rank
+    #print Rank
     if Rank>1:
        NMFAnalysis(inputfile,Rank)
     else:

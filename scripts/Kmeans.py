@@ -6,6 +6,7 @@ import os
 import os.path
 from collections import defaultdict
 from sklearn.cluster import KMeans
+import export
 
 def strip_first_col(fname, delimiter=None):
     with open(fname, 'r') as fin:
@@ -27,7 +28,7 @@ def header_file(fname, delimiter=None):
             else:break
     return header
 
-def KmeansAnalysis(filename,header):
+def KmeansAnalysis(filename,header,InputFile,turn):
     X=defaultdict(list)
     prev=""
     head=0
@@ -52,7 +53,13 @@ def KmeansAnalysis(filename,header):
         X[key]=np.array(X[key])
         print X[key].shape
         mat=[]
-        exportname=filename[:-4]+key+'.txt'
+        dire= export.findParentDir(export.findParentDir(InputFile)[:-1])
+        output_dir = dire+'SVMOutputs'
+        if os.path.exists(output_dir)==False:
+            export.createExportFolder(output_dir)
+   
+        exportname=output_dir+'/round'+str(turn)+'Kmeans_result.txt'
+        #exportname=filename[:-4]+key+'.txt'
         export_results=open(exportname,"w")
         mat=zip(*X[key])
         mat=np.array(mat)
@@ -66,6 +73,7 @@ def KmeansAnalysis(filename,header):
         cent_1=y.count(0)
         cent_2=y.count(1)
         print cent_1,cent_2
+        export_results.write("uid"+"\t"+"group"+"\n")
         if cent_1<cent_2:
             count=2
             for j in y:

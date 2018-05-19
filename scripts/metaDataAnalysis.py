@@ -200,7 +200,7 @@ def prepareComparisonData(metadata_file,metadata_filters,groups_db,comps_db):
                             comps.append((group1,group2))
         comps_db[field]=comps
                         
-    print len(list(set(samplesToRetainFinal))), 'samples considered for analysis.', len(list(set(samplesToRemove))), 'removed.'
+    #print len(list(set(samplesToRetainFinal))), 'samples considered for analysis.', len(list(set(samplesToRemove))), 'removed.'
     return groups_db,comps_db
 
 def cleanUpLine(line):
@@ -595,7 +595,7 @@ def performDifferentialExpressionAnalysis(species,platform,input_file,groups_db,
         #do.close()
         #uo.close()
         so.close()
-    print len(compared_ids),'unique IDs compared (denominator).'
+    #print len(compared_ids),'unique IDs compared (denominator).'
     return rootdir, splicingEventTypes
 
 def outputSplicingSummaries(rootdir,splicingEventTypes):
@@ -807,8 +807,8 @@ def importExpressionData(species,platform,expression_file,cell_line_db,common_li
                     symbol = ''
                 geneIDs = [(uid,symbol)]
             elif uid in gene_to_symbol:
-                if 'uid'== 'cg21028156':
-                    print gene_to_symbol[uid]
+                #if 'uid'== 'cg21028156':
+                    #print gene_to_symbol[uid]
                 for g in gene_to_symbol[uid]:
                     if 'ENS' in g:
                         if platform == 'methylation' and ':' in original_uid:
@@ -817,7 +817,7 @@ def importExpressionData(species,platform,expression_file,cell_line_db,common_li
             for (geneID,uid) in geneIDs:
                 try: filtered_exp_data[geneID].append((uid,filtered_values))
                 except Exception: filtered_exp_data[geneID] = [(uid,filtered_values)]
-    print len(filtered_exp_data)
+    #print len(filtered_exp_data)
     return filtered_exp_data, samplesToEvaluate
 
 def combineAndCompareMatrices(input_file,filtered_exp_data1,filtered_exp_data2,platform1,platform2,samplesToEvaluate):
@@ -1370,9 +1370,9 @@ def remoteAnalysis(species,expression_file,groups_file,platform='PSI',log_fold_c
             metadata_filters = importMetaDataDescriptions(meta_description_file)
             all_groups_db, all_comps_db = prepareComparisonData(metadata_files[0],metadata_filters,all_groups_db, all_comps_db)
 
-    for i in all_groups_db:
+    #for i in all_groups_db:
         #print i
-        for k in all_groups_db[i]: print '  ',k,'\t',len(all_groups_db[i][k])
+     #   for k in all_groups_db[i]: print '  ',k,'\t',len(all_groups_db[i][k])
     #print all_comps_db
     
     if platform == 'PSI':

@@ -19,9 +19,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.ensemble import BaggingClassifier
-from sklearn.naive_bayes import GaussianNB
 
+import Orderedheatmap
 
 #from sklearn import cross_validation
 
@@ -90,7 +89,7 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     else:
         omitcluster=1
     export_class.write(psi+"\t"+str(len(unique_clusters[0]))+"\n")
-    print len(upd_guides)
+
     return omitcluster
     #return upd_guides,train
 
@@ -107,7 +106,7 @@ def filterRows(input_file,output_file,filterDB=None,logData=False):
     export_object = open(output_file,'w')
     firstLine = True
     Flag=0;
-    print len(filterDB)
+
     #for i in filterDB:
     for line in open(input_file,'rU').xreadlines():
         #for i in filterDB:
@@ -160,7 +159,7 @@ def filterRows_data(input_file,output_file,filterDB=None,logData=False):
     export_object = open(output_file,'w')
     firstLine = True
     Flag=0;
-    print len(filterDB)
+
     for i in filterDB:
         event=string.split(i,"|")[0]
         tempevents.append(event)
@@ -204,16 +203,16 @@ def filterRows_data(input_file,output_file,filterDB=None,logData=False):
         if i in orderlst:
             export_object.write(orderlst[i])
             if "\n" not in orderlst[i]:
-                print i
+                #print i
                 export_object.write("\n") 
     export_object.close()
     tempevents2=[]
-    print 'Filtered rows printed to:',output_file
+    #print 'Filtered rows printed to:',output_file
     for i in range(len(tempevents)):
         if tempevents[i] in filteredevents:
             tempevents2.append(tempevents[i])
     
-    print len(tempevents2) 
+   # print len(tempevents2) 
     return tempevents2
 
 def findParentDir(filename):
@@ -221,7 +220,7 @@ def findParentDir(filename):
     filename = string.replace(filename,'\\','/')
     x = string.find(filename[::-1],'/')*-1
     return filename[:x]
-def Classify(header,Xobs,output_file,grplst,name):
+def Classify(header,Xobs,output_file,grplst,name,turn):
     count=0
     start=1
     Y=[]
@@ -251,19 +250,19 @@ def Classify(header,Xobs,output_file,grplst,name):
         else:
             head+=1
             continue
-    print "Xobs"  
+
     Xobs=zip(*Xobs)
-    print len(Xobs)
+
     Xobs=np.array(Xobs)
     Xobs=zip(*Xobs)
-    print len(Xobs)
+
     Xobs=np.array(Xobs)
     X=grplst
     X=zip(*X)
     X=np.array(X)
     Y=zip(*Y)
     Y=np.array(Y)
-    print Y.shape
+
 #X=np.loadtxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/group.txt")
 #print len(Xobs)
 #Load test
@@ -272,49 +271,52 @@ def Classify(header,Xobs,output_file,grplst,name):
 #Reshape the files
 #X=X.reshape(len(X), 1)
 #Xobs=np.array(Xobs)
-    exportnam=output_file[:-4]+'KNN_test_30.txt'
-    export_class=open(exportnam,"w")
-    export_class.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
-    regr = KNeighborsClassifier(n_neighbors=1)
-    print X.shape,Xobs.shape
-    regr.fit(Xobs,X[:,0])
-    q=regr.predict(Y)
-    count=1
-    for i in q:
-        export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
-        count+=1            
+    #exportnam=output_file[:-4]+'KNN_test_30.txt'
+    #export_class=open(exportnam,"w")
+    #export_class.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
+    #regr = KNeighborsClassifier(n_neighbors=1)
+    ##print X.shape,Xobs.shape
+    #regr.fit(Xobs,X[:,0])
+    #q=regr.predict(Y)
+    #count=1
+    #for i in q:
+    #    export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
+    #    count+=1            
     
     #np.savetxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/complete_KNN.txt",q)
-    
-    exportnam=output_file[:-4]+'SVC_test_50cor.txt'
-    export_class=open(exportnam,"w")
-    exportnam1=output_file[:-4]+'SVC_test_50cor_decision.txt'
+    dire =export.findParentDir(export.findParentDir(export.findParentDir(output_file)[:-1])[:-1])
+    output_dir = dire+'SVMOutputs'
+    if os.path.exists(output_dir)==False:
+        export.createExportFolder(output_dir)
+    #exportnam=output_dir+'/round'+str(turn)+'SVC_test_50cor.txt'
+    #export_class=open(exportnam,"w")
+    exportnam1=output_dir+'/round'+str(turn)+'SVC_decision_func.txt'
     export_class1=open(exportnam1,"w")
-    exportnam2=output_file[:-4]+'SVC_test_50cor_decision_bin.txt'
+    exportnam2=output_dir+'/round'+str(turn)+'SVC_Results.txt'
     export_class2=open(exportnam2,"w")
-    export_class.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
+    #export_class2.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
     regr = LinearSVC()
     regr.fit(Xobs,X[:,0])
     q=regr.predict(Y)
-    print q
+    #print q
     count=1
     
-    for i in q:
+    #for i in q:
         
-        export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
-        count+=1
-    print len(X[:,0])
+        #export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
+        #count+=1
+    #print len(X[:,0])
     if len(X[:,0])>2:
         prob_=regr.fit(Xobs,X[:,0]).decision_function(Y)
         #k=list(prob_)
         export_class1.write("uid")
         export_class2.write("uid")
         for ni in name:
-            export_class1.write("\t"+ni)
-            export_class2.write("\t"+ni)
+            export_class1.write("\t"+"R"+str(turn)+"-"+ni)
+            export_class2.write("\t"+"R"+str(turn)+"-"+ni)
         export_class1.write("\n")
         export_class2.write("\n")
-        print prob_
+        #print prob_
         for iq in range(0,len(header)-1):
             export_class1.write(header[iq+1])
             export_class2.write(header[iq+1])
@@ -334,13 +336,13 @@ def Classify(header,Xobs,output_file,grplst,name):
         export_class1.write("uid"+"\t")
         export_class2.write("uid"+"\t")
         export_class1.write("group")
-        export_class2.write("group")
+        export_class2.write("round"+str(turn)+"-V1"+"\t"+"round"+str(turn)+"-V2"+"\n")
         #for ni in name:
         #   export_class1.write("\t"+ni)
         #    export_class2.write("\t"+ni)
         export_class1.write("\n")
         export_class2.write("\n")
-        print prob_
+        #print prob_
         #export_class1.write(header[1])
         #export_class2.write(header[1])
         for iq in range(0,len(header)-1):
@@ -350,30 +352,32 @@ def Classify(header,Xobs,output_file,grplst,name):
             export_class1.write("\t"+str(prob_[iq]))
             if prob_[iq]>0.5:
                     
-                export_class2.write("\t"+str(1))
+                export_class2.write("\t"+str(1)+"\t"+str(0))
             
             else:
                 if prob_[iq]<-0.5:  
-                    export_class2.write("\t"+str(2))
+                    export_class2.write("\t"+str(0)+"\t"+str(1))
                 else:
-                    export_class2.write("\t"+str(0))
+                    export_class2.write("\t"+str(0)+"\t"+str(0))
             export_class1.write("\n")
             export_class2.write("\n")
-        
+    export_class2.close() 
+    Orderedheatmap.Classify(exportnam2)      
+    
         
     #np.savetxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/complete_SVC_decisions.txt",prob_)
-    
-    exportnam=output_file[:-4]+'Random_test_30.txt'
-    export_class=open(exportnam,"w")
-    export_class.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
-    regr = RandomForestClassifier(n_estimators=60,max_features='sqrt',bootstrap='true')
-    regr.fit(Xobs,X[:,0])
-    q=regr.predict(Y)
-    count=1
-    for i in q:
-        export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
-        count+=1
-    return exportnam1,exportnam2
+    #
+    #exportnam=output_file[:-4]+'Random_test_30.txt'
+    #export_class=open(exportnam,"w")
+    #export_class.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
+    #regr = RandomForestClassifier(n_estimators=60,max_features='sqrt',bootstrap='true')
+    #regr.fit(Xobs,X[:,0])
+    #q=regr.predict(Y)
+    #count=1
+    #for i in q:
+    #    export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
+    #    count+=1
+    #return exportnam1,exportnam2
         #np.savetxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/complete_random_Forest.txt",q)
         
 def header_file(fname, delimiter=None):
@@ -427,7 +431,7 @@ def TrainDataGeneration(output_file,NMF_annot,name):
                     except Exception: mapping[0]=[header[i]]
             head2=0
             #print len(mapping[1]),len(mapping[0])
-            print lin[0]
+            #print lin[0]
             eventname=[]
             for exp2 in open(output_file,"rU").xreadlines():
                     lin2=exp2.rstrip('\r\n')
@@ -481,27 +485,27 @@ def TrainDataGeneration(output_file,NMF_annot,name):
                             matrix[lin[0]].append(float(0))
                             eventname.append(key)
                         
-    exportnam=output_file[:-4]+'training_centroid.txt'
-    export_class=open(exportnam,"w")
-    export_class.write('uid')
-    for i in range(len(eventname)):
-        export_class.write('\t'+eventname[i])
-    export_class.write('\n')
+    #exportnam=output_file[:-4]+'training_centroid.txt'
+    #export_class=open(exportnam,"w")
+    #export_class.write('uid')
+    #for i in range(len(eventname)):
+     #   export_class.write('\t'+eventname[i])
+    #export_class.write('\n')
     for j in range(0,len(name)):
-        print name[j]
+        #print name[j]
         
         for key in matrix:
             key1=key+"_vs"
             key2="vs_"+key+".txt"
             
             if key1 in name[j] or key2 in name[j]:
-                print key
+               # print key
                 train.append(matrix[key])
-                export_class.write(key)
-                for i in range(len(matrix[key])):
-                    export_class.write('\t'+str(matrix[key][i]))
-                export_class.write('\n')
-                    
+                #export_class.write(key)
+                #for i in range(len(matrix[key])):
+                 #   export_class.write('\t'+str(matrix[key][i]))
+                #export_class.write('\n')
+                 
     return train
 
 if __name__ == '__main__':
