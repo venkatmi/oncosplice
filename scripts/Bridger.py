@@ -234,6 +234,7 @@ def parseResultfolders(motifdir,GEdir,SFlist):
                         
     #output=os.path.join(motifdir,"merged_output_allpvalues_nofold.txt")
     output1=open(output,"w")
+    #output1.write("signature"+"\t"+"gene"+"\t"+"tool"+"\t"+"p-value"+"\n")
     for name,gene,key in mappingdict:
         output1.write(name+"\t"+gene+"\t"+key+"\t"+mappingdict[name,gene,key]+"\n")
     output1.close()
@@ -252,7 +253,12 @@ def Mergeresults(filename):
     
     #output="/Volumes/Pass/MotifAnalyses/Bridger/Exons_MotifAnalyses/merged_output_allpvalues_nofold_upd.txt"
     output1=open(output,"w")
-
+    
+    output=dire+"/Motifresults_zscores.txt"
+    output2=open(output,"w")
+    
+    output1.write("signature"+"\t"+"gene"+"\t"+"technique"+"\t"+"p-value"+"\t"+"log-transformed"+"\t"+"signature"+"\t"+"gene"+"\t"+"technique"+"\t"+"p-value"+"\t"+"log-transformed"+"\t"+"signature"+"\t"+"gene"+"\t"+"technique"+"\t"+"p-value"+"\t"+"log-transformed"+"\t"+"signature"+"\t"+"gene"+"\t"+"technique"+"\t"+"p-value"+"\t"+"log-transformed"+"\n")
+    output2.write("signature"+"\t"+"gene"+"\t"+"cisbp-zscore"+"\t"+"CLIPseq-zscore"+"\t"+"GE-zscore"+"\n")
     for lin in open(filename,'rU').xreadlines():
         genes=[]
         s=lin.rstrip('\r\n')
@@ -298,8 +304,13 @@ def Mergeresults(filename):
                 Newval[sig1,tool,genes[i].upper()]=float(s1[3])
                 genelst[sig1,genes[i].upper()].append(tool)
         
-
+    zscoredt={}
+    cisbp=[]
+    clipseq=[]
+    ge=[]
+  
     for sig,genes in genelst:
+       
         tools=[]
         cisbpact=True
         cisbpden=True
@@ -317,37 +328,79 @@ def Mergeresults(filename):
         pval=0.0
         count=0
         if a>1:
+            pval=0.0
+            count=0
             if "Cisbp_Actual" in tools and cisbpact:
-                output1.write(sig+"\t"+genes+"\t"+"Cisbp_Actual"+"\t"+str(Newval[sig,"Cisbp_Actual",genes])+"\t")
+                
                 count+=1
                # print str(Newval[sig,"Cisbp_Actual",genes])
-                pval=pval-math.log10(Newval[sig,"Cisbp_Actual",genes])
+                pval=0.0-math.log10(Newval[sig,"Cisbp_Actual",genes])
+                output1.write(sig+"\t"+genes+"\t"+"Cisbp_Actual"+"\t"+str(Newval[sig,"Cisbp_Actual",genes])+"\t"+str(pval)+"\t")
+                zscoredt[sig,genes]=[pval,]
+                cisbp.append(pval)
             else:
-                output1.write(sig+"\t"+genes+"\t"+"Cisbp_Actual"+"\t"+"NA"+"\t")
+                
+                output1.write(sig+"\t"+genes+"\t"+"Cisbp_Actual"+"\t"+"NA"+"\t"+"NA"+"\t")
             if 'Cisbp_denovo' in tools and cisbpden:
                 count+=1
                 #print str(Newval[sig,"Cisbp_denovo",genes])
-                pval=pval-math.log10(Newval[sig,"Cisbp_denovo",genes])
-                output1.write(sig+"\t"+genes+"\t"+"Cisbp_denovo"+"\t"+str(Newval[sig,"Cisbp_denovo",genes])+"\t")
+                pval=0.0-math.log10(Newval[sig,"Cisbp_denovo",genes])
+                output1.write(sig+"\t"+genes+"\t"+"Cisbp_denovo"+"\t"+str(Newval[sig,"Cisbp_denovo",genes])+"\t"+str(pval)+"\t")
+                zscoredt[sig,genes]=[pval,]
+                cisbp.append(pval)
             else:
-                output1.write(sig+"\t"+genes+"\t"+"Cisbp_denovo"+"\t"+"NA"+"\t")
+                output1.write(sig+"\t"+genes+"\t"+"Cisbp_denovo"+"\t"+"NA"+"\t"+"NA"+"\t")
+                
+            if (sig,genes) not in zscoredt:
+                zscoredt[sig,genes]=[0.0,]
+                cisbp.append(0.0)
                 
             if "Clipseq" in tools:
                 count+=1
                 #print str(Newval[sig,"Clipseq",genes])
-                pval=pval-math.log10(Newval[sig,"Clipseq",genes])
-                output1.write(sig+"\t"+genes+"\t"+"Clipseq"+"\t"+str(Newval[sig,"Clipseq",genes])+"\t")
+                pval=0.0-math.log10(Newval[sig,"Clipseq",genes])
+                output1.write(sig+"\t"+genes+"\t"+"Clipseq"+"\t"+str(Newval[sig,"Clipseq",genes])+"\t"+str(pval)+"\t")
+                zscoredt[sig,genes].append(pval)
+                clipseq.append(pval)
             else:
-               output1.write(sig+"\t"+genes+"\t"+"Clipseq"+"\t"+"NA"+"\t")
+               output1.write(sig+"\t"+genes+"\t"+"Clipseq"+"\t"+"NA"+"\t"+"NA"+"\t")
+               zscoredt[sig,genes].append(0.0)
+               clipseq.append(0.0)
             if "GE" in tools:
                 count+=1
                 #print str(Newval[sig,"GE",genes])
-                pval=pval-math.log10(Newval[sig,"GE",genes])
-                output1.write(sig+"\t"+genes+"\t"+"GE"+"\t"+str(Newval[sig,"GE",genes])+"\t")
+                pval=0.0-math.log10(Newval[sig,"GE",genes])
+                output1.write(sig+"\t"+genes+"\t"+"GE"+"\t"+str(Newval[sig,"GE",genes])+"\t"+str(pval)+"\n")
+                zscoredt[sig,genes].append(pval)
+                ge.append(pval)
             else:
-                output1.write(sig+"\t"+genes+"\t"+"GE"+"\t"+"NA"+"\t")
-            pval=pval/float(count)
-            output1.write(str(pval)+"\n")
+                output1.write(sig+"\t"+genes+"\t"+"GE"+"\t"+"NA"+"\t"+"NA"+"\n")
+                zscoredt[sig,genes].append(0.0)
+                ge.append(0.0)
+    meancis=np.mean(cisbp)
+    meanclip=np.mean(clipseq)
+    meange=np.mean(ge)
+    sdcis=np.std(cisbp)
+    sdclip=np.std(clipseq)
+    sdge=np.std(ge)
+
+    
+    for sig,genes in zscoredt:
+        scores=[]
+        scores=zscoredt[sig,genes]
+        if len(scores)==3:
+            val1=(float(scores[0])-float(meancis))/float(sdcis)
+            val2=(float(scores[1])-float(meanclip))/float(sdclip)
+            val3=(float(scores[2])-float(meange))/float(sdge)
+            output2.write(sig+"\t"+genes+"\t"+str(val1)+"\t"+str(val2)+"\t"+str(val3)+"\n")
+        else:
+            print "error in zscore calculation"
+            print sig,genes
+            
+        
+    
+            #pval=pval/float(count)
+            #output1.write(str(pval)+"\n")
 
 
     

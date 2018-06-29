@@ -345,12 +345,7 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     
     sh=Z_new.shape
    
-    #for i in range(sh[0]):
-    #    export_res4.write('V'+str(i))
-    #  
-    #    for j in range(sh[1]):
-    #        export_res4.write("\t"+str(Z_new[i][j]))
-    #    export_res4.write("\n")
+ 
     
     export_res5.close()
     Orderedheatmap.Classify(exportnam_bint)    
@@ -382,15 +377,10 @@ if __name__ == '__main__':
             elif opt == '--PSI':PSI=arg
             else:
                 print "Warning! Command-line argument: %s not recognized. Exiting..." % opt; sys.exit()
-    #mutfile="/Users/meenakshi/Desktop/Leucegene-data1/Mutation_Annotations.txt"          
-    #Guidefile="/Users/meenakshi/Documents/leucegene/ICGS/Round2_cor_0.6_280default/Clustering-exp.round2_insignificantU2like-Guide1 DDX5&ENSG00000108654&E3.4-E3.9__ENSG0000010-hierarchical_cosine_correlation.txt"          
-    #Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
-    #inputfile,Rank=FilterFile(Guidefile,Guidefile_block,PSI)
-    #inputfile=PSI
+   
     inputfile=Guidefile
-    input
+ 
     Rank=30
-    #print Rank
     if Rank>1:
        NMFAnalysis(inputfile,Rank)
     else:

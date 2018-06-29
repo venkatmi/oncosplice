@@ -108,17 +108,9 @@ def Classify(filename,Mutlabels={},dire="",flag=True):
         Z.append(Y[jk,:])
     Z=np.array(Z)
     q= Z.shape
-    #print Z.shape
-    #print len(header)
-    #print header[24]
-    #print q[0]
-    #print q[1]
-    #for i in range(0,len(C)):
-    #    Y=sorted(Y,key=itemgetter(i))
+
     export_object.write("uid")
-    #for i in colnames:
-    #    export_object.write("\t"+i)
-    #export_object.write("\n")
+  
         
     for i in range(q[1]):
         export_object.write("\t"+Z[0][i])

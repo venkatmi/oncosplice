@@ -57,10 +57,9 @@ def filterPSIValues(filename):
     rows=0
     filtered=0
     new_file = filename[:-4]+'-75p.txt'
-    #new_file_clust = new_file[:-4]+'-clustID.txt'
+   
     ea = export.ExportFile(new_file)
-    #eac = export.ExportFile(new_file_clust)
-   # added=[]
+
     for line in open(fn,'rU').xreadlines():
         data = line.rstrip()
         t = string.split(data,'\t')
@@ -74,23 +73,21 @@ def filterPSIValues(filename):
             new_line = string.join(t,'\t')+'\n'
             ea.write(new_line)
         else:
-            #cID = t[5]
+          
             t = [t[1]]+t[eventindex+1:]
             missing_values_at_the_end = (header_length+1)-len(t)
             missing = missing_values_at_the_end+t.count('')
             if missing<not_detected:
-                #if cID not in added:
-                #added.append(cID)
+               
                 new_line = string.join(t,'\t')+'\n'
                 ea.write(new_line)
-                #eac.write(t[0]+'\t'+cID+'\n')
+               
                 filtered+=1
         rows+=1
-    #print rows, filtered
+
     ea.close()
     return newfile
-    #eac.close()
-    #removeRedundantCluster(new_file,new_file_clust)
+    
 
 def header_list(EventAnnot):
     head=0
@@ -106,7 +103,7 @@ def header_list(EventAnnot):
                     
                         header.append(line[i])
                 
-                #del header[:1]
+              
                 head=1
             else:break
     return header
@@ -117,7 +114,7 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     guidekeys=[]
     exportnam=os.path.join(Guidedir,"SplicingeventCount1.txt")
     export_class=open(exportnam,"a")
-    #commonkeys=[]
+
     tempkeys={}
     global upd_guides
     global train
@@ -154,9 +151,9 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     for i in tempkeys:
         
         if len(tempkeys[i])>1:
-            #print tempkeys[i]
+        
             tempkeys[i].sort(key=operator.itemgetter(1),reverse=False)
-            #print tempkeys[i][0]
+           
             try:
                 unique_clusters[0].append(tempkeys[i][0])
             except KeyError:
@@ -311,11 +308,8 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
            
             
             print "Running block identification for rank analyses - Round"+str(turn)
-            RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True)
-        ##    
+            RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
             Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
-        
-        ###Guidefile="/Users/meenakshi/Documents/testdata/ICGS/Clustering-exp.testdata-filteredcor_depleted-Guide3 ANKS1A ENSG00000064999 I17.1-E18.1 ENSG0000-hierarchical_euclidean_correlation.txt"
             NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile,turn)
         except Exception:Rank=0
      
@@ -360,9 +354,6 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
                     export.createExportFolder(output_dir)
         
                 output_file = output_dir+'/SVMInput-Round'+str(turn)+'.txt'
-                #output_file=InputFile[:-4]+"-filtered.txt"  
-                #print guidekey
-                #print len(upd_guides)
                 ExpandSampleClusters.filterRows(InputFile,output_file,filterDB=upd_guides,logData=False)
                 header=ExpandSampleClusters.header_file(output_file)
                 print "Running SVM prediction for improved subtypes - Round"+str(turn)
@@ -385,6 +376,7 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
                     header=[]
                     header=Kmeans.header_file(Guidefile_block)
                     Kmeans.KmeansAnalysis(Guidefile_block,header,InputFile,turn)
+                    flag=False
                 except Exception:
                     flag=False
                 
@@ -401,7 +393,7 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
                     flag=False
             else:
                 flag=False
-        #     
+         
         return flag,InputFile,FilteredEventAnnot
 if __name__ == '__main__':
     import getopt
@@ -432,7 +424,7 @@ if __name__ == '__main__':
     InputFile=output_dir+"/exp.input.txt"
     header=header_list(EventAnnot)
     sampleIndexSelection.filterFile(EventAnnot,InputFile,header,FirstCol=False)
-    flag=False
+    flag=True
     turn=1
     if mode=="single":
         flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq)
@@ -451,14 +443,16 @@ if __name__ == '__main__':
     output_dir = dire+'SVMOutputs'
     Combinedres=MergeResults(output_dir)
     
-    #Combinedres="/Volumes/Pass/testrun/SVMOutputs/MergedResult_v2.txt"
+    
     mutlabels={}
     if Mutationref!="":
         print "Running Mutation Enrichment Analyses"
         Expand="yes"
         mutdict=defaultdict(list)
         header=ME.header_file(Mutationref)
+      
         mutdict=ME.findsiggenepermut(Mutationref)
+      
         mutlabels=ME.Enrichment(Combinedres,mutdict,Mutationref,Expand,header)
     print "Generating the final consolidated results"
     Orderedheatmap.Classify(Combinedres,mutlabels,dire)

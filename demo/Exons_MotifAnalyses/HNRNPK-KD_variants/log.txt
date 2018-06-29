@@ -1,9 +1,0 @@
-total simulation + intersection time	5.31419
-simulation time	0.771544
-intersection block time	4.54264
-intersection only time	4.50081
-sorting after intersection time	0.0017869
-total simulation + intersection time per iteration	0.00531419
-intersection block time per iteration	0.00454264
-intersection only time per iteration	0.00450081
-sorting after intersection time per iteration	1.7869e-06

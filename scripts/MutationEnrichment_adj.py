@@ -115,13 +115,12 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     dire=export.findParentDir(Inputfile)
     output_dir = dire+'MutationEnrichment'
     export.createExportFolder(output_dir)
-    #output_file=output_dir+"/Consolidated.txt"
+
     exportnam=output_dir+'/Enrichment_Results.txt'
     export_enrich=open(exportnam,"w")
     exportnam=output_dir+'/Enrichment_tophits.txt'
     export_hit=open(exportnam,"w")
-    #exportnam1=Inputfile[:-4]+mut[:-4]+'enrichmentmatrix.txt'
-    #export_enrich1=open(exportnam1,"w")
+   
     export_enrich.write("Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n")
     if Expand=="yes":
         header2=header_file(Inputfile)
@@ -144,11 +143,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
             line=string.split(line,'\t')
             #for i in range(1,len(line)):
             group[line[2]].append(line[0])
-    #print group
-   # export_enrich1.write("uid")    
-    #for key2 in group:
-    #    export_enrich1.write("\t"+key2)
-    #export_enrich1.write("\n")
+   
     total_Scores={}
     for kiy in mutdict:
         if kiy =="MDP":
@@ -199,8 +194,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
         mappfinder.adjustPermuteStats(signature_db)
         for signature in signature_db:
             zsd = signature_db[signature]
-            #if float(zsd.ZScore())>1.96 and float(zsd.Changed())>2 and float(zsd.PermuteP())<0.05:
-               # enriched_SFs={}
+           
             results = [kiy,signature,zsd.Changed(),zsd.Measured(),zsd.InPathway(),str(float(zsd.PercentChanged())/100.0),str(float(float(zsd.Changed())/float(zsd.InPathway()))), zsd.ZScore(), zsd.PermuteP(), zsd.AdjP()] #string.join(zsd.AssociatedIDs(),'|')
             sorted_results.append([signature,float(zsd.PermuteP()),results])
     sorted_results.sort() ### Sort by p-value
@@ -236,8 +230,7 @@ def findsiggenepermut(mutfile):
         if len(lin)>2:
             if head==0:
                 for i in lin[1:]:
-                   # i= string.split(i,".")[0]
-                    #i= string.split(i,".")[0]
+            
                     samplelist.append(i)
                 head=1
                 continue
@@ -249,7 +242,7 @@ def findsiggenepermut(mutfile):
                         
         else:
             mutdict[lin[1]].append(lin[0])
-    #print mutdict    
+   
     return  mutdict
 
 def Zscore(r,n,N,R):
