@@ -14,6 +14,7 @@ Oncosplice is an automated pipeline to identify sample subtypes in an unsupervis
   * matplotlib
   * R 3.0 or greater with Hopach library included
   * nimfa
+  * scikit-learn
 
  # How to run the workflow # 
 
