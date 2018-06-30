@@ -1,0 +1,9 @@
+Package: tcltk
+Version: 2.15.1
+Priority: base
+Title: Tcl/Tk Interface
+Author: R Core Team
+Maintainer: R Core Team <R-core@r-project.org>
+Description: Interface and language bindings to Tcl/Tk GUI elements
+License: Part of R 2.15.1
+Built: R 2.15.1; x86_64-pc-mingw32; 2012-06-22 14:10:52 UTC; windows

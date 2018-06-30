@@ -1,0 +1,10 @@
+Package: graphics
+Version: 2.15.1
+Priority: base
+Title: The R Graphics Package
+Author: R Core Team and contributors worldwide
+Maintainer: R Core Team <R-core@r-project.org>
+Description: R functions for base graphics
+Imports: grDevices
+License: Part of R 2.15.1
+Built: R 2.15.1; ; 2012-06-22 14:05:34 UTC; windows

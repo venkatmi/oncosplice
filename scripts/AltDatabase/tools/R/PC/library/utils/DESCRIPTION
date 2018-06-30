@@ -1,0 +1,9 @@
+Package: utils
+Version: 2.15.1
+Priority: base
+Title: The R Utils Package
+Author: R Core Team and contributors worldwide
+Maintainer: R Core Team <R-core@r-project.org>
+Description: R utility functions
+License: Part of R 2.15.1
+Built: R 2.15.1; ; 2012-06-22 14:04:30 UTC; windows

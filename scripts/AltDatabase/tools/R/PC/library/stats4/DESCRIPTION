@@ -1,0 +1,10 @@
+Package: stats4
+Title: Statistical Functions using S4 Classes
+Version: 2.15.1
+Priority: base
+Author: R Core Team and contributors worldwide
+Description: Statistical Functions using S4 classes
+Maintainer: R Core Team <R-core@r-project.org>
+Depends: methods, graphics, stats
+License: Part of R 2.15.1
+Built: R 2.15.1; ; 2012-06-22 14:10:44 UTC; windows
