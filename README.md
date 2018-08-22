@@ -60,13 +60,13 @@ python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnno
 
 *For the Event Annotation file provide the full path.
 
-Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how run OncoSplice on the demo files. Please read the additional information section for detailed description of the pipeline.
+Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how to run OncoSplice on the demo files. Please read the additional information section for detailed description of the pipeline.
 
  # Additional Information # 
 
 1. Please click [here](https://github.com/venkatmi/oncosplice/wiki/Feature-Selection-and-Sample-Subtype-Classification) for more information on the computational pipeline and algorithms used in Oncosplice. 
 
-2. Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how run the entire OncoSplice on the demo files.
+2. Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how to run the entire OncoSplice on the demo files.
 
 3. Please click [here](https://github.com/venkatmi/oncosplice/wiki/Input-Output-Folder-Structure) for detailed information on the output files and folders generated from OncoSplice.
 
