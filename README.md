@@ -4,10 +4,11 @@ Unsupervised Detection of Splicing Subtypes from RNA-Seq
 
 ![workflow](https://github.com/venkatmi/oncosplice/wiki/images/workflow.png)
 
-Oncosplice is an automated pipeline to identify sample subtypes in an unsupervised manner from splicing quantification data. Oncosplice is currently dependent on input files from AltAnalyze using the recently developed MultiPath-PSI algorithm. 
+Oncosplice is an automated pipeline to identify sample subtypes in an unsupervised manner from splicing quantification data. Oncosplice is currently runs on input files generated using MultiPath-PSI algorithm developed recently in AltAnalyze. 
 
  # Dependencies # 
 
+You will need to install the below packages (majorly python packages) before running OncoSplice.
   * Python 2.7
   * numpy
   * scipy
