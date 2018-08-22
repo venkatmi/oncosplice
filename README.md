@@ -16,22 +16,8 @@ You will need to install the below packages (majorly python packages) before run
   * R 3.0 or greater with Hopach library included
   * nimfa
   * scikit-learn
-
- # Steps involved # 
- 
-1. Generating the input files  
-
-The input to this workflow can be obtained through AltAnalyze version 2.1.0 or greater (http://www.altanalyze.org) using the default analysis workflow described [here](http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm). If using the AltAnalyze GUI, users can enter the path where their RNA-Seq BAMs are stored and run the tool with default parameters.If the using the command-line version AltAnalyze, see the BAM file analysis instructions [here](https://github.com/nsalomonis/altanalyze/wiki/CommandLineMode).
-
-
-
-```javascript
-python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt"
-```
-
-For the Event Annotation file provide the full path.
-
-Before running this workflow, you will need to install the appropriate species RNA-Seq database using the associated command-line:
+  
+Before running the OncoSplice workflow, you will need to install the appropriate species RNA-Seq database using the associated command-line:
 
 ```javascript
 python AltAnalyze.py --species Hs --platform RNASeq --update Official --version EnsMart72
@@ -39,9 +25,40 @@ python AltAnalyze.py --species Hs --platform RNASeq --update Official --version 
 
 Replace the existing AltDatabase folder in oncosplice/scripts with the downloaded AltDatabase folder. This will update all the reference files required for running Oncosplice pipeline.
 
- # Generating the input files #
+ # Steps involved # 
+ 
+1. Generating the input files  
 
-The input to this workflow can be obtained through AltAnalyze version 2.1.0 or greater (http://www.altanalyze.org) using the default analysis workflow described [here](http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm). The option to run the Oncosplice pipeline directly from RNA-Seq aligned BAM files will be added in the release version of this pipeline. If using the AltAnalyze GUI, users can enter the path where their RNA-Seq BAMs are stored and run the tool with default parameters. If the using the command-line version AltAnalyze, see the BAM file analysis instructions [here](https://github.com/nsalomonis/altanalyze/wiki/CommandLineMode). For AltAnalyze, at least two groups need to specified (can be random - won’t impact OncoSplice results). The input PSI results file can be found in the folder *YourExpDirectory*/AltResults/AlternateOutput with the name “Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt” in the folder.
+The input to this workflow can be obtained through AltAnalyze version 2.1.0 or greater (http://www.altanalyze.org) using the default analysis workflow described [here](http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm). If using the AltAnalyze GUI, users can enter the path where their RNA-Seq BAMs are stored and run the tool with default parameters.If using the command-line version AltAnalyze, see the installation instructions [here](https://github.com/nsalomonis/altanalyze/wiki/CommandLineMode).  
+Generating bed files from BAM files (generated using STAR/Tophat)
+
+- Junction Bed
+```javascript
+python BAMtoJunctionBED.py --i BAM_dir --species Hs --r software/AltAnalyze/AltDatabase/EnsMart72/ensembl/Hs/Hs_Ensembl_exon.txt
+```
+
+- Intron Bed
+```javascript
+python BAMtoExonBED.py --i BAM_dir --r exonrefdir/Hs.bed --s Hs
+```
+*the exon reference bed is generated in the Bam directory
+
+Running AltAnalyze on Bed files (AltAnalyze generated/TCGA generated)
+```javascript
+python AltAnalyze.py --species Hs --platform RNASeq --bedDir bed_file_dir --output output_dir --groupdir /output_dir/ExpressionInput/groups_file.txt --compdir /output_dir/ExpressionInput/comps_file.txt --expname Exp_Name --runGOElite no
+```
+*For AltAnalyze, at least two groups need to specified (can be random - won’t impact OncoSplice results). Please read AltAnalyze manual to understand the naming and format of the groups and comps files [here](https://github.com/nsalomonis/altanalyze/wiki/ManualGroupsCompsCreation).
+
+
+2. Running Oncosplice on AltAnalyze generated input PSI files  
+
+The input PSI results file can be found in the folder *YourExpDirectory*/AltResults/AlternateOutput with the name “Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt” in the folder.
+
+```javascript
+python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt"
+```
+
+*For the Event Annotation file provide the full path.
 
  # Additional Information # 
 
