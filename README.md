@@ -4,7 +4,7 @@ Unsupervised Detection of Splicing Subtypes from RNA-Seq
 
 ![workflow](https://github.com/venkatmi/oncosplice/wiki/images/workflow.png)
 
-Oncosplice is an automated pipeline to identify sample subtypes in an unsupervised manner from splicing quantification data. Oncosplice is currently runs on input files generated using MultiPath-PSI algorithm developed recently in AltAnalyze.
+Oncosplice is a comprehensive pipeline that can identify sample subtypes in an unsupervised manner (splice-ICGS) from splicing quantification data and also identify putative regulators (RBP-Finder). Oncosplice is currently run on input files generated using MultiPath-PSI algorithm developed recently in AltAnalyze.
 
  # Dependencies # 
 
@@ -50,7 +50,7 @@ python AltAnalyze.py --species Hs --platform RNASeq --bedDir bed_file_dir --outp
 *For AltAnalyze, at least two groups need to specified (can be random - won’t impact OncoSplice results). Please read AltAnalyze manual to understand the naming and format of the groups and comps files [here](https://github.com/nsalomonis/altanalyze/wiki/ManualGroupsCompsCreation).
 
 
-2. Running Oncosplice on AltAnalyze generated input PSI files  
+2. Running splice-ICGS on AltAnalyze generated input PSI files  
 
 The input PSI results file can be found in the folder *YourExpDirectory*/AltResults/AlternateOutput with the name “Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt” in the folder.
 
@@ -60,7 +60,7 @@ python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnno
 
 *For the Event Annotation file provide the full path.
 
-Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how to run OncoSplice on the demo files. Please read the additional information section for detailed description of the pipeline.
+Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how to run OncoSplice (splice-ICGS, splice Enricher, RBP-Finder) on the demo files. Please read the additional information section for detailed description of the pipeline.
 
  # Additional Information # 
 
