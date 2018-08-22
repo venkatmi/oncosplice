@@ -64,13 +64,13 @@ Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-wit
 
  # Additional Information # 
 
-1. Please click [here](https://github.com/venkatmi/oncosplice/wiki/Feature-Selection-and-Sample-Subtype-Classification) for more information on the computational pipeline and algorithms used in Oncosplice. 
+1. Click [here](https://github.com/venkatmi/oncosplice/wiki/Feature-Selection-and-Sample-Subtype-Classification) for more information on the computational pipeline and algorithms used in Oncosplice. 
 
-2. Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how to run the entire OncoSplice on the demo files.
+2. Click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how to run the entire OncoSplice on the demo files.
 
-3. Please click [here](https://github.com/venkatmi/oncosplice/wiki/Input-Output-Folder-Structure) for detailed information on the output files and folders generated from OncoSplice.
+3. Click [here](https://github.com/venkatmi/oncosplice/wiki/Input-Output-Folder-Structure) for detailed information on the output files and folders generated from OncoSplice.
 
-4. Please click [here](https://github.com/venkatmi/oncosplice/wiki/OncoSplice-Software-Functions-Description) for information on additional input parameters, python scripts and modules used by OncoSplice. 
+4. Click [here](https://github.com/venkatmi/oncosplice/wiki/OncoSplice-Software-Functions-Description) for information on additional input parameters, python scripts and modules used by OncoSplice. 
 
 See our [wiki](https://github.com/venkatmi/oncosplice/wiki) pages for additional details on the pipeline algorithms and available functions.
 
