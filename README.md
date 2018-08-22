@@ -4,7 +4,7 @@ Unsupervised Detection of Splicing Subtypes from RNA-Seq
 
 ![workflow](https://github.com/venkatmi/oncosplice/wiki/images/workflow.png)
 
-Oncosplice is an automated pipeline to identify sample subtypes in an unsupervised manner from splicing quantification data. Oncosplice is currently runs on input files generated using MultiPath-PSI algorithm developed recently in AltAnalyze. 
+Oncosplice is an automated pipeline to identify sample subtypes in an unsupervised manner from splicing quantification data. Oncosplice is currently runs on input files generated using MultiPath-PSI algorithm developed recently in AltAnalyze.
 
  # Dependencies # 
 
@@ -17,7 +17,13 @@ You will need to install the below packages (majorly python packages) before run
   * nimfa
   * scikit-learn
 
- # How to run the workflow # 
+ # Steps involved # 
+ 
+1. Generating the input files  
+
+The input to this workflow can be obtained through AltAnalyze version 2.1.0 or greater (http://www.altanalyze.org) using the default analysis workflow described [here](http://altanalyze.readthedocs.io/en/latest/Algorithms/#multipath-psi-splicing-algorithm). If using the AltAnalyze GUI, users can enter the path where their RNA-Seq BAMs are stored and run the tool with default parameters.If the using the command-line version AltAnalyze, see the BAM file analysis instructions [here](https://github.com/nsalomonis/altanalyze/wiki/CommandLineMode).
+
+
 
 ```javascript
 python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt"
