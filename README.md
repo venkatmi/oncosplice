@@ -55,7 +55,7 @@ python AltAnalyze.py --species Hs --platform RNASeq --bedDir bed_file_dir --outp
 The input PSI results file can be found in the folder *YourExpDirectory*/AltResults/AlternateOutput with the name “Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt” in the folder.
 
 ```javascript
-python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt"
+python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation.txt
 ```
 
 *For the Event Annotation file provide the full path.
