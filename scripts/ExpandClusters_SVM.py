@@ -351,7 +351,8 @@ def TrainDataGeneration(output_file,NMF_annot,header,name,Multigroup):
     keye2="None"
     
     
-    if Multigroup==True:
+    if Multigroup=="True":
+     
      for exp1 in open(NMF_annot,"rU").xreadlines():
         lin=exp1.rstrip('\r\n')
         lin=string.split(lin,"\t")

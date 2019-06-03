@@ -146,7 +146,7 @@ def SupervisedAnalyses(Training,Test,Multigroup,group,diffevents,adjp,centroid,n
                 filteredevents=ExpandSampleClusters.filterRows_data(InputFile,output_file,filterDB=upd_guides,logData=False)
                 ExpandSampleClusters.filterRows_data(InputFile2,output_file1,filterDB=filteredevents,logData=False)
                 
-                if normalize==True:
+                if normalize=="True":
                     output_file=normalization(output_file)
                     output_file1=normalization(output_file1)
                 header=ExpandSampleClusters.header_file(output_file)
@@ -160,8 +160,8 @@ if __name__ == '__main__':
     import getopt
     adjp=False
     centroid=True
-    Multigroup=False
-    normalize=False
+    Multigroup="False"
+    normalize="False"
     if len(sys.argv[1:])<=1:  ### Indicates that there are insufficient number of command-line arguments
         print "Warning! Insufficient command line flags supplied."
         sys.exit()
