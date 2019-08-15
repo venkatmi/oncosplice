@@ -300,18 +300,18 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
         
         try:
             print "Running splice-ICGS for feature selection - Round"+str(turn)
-        except Exception:Rank=0
-        graphic_links3 = RNASeq.singleCellRNASeqWorkflow(species, 'exons', InputFile,mlp,exp_threshold=0, rpkm_threshold=0, parameters=gsp)
+        #except Exception:Rank=0
+            graphic_links3 = RNASeq.singleCellRNASeqWorkflow(species, 'exons', InputFile,mlp,exp_threshold=0, rpkm_threshold=0, parameters=gsp)
 
-        Guidefile=graphic_links3[-1][-1]
-        Guidefile=Guidefile[:-4]+'.txt'
+            Guidefile=graphic_links3[-1][-1]
+            Guidefile=Guidefile[:-4]+'.txt'
            
             
-        print "Running block identification for rank analyses - Round"+str(turn)
-        RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
-        Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
-        NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile,turn)
-        #except Exception:Rank=0
+            print "Running block identification for rank analyses - Round"+str(turn)
+            RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
+            Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
+            NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile,turn)
+        except Exception:Rank=0
      
            
 
@@ -398,7 +398,7 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
 if __name__ == '__main__':
     import getopt
     seq="bulk"
-    rho_cutoff=0.3
+    rho_cutoff=0.4
     strategy="stringent"
     filters=True
     mode="iterative"
