@@ -9,12 +9,14 @@ import os.path
 from collections import defaultdict
 from sklearn.cluster import KMeans
 
-import statistics
+try:from stats_scripts import statistics
+except Exception: import statistics
 import random
 import UI
 import export; reload(export)
 import re
-import fishers_exact_test
+try:from stats_scripts import fishers_exact_test
+except Exception:import fishers_exact_test
 import traceback
 import warnings
 import math
@@ -78,16 +80,17 @@ def FishersExactTest(r,n,R,N):
     
 
             
-def header_file(fname, delimiter=None):
+def header_file(fname, delimiter=None,Expand="no"):
     head=0
     header=[]
     newheader=[]
     with open(fname, 'rU') as fin:
         for line in fin:
+            #print line
             line = line.rstrip(os.linesep)
             header=string.split(line,'\t')
         
-            if len(header)>2:
+            if Expand=="yes":
                 if head==0:
                     
                     for i in range(1,len(header)):
@@ -97,9 +100,9 @@ def header_file(fname, delimiter=None):
                     head=1
                 else:break
             else:
-               
-                if header[0] not in newheader:
-                    newheader.append(header[0]) 
+                if len(header)<3 or Expand=="no":
+                    if header[0] not in newheader:
+                        newheader.append(header[0]) 
     #print len(newheader)           
     return newheader
 
@@ -123,7 +126,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
    
     export_enrich.write("Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n")
     if Expand=="yes":
-        header2=header_file(Inputfile)
+        header2=header_file(Inputfile,Expand="yes")
         
         for line in open(Inputfile,'rU').xreadlines():
             if head >0:
@@ -157,27 +160,36 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
         for key2 in group:
            
             
-            r=float(len(group[key2])-len(list(set(group[key2]) - set(mutdict[kiy]))))
+            r=float(len(list(set(group[key2])))-len(list(set(group[key2]) - set(mutdict[kiy]))))
             n=float(len(group[key2]))
             R=float(len(set(mutdict[kiy])))
             N=float(len(header))
-            if key2=="1":
-             
-             print kiy,key2,r,n,R,N
-            if r==0:
+        
+            if r==0 or key2=="1" or R==1.0:
+                print kiy,key2,r,n,R,N
                 pval=float(1)
                 z=float(0)
                 null_z = 0.000
+                zsd = mappfinder.ZScoreData(key2,r,R,z,null_z,n)
+                zsd.SetP(pval)
             else:
                 try: z = Zscore(r,n,N,R)
                 except : z = 0.0000
                 ### Calculate a Z-score assuming zero matching entries
                 try: null_z = Zscore(0,n,N,R)
                 except Exception: null_z = 0.000
-            
-                pval = mappfinder.FishersExactTest(r,n,R,N)
-            zsd = mappfinder.ZScoreData(key2,r,R,z,null_z,n)
-            zsd.SetP(pval)
+               
+                
+                try:
+                    pval = mappfinder.FishersExactTest(r,n,R,N)
+                    zsd = mappfinder.ZScoreData(key2,r,R,z,null_z,n)
+                    zsd.SetP(pval)
+                except Exception:
+                    pval=1.0
+                    zsd = mappfinder.ZScoreData(key2,r,R,z,null_z,n)
+                    zsd.SetP(pval)
+                    #pass
+                
           
             if kiy in total_Scores:
                     signature_db = total_Scores[kiy]
@@ -227,7 +239,7 @@ def findsiggenepermut(mutfile):
         #print exp1
         lin=exp1.rstrip('\r\n')
         lin=string.split(lin,"\t")
-        if len(lin)>2:
+        if len(lin)>3:
             if head==0:
                 for i in lin[1:]:
             
@@ -241,7 +253,7 @@ def findsiggenepermut(mutfile):
                         mutdict[lin[0]].append(samplelist[j-1])
                         
         else:
-            mutdict[lin[1]].append(lin[0])
+            mutdict[lin[2]].append(lin[0])
    
     return  mutdict
 

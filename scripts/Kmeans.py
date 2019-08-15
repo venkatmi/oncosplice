@@ -58,7 +58,7 @@ def KmeansAnalysis(filename,header,InputFile,turn):
         if os.path.exists(output_dir)==False:
             export.createExportFolder(output_dir)
    
-        exportname=output_dir+'/round'+str(turn)+'Kmeans_result.txt'
+        exportname=output_dir+'/R'+str(turn)+'Kmeans_result.txt'
         #exportname=filename[:-4]+key+'.txt'
         export_results=open(exportname,"w")
         mat=zip(*X[key])
@@ -73,7 +73,8 @@ def KmeansAnalysis(filename,header,InputFile,turn):
         cent_1=y.count(0)
         cent_2=y.count(1)
         print cent_1,cent_2
-        export_results.write("uid"+"\t"+"group"+"\n")
+        group='R'+str(turn)+'_Kmeans'
+        export_results.write("uid"+"\t"+group+"\n")
         if cent_1<cent_2:
             count=2
             for j in y:

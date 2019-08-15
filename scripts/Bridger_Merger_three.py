@@ -20,8 +20,10 @@ Newval={}
 genelst=defaultdict(list)
 Allcomp={}
 
-MergedOutput="/Volumes/Pass/MotifAnalyses/Bridger/Exons_MotifAnalyses/merged_output_allpvalues_nofold.txt"
-output="/Volumes/Pass/MotifAnalyses/Bridger/Exons_MotifAnalyses/merged_output_allpvalues_nofold_upd.txt"
+#MergedOutput="/Volumes/Pass/MotifAnalyses/Bridger/Exons_MotifAnalyses/merged_output_allpvalues_nofold.txt"
+#output="/Volumes/Pass/MotifAnalyses/Bridger/Exons_MotifAnalyses/merged_output_allpvalues_nofold_upd.txt"
+MergedOutput=""
+output="output_results.txt"
 output1=open(output,"w")
 
 for lin in open(MergedOutput,'rU').xreadlines():

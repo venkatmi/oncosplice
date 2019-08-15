@@ -312,8 +312,9 @@ def Classify(header,Xobs,output_file,grplst,name,turn):
         export_class1.write("uid")
         export_class2.write("uid")
         for ni in name:
-            export_class1.write("\t"+"R"+str(turn)+"-"+ni)
-            export_class2.write("\t"+"R"+str(turn)+"-"+ni)
+            sub=string.split(ni,"_")[0]
+            export_class1.write("\t"+"R"+str(turn)+"-"+sub)
+            export_class2.write("\t"+"R"+str(turn)+"-"+sub)
         export_class1.write("\n")
         export_class2.write("\n")
         #print prob_
@@ -336,7 +337,7 @@ def Classify(header,Xobs,output_file,grplst,name,turn):
         export_class1.write("uid"+"\t")
         export_class2.write("uid"+"\t")
         export_class1.write("group")
-        export_class2.write("round"+str(turn)+"-V1"+"\t"+"round"+str(turn)+"-V2"+"\n")
+        export_class2.write("R"+str(turn)+"-V1"+"\t"+"R"+str(turn)+"-V2")
         #for ni in name:
         #   export_class1.write("\t"+ni)
         #    export_class2.write("\t"+ni)

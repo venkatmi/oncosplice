@@ -50,9 +50,9 @@ import MutationEnrichment_adj as ME
 import Orderedheatmap
 
 def filterPSIValues(filename):
-    fn = filepath(filename)
+    #fn = filepath(filename)
     firstRow=True
-          
+    #detected=0.75   
     header = True
     rows=0
     filtered=0
@@ -60,7 +60,7 @@ def filterPSIValues(filename):
    
     ea = export.ExportFile(new_file)
 
-    for line in open(fn,'rU').xreadlines():
+    for line in open(filename,'rU').xreadlines():
         data = line.rstrip()
         t = string.split(data,'\t')
         if header:
@@ -68,9 +68,9 @@ def filterPSIValues(filename):
             eventindex=t.index('EventAnnotation')
             t = [t[1]]+t[eventindex+1:]
             header_length = len(t)-1
-            minimum_values_present = int(header_length)-1
+            minimum_values_present = int(float((header_length)-1.0)*0.75)
             not_detected = header_length-minimum_values_present
-            new_line = string.join(t,'\t')+'\n'
+            new_line = line
             ea.write(new_line)
         else:
           
@@ -79,14 +79,14 @@ def filterPSIValues(filename):
             missing = missing_values_at_the_end+t.count('')
             if missing<not_detected:
                
-                new_line = string.join(t,'\t')+'\n'
+                new_line = line
                 ea.write(new_line)
                
                 filtered+=1
         rows+=1
 
     ea.close()
-    return newfile
+    return new_file
     
 
 def header_list(EventAnnot):
@@ -300,18 +300,18 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
         
         try:
             print "Running splice-ICGS for feature selection - Round"+str(turn)
+        except Exception:Rank=0
+        graphic_links3 = RNASeq.singleCellRNASeqWorkflow(species, 'exons', InputFile,mlp,exp_threshold=0, rpkm_threshold=0, parameters=gsp)
 
-            graphic_links3 = RNASeq.singleCellRNASeqWorkflow(species, 'exons', InputFile,mlp,exp_threshold=0, rpkm_threshold=0, parameters=gsp)
-
-            Guidefile=graphic_links3[-1][-1]
-            Guidefile=Guidefile[:-4]+'.txt'
+        Guidefile=graphic_links3[-1][-1]
+        Guidefile=Guidefile[:-4]+'.txt'
            
             
-            print "Running block identification for rank analyses - Round"+str(turn)
-            RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
-            Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
-            NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile,turn)
-        except Exception:Rank=0
+        print "Running block identification for rank analyses - Round"+str(turn)
+        RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
+        Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
+        NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile,turn)
+        #except Exception:Rank=0
      
            
 
@@ -398,9 +398,9 @@ def CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq):
 if __name__ == '__main__':
     import getopt
     seq="bulk"
-    rho_cutoff=0.4
+    rho_cutoff=0.3
     strategy="stringent"
-    filters=False
+    filters=True
     mode="iterative"
     Mutationref=""
     if len(sys.argv[1:])<=1:  ### Indicates that there are insufficient number of command-line arguments
@@ -416,27 +416,31 @@ if __name__ == '__main__':
             if opt=='--filter':filters=arg
             if opt=='--mode':mode=arg
             if opt=='--Mutationref':Mutationref=arg
-            
+    print EventAnnot
+    print Mutationref
     dire = export.findParentDir(EventAnnot)
-   
+    turn=1
+    if turn==1 and filters==True:
+        EventAnnot=filterPSIValues(EventAnnot)
     output_dir = dire+'ExpressionInput'
+   
     export.createExportFolder(output_dir)
     InputFile=output_dir+"/exp.input.txt"
     header=header_list(EventAnnot)
     sampleIndexSelection.filterFile(EventAnnot,InputFile,header,FirstCol=False)
     flag=True
-    turn=1
+ 
     if mode=="single":
         flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq)
   
     else:
         while flag:
-            if turn==1 and filters==True:
-                InputFile=filterPSIValues(InputFile)
             
             flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq)
       
             turn+=1
+            if turn>3:
+                flag=False
             if flag==False:
                 break
     
