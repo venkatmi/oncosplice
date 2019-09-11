@@ -62,6 +62,15 @@ python Oncosplice.py --EventAnnotation Hs_RNASeq_top_alt_junctions-PSI_EventAnno
 
 Please click [here](https://github.com/venkatmi/oncosplice/wiki/Demo-Example-with-scripts) for detailed description on how to run OncoSplice (splice-ICGS, splice Enricher, RBP-Finder) on the demo files. Please read the additional information section for detailed description of the pipeline.
 
+ # Modules required for cluster processing #
+ 
+ Python and R have to be loaded for running oncosplice on cluster machines.
+ ```javascript
+module load python/2.7.6
+module load R
+```
+ 
+
  # Additional Information # 
 
 1. Click [here](https://github.com/venkatmi/oncosplice/wiki/Feature-Selection-and-Sample-Subtype-Classification) for more information on the computational pipeline and algorithms used in Oncosplice. 
