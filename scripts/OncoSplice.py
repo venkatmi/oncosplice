@@ -403,11 +403,12 @@ if __name__ == '__main__':
     filters=True
     mode="iterative"
     Mutationref=""
+    flag=True
     if len(sys.argv[1:])<=1:  ### Indicates that there are insufficient number of command-line arguments
         print "Warning! Insufficient command line flags supplied."
         sys.exit()
     else:
-        options, remainder = getopt.getopt(sys.argv[1:],'', ['EventAnnotation=','rho=','strategy=','filter=','mode=','Mutationref='])
+        options, remainder = getopt.getopt(sys.argv[1:],'', ['EventAnnotation=','rho=','strategy=','filter=','mode=','Mutationref=','Assoc='])
         for opt, arg in options:
             #if opt == '--InputFile': InputFile=arg
             if opt=='--EventAnnotation':EventAnnot=arg
@@ -416,6 +417,10 @@ if __name__ == '__main__':
             if opt=='--filter':filters=arg
             if opt=='--mode':mode=arg
             if opt=='--Mutationref':Mutationref=arg
+            if opt=='--Assoc':assoc=arg
+   
+    if assoc=="False": flag=False
+    
     print EventAnnot
     print Mutationref
     dire = export.findParentDir(EventAnnot)
@@ -428,26 +433,27 @@ if __name__ == '__main__':
     InputFile=output_dir+"/exp.input.txt"
     header=header_list(EventAnnot)
     sampleIndexSelection.filterFile(EventAnnot,InputFile,header,FirstCol=False)
-    flag=True
- 
-    if mode=="single":
-        flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq)
-  
-    else:
-        while flag:
-            
+    
+    if flag: 
+        if mode=="single":
             flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq)
       
-            turn+=1
-            if turn>3:
-                flag=False
-            if flag==False:
-                break
-    
-    output_dir = dire+'SVMOutputs'
-    Combinedres=MergeResults(output_dir)
-    
-    
+        else:
+            while flag:
+                
+                flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,turn,rho_cutoff,strategy,seq)
+          
+                turn+=1
+                if turn>3:
+                    flag=False
+                if flag==False:
+                    break
+        
+        output_dir = dire+'SVMOutputs'
+        Combinedres=MergeResults(output_dir)
+    else:
+        output_dir = dire+'SVMOutputs'
+        Combinedres=os.path.join(output_dir,"MergedResult.txt")
     mutlabels={}
     if Mutationref!="":
         print "Running Mutation Enrichment Analyses"
