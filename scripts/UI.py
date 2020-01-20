@@ -6395,6 +6395,8 @@ class GeneSelectionParameters:
     def SamplesDiffering(self):
         try: return int(float(self.samplesDiffering))
         except Exception: return False
+    def setSamplesDiffering(self,samplesDiffering):
+        self.samplesDiffering = samplesDiffering
     def amplifyGenes(self):
         if (self.FilterByPathways() != '' and self.FilterByPathways() !=False) or (self.GeneSelection() != '' and self.GeneSelection() != ' amplify'):
             return True

@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-#!/usr/bin/env python
 import numpy as np
 import pylab as pl
 import sys,string
@@ -119,15 +118,19 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     output_dir = dire+'MutationEnrichment'
     export.createExportFolder(output_dir)
 
+    ### All enrichment results
     exportnam=output_dir+'/Enrichment_Results.txt'
     export_enrich=open(exportnam,"w")
+    
+    ### Selected Enrichment results based on p-value, sensitivity and specificity for association with cluster names
     exportnam=output_dir+'/Enrichment_tophits.txt'
     export_hit=open(exportnam,"w")
    
-    export_enrich.write("Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n")
+    header = "Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n"
+    export_enrich.write(header)
+    export_hit.write(header)
     if Expand=="yes":
         header2=header_file(Inputfile,Expand="yes")
-        
         for line in open(Inputfile,'rU').xreadlines():
             if head >0:
                 line=line.rstrip('\r\n')
@@ -136,7 +139,6 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
                     if q[i]==str(1):
                         #group[q[0]].append(header2[i-1])
                         group[header2[i-1]].append(q[0])
-           
             else:
                 head+=1
                 continue
@@ -156,17 +158,15 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
         remaining=list(set(header) - set(mutdict[kiy]))
         groupdict[1]=mutdict[kiy]
         groupdict[2]=remaining
-       # export_enrich1.write(kiy)
+        #export_enrich1.write(kiy)
         for key2 in group:
-           
-            
             r=float(len(list(set(group[key2])))-len(list(set(group[key2]) - set(mutdict[kiy]))))
             n=float(len(group[key2]))
             R=float(len(set(mutdict[kiy])))
             N=float(len(header))
         
             if r==0 or key2=="1" or R==1.0:
-                print kiy,key2,r,n,R,N
+                #print kiy,key2,r,n,R,N
                 pval=float(1)
                 z=float(0)
                 null_z = 0.000
@@ -179,7 +179,6 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
                 try: null_z = Zscore(0,n,N,R)
                 except Exception: null_z = 0.000
                
-                
                 try:
                     pval = mappfinder.FishersExactTest(r,n,R,N)
                     zsd = mappfinder.ZScoreData(key2,r,R,z,null_z,n)
@@ -190,7 +189,6 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
                     zsd.SetP(pval)
                     #pass
                 
-          
             if kiy in total_Scores:
                     signature_db = total_Scores[kiy]
                     signature_db[key2]=zsd ### Necessary format for the permutation function
@@ -200,24 +198,26 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     sorted_results=[]
     mutlabels={}
     for kiy in total_Scores:
-        
         signature_db = total_Scores[kiy]
         ### Updates the adjusted p-value instances
         mappfinder.adjustPermuteStats(signature_db)
         for signature in signature_db:
             zsd = signature_db[signature]
-           
             results = [kiy,signature,zsd.Changed(),zsd.Measured(),zsd.InPathway(),str(float(zsd.PercentChanged())/100.0),str(float(float(zsd.Changed())/float(zsd.InPathway()))), zsd.ZScore(), zsd.PermuteP(), zsd.AdjP()] #string.join(zsd.AssociatedIDs(),'|')
             sorted_results.append([signature,float(zsd.PermuteP()),results])
     sorted_results.sort() ### Sort by p-value
+    
     prev=""
     for (sig,p,values) in sorted_results:
         if sig!=prev:
             flag=True
             export_hit.write(string.join(values,'\t')+'\n')
         if flag:
+            ### Update the cluster label to include the top enriched term meeting, sensitivity and specificity cutoffs
             if (float(values[5])>=0.5 and float(values[6])>=0.5) or float(values[5])>=0.6 :
-                mutlabels[values[1]]=values[0]
+                clusterID = values[1]
+                topEnrichedTerm=values[0]
+                mutlabels[clusterID]=clusterID+' ('+topEnrichedTerm+')'
                 flag=False
                 export_hit.write(string.join(values,'\t')+'\n')
         export_enrich.write(string.join(values,'\t')+'\n')
@@ -225,12 +225,10 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     if len(sorted_results)==0:
             export_enrich.write(string.join([splicing_factor,'NONE','NONE','NONE','NONE','NONE','NONE'],'\t')+'\n')
     export_enrich.close()
-    #print mutlabels
+
     return mutlabels
             
-        
 def findsiggenepermut(mutfile):
-    
     samplelist=[]
     mutdict=defaultdict(list)
     head=0
@@ -253,8 +251,7 @@ def findsiggenepermut(mutfile):
                         mutdict[lin[0]].append(samplelist[j-1])
                         
         else:
-            mutdict[lin[2]].append(lin[0])
-   
+            mutdict[lin[-1]].append(lin[0])
     return  mutdict
 
 def Zscore(r,n,N,R):
@@ -267,9 +264,9 @@ def Zscore(r,n,N,R):
     return z               
                 
 if __name__ == '__main__':
-
+    """ Enrichment analysis for user-supplied metadata, including mutations and clincial characteristics """
+    
     import getopt
-  
     mutdict=defaultdict(list)
     
     ################  Comand-line arguments ################
@@ -279,11 +276,11 @@ if __name__ == '__main__':
     else:
         analysisType = []
 
-        options, remainder = getopt.getopt(sys.argv[1:],'', ['Inputfile=','Reference=','Expand='])
+        options, remainder = getopt.getopt(sys.argv[1:],'', ['Inputfile=','Reference=','Expand=', 'i=', 'input=', 'r=', 'reference=', 'expand='])
         for opt, arg in options:
-            if opt == '--Inputfile': Inputfile=arg
-            elif opt == '--Reference':Reference=arg
-            elif opt =='--Expand': Expand=arg
+            if opt == '--Inputfile' or opt == '--i' or opt == '--input': Inputfile=arg
+            elif opt == '--Reference' or opt == '--' or opt == '--reference': Reference=arg
+            elif opt =='--Expand' or opt =='--expand': Expand=arg
             
             else:
                 print "Warning! Command-line argument: %s not recognized. Exiting..." % opt; sys.exit()

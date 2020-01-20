@@ -933,7 +933,7 @@ def heatmap(x, row_header, column_header, row_method, column_method, row_metric,
     pylab.savefig(root_dir + filename)
     #print 'Exporting:',filename
     filename = filename[:-3]+'png'
-    pylab.savefig(root_dir + filename, dpi=100) #,dpi=200
+    pylab.savefig(root_dir + filename, dpi=1000) #,dpi=200
     
     includeBackground=False
     try:

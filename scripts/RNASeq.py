@@ -3349,7 +3349,8 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
                     counter+=1
                 iterator+=1
                 if iterator%500==0:
-                    print iterator
+                    #print iterator
+                    print '*',
         
             #print dupgenes,counter
             counter2=0;counter=0
