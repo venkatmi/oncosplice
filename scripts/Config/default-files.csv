@@ -5,7 +5,7 @@
 "PathDir","local","","all"
 "Program/Download","Status","Location","Species"
 "url","url","http://altanalyze.org/archiveDBs/","all"
-"PathFile","local","/Volumes/Pass/Leucegene_ClassifyNew/ExpressionProfiles","all"
+"PathFile","local","/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/OSU-AML/PSI/0.3-broad/ExpressionInput/amplify/DataPlots","all"
 "TrEMBL","ftp","ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/taxonomic_divisions/uniprot_trembl_human.dat.gz","Hs"
 "TrEMBL","ftp","ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/taxonomic_divisions/uniprot_trembl_rodents.dat.gz","Mm|Rn"
 "APT","local","AltDatabase/affymetrix/APT","all"

@@ -266,10 +266,7 @@ def Classify(header,Xobs1,train2,output_file,grplst,name):
             header1=string.split(line,"\t")
             head+=1
             continue
-    #print Xobs
-    #exportnam=output_file[:-4]+'KNN_one.txt'
-    #export_class_knn=open(exportnam,"a")
-    #export_class_knn.write(header)
+
     exportnam=output_file[:-4]+'_SVMClasses.txt'
     if path.exists(exportnam):
         export_class_svc=open(exportnam,"a")
@@ -287,9 +284,10 @@ def Classify(header,Xobs1,train2,output_file,grplst,name):
  
     Y=zip(*Y)
     Y=np.array(Y)
-
-  
     for iq in range(0,len(name)):
+        print iq
+        print len(train2)
+        print len(Xobs1)
         Xobs=[Xobs1[iq],train2[iq]]
     
         Xobs=zip(*Xobs)

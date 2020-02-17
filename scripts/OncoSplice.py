@@ -112,11 +112,8 @@ def header_list(EventAnnot):
                 line=string.split(line,'\t')
                 startpos=line.index('EventAnnotation')
                 header.append('UID')
-                for i in range(startpos+1,len(line)):
-                    
+                for i in range(startpos+1,len(line)):          
                         header.append(line[i])
-                
-              
                 head=1
             else:break
     return header
@@ -301,7 +298,8 @@ def CompleteWorkflow(InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroad
     if Rank>1:
         ### ADJUST THE RANKS - MUST UPDATE!!!!
         if turn == 1:
-            Rank=2
+            #Rank=2
+            Rank = Rank
         else:
             if Rank>2:
                 Rank = 30
@@ -517,7 +515,8 @@ if __name__ == '__main__':
                                             'column_method=','ExpressionCutoff=','normalization=','CountsCutoff=',
                                             'FoldDiff=','SamplesDiffering=','removeOutliers=','percentCutoff=',
                                             'forceBroadClusters=','i=','metadata=','EnrichmentOnly=',
-                                            'subtypeDiscvoery='])
+                                            'subtypeDiscvoery=','row_metric=','column_metric=','SamplesDiffering-',
+                                            'removeOutliers=','FoldDiff=','ExpressionCutoff=','normalization='])
         for opt, arg in options:
             if opt == '--EventAnnotation' or opt == '--i':EventAnnot=arg
             elif opt == '--strategy' or opt == '--subtypeDiscvoery':

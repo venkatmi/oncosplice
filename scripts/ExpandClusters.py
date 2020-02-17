@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-#!/usr/bin/env python
-
 import numpy as np
 import pylab as pl
 import sys,string
@@ -215,7 +213,8 @@ def filterRows_data(input_file,output_file,filterDB=None,logData=False):
             tempevents2.append(tempevents[i])
     
     print len(tempevents2) 
-    return tempevents2      
+    return tempevents2
+
 def Classify(header,Xobs,output_file,grplst,name):
     count=0
     start=1
