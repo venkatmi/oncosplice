@@ -46,13 +46,14 @@ def FishersExactTest(r,n,R,N):
     +----+-----+
       85  14395  14480
     """
+
     if (R-N) == 0: return 0
     elif r==0 and n == 0: return 0
     else:
         try:
             #try:
-            z = (r - n*(R/N))/math.sqrt(n*(R/N)*(1-(R/N))*(1-((n-1)/(N-1))))
-          
+            z = (r - (n*(R/N)))/math.sqrt(n*(R/N)*(1-(R/N))*(1-((n-1)/(N-1))))
+            print r, n, R, N, z;sys.exit()
             #except ZeroDivisionError: print 'r,_n,R,N: ', r,_n,R,N;kill
         except Exception: print (r - n*(R/N)), n*(R/N),(1-(R/N)),(1-((n-1)/(N-1))),r,n,N,R;kill
     a = r; b = n-r; c=R-r; d=N-R-b
@@ -74,7 +75,7 @@ def FishersExactTest(r,n,R,N):
         return pvalue,z
     except Exception:
         ft = fishers_exact_test.FishersExactTest(table)
-       # print ft.two_tail_p()
+        print ft.two_tail_p()
         return ft.two_tail_p(),z
     
 
@@ -129,10 +130,12 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     header = "Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n"
     export_enrich.write(header)
     export_hit.write(header)
+    number_of_samples = 0
     if Expand=="yes":
         header2=header_file(Inputfile,Expand="yes")
         for line in open(Inputfile,'rU').xreadlines():
             if head >0:
+                number_of_samples+=1
                 line=line.rstrip('\r\n')
                 q= string.split(line,'\t')
                 for i in range(1,len(q)):
@@ -140,6 +143,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
                         #group[q[0]].append(header2[i-1])
                         group[header2[i-1]].append(q[0])
             else:
+                number_of_samples+=1
                 head+=1
                 continue
     else:
@@ -148,6 +152,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
             line=string.split(line,'\t')
             #for i in range(1,len(line)):
             group[line[2]].append(line[0])
+            number_of_samples+=1
    
     total_Scores={}
     for kiy in mutdict:
@@ -163,8 +168,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
             r=float(len(list(set(group[key2])))-len(list(set(group[key2]) - set(mutdict[kiy]))))
             n=float(len(group[key2]))
             R=float(len(set(mutdict[kiy])))
-            N=float(len(header))
-        
+            N=float(number_of_samples)
             if r==0 or key2=="1" or R==1.0:
                 #print kiy,key2,r,n,R,N
                 pval=float(1)
@@ -174,7 +178,7 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
                 zsd.SetP(pval)
             else:
                 try: z = Zscore(r,n,N,R)
-                except : z = 0.0000
+                except: z=0
                 ### Calculate a Z-score assuming zero matching entries
                 try: null_z = Zscore(0,n,N,R)
                 except Exception: null_z = 0.000
@@ -260,6 +264,7 @@ def Zscore(r,n,N,R):
     n is the total number of events in this specific reference gene-set: 
     r is the number of events meeting the criterion in the examined reference gene-set: """
     N=float(N) ### This bring all other values into float space
+
     z = (r - n*(R/N))/math.sqrt(n*(R/N)*(1-(R/N))*(1-((n-1)/(N-1))))
     return z               
                 
