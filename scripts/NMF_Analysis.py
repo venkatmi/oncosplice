@@ -117,7 +117,6 @@ def FilterFile(Guidefile,Guidefile_block,PSI,turn):
             q= string.split(line,'\t')
             val.append(q[0])
             
-                
         else:
             head+=1
             continue
@@ -317,7 +316,7 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     Z=zip(*Z)
     Z=np.array(Z)
     sh=Z.shape
-        
+    print "stringency = ",[strategy]
     for i in range(sh[0]):
         val1=Z[i,:]
         #print sum(val1)
@@ -330,15 +329,19 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
         st=np.std(val)
         export_res2.write(header[i+1])
         export_res5.write(header[i+1])
+        
         for j in range(sh[1]):
             if strategy=="conservative":
+                print header[i+1]
                 export_res2.write("\t"+str(val1[j]))
                 export_res5.write("\t"+str(val1[j]))
             else:
+               print header[i+1] 
                export_res2.write("\t"+str(val[j]))
                export_res5.write("\t"+str(val[j])) 
         export_res2.write("\n")
         export_res5.write("\n")
+        
         Z_new.append(val)
     Z_new=zip(*Z_new)
     Z_new=np.array(Z_new)

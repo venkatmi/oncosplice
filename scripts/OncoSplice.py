@@ -290,16 +290,21 @@ def CompleteWorkflow(InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroad
         RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
         Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
         NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile,turn)
+
     except Exception:
         print 'UNKNOWN ERROR!!!!! Setting Rank=0' 
-        print traceback.format_exc()
+        #print traceback.format_exc()
         Rank=0
  
     if Rank>1:
         ### ADJUST THE RANKS - MUST UPDATE!!!!
         if turn == 1:
-            #Rank=2
-            Rank = Rank
+            if force_broad_round1:
+                #Rank=2
+                Rank = Rank
+            else:
+                if Rank>2:
+                    Rank=30
         else:
             if Rank>2:
                 Rank = 30
@@ -503,6 +508,8 @@ if __name__ == '__main__':
     removeOutliers = False
     forceBroadClusters = False
     EnrichmentOnly = False
+    metaDataMatrixFormat = False
+    force_broad_round1 = False
     
     """ Below are the user-defined variables for OncoSplice """
     flag=True
@@ -516,7 +523,8 @@ if __name__ == '__main__':
                                             'FoldDiff=','SamplesDiffering=','removeOutliers=','percentCutoff=',
                                             'forceBroadClusters=','i=','metadata=','EnrichmentOnly=',
                                             'subtypeDiscvoery=','row_metric=','column_metric=','SamplesDiffering-',
-                                            'removeOutliers=','FoldDiff=','ExpressionCutoff=','normalization='])
+                                            'removeOutliers=','FoldDiff=','ExpressionCutoff=','normalization=',
+                                            'metaDataMatrixFormat=','Expand=','force_broad_round1='])
         for opt, arg in options:
             if opt == '--EventAnnotation' or opt == '--i':EventAnnot=arg
             elif opt == '--strategy' or opt == '--subtypeDiscvoery':
@@ -525,6 +533,15 @@ if __name__ == '__main__':
                 strategy=arg 
             elif opt == '--filter':filters=arg
             elif opt == '--mode':mode=arg
+            elif opt == '--metaDataMatrixFormat' or opt == '--Expand':
+                if string.lower(arg) == 'true' or string.lower(arg) == 'yes':
+                    metaDataMatrixFormat = True
+                else:
+                    metaDataMatrixFormat = False
+            elif opt == '--force_broad_round1':
+                if string.lower(arg) == 'yes' or string.lower(arg) == 'yes':
+                    ### Rather than forcing 30 or 2 clusters in Round1 - uses the blockID based k
+                    force_broad_round1 = True
             elif opt == '--Mutationref' or opt == '--metadata':
                 Mutationref=arg
             elif opt == '--Assoc':
@@ -630,9 +647,12 @@ if __name__ == '__main__':
         Expand="yes"
         Mutationref = checkMetadataFormat(Mutationref)
         mutdict=defaultdict(list)
-        header=ME.header_file(Mutationref)
+        print Mutationref
+        print metaDataMatrixFormat
+        header=ME.returnSamplesInMetaData(Mutationref,metaDataMatrixFormat=metaDataMatrixFormat)
+        print len(header)
         mutdict=ME.findsiggenepermut(Mutationref)
-        mutlabels=ME.Enrichment(Combinedres,mutdict,Mutationref,Expand,header)
+        mutlabels=ME.Enrichment(Combinedres,mutdict,Mutationref,metaDataMatrixFormat,header)
     print "Generating the final consolidated results"
     Orderedheatmap.Classify(Combinedres,mutlabels,dire)
     Orderedheatmap.Classify(Combinedres,mutlabels,dire,False) 

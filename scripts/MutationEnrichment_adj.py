@@ -80,7 +80,9 @@ def FishersExactTest(r,n,R,N):
     
 
             
-def header_file(fname, delimiter=None,Expand="no"):
+def returnSamplesInMetaData(fname, delimiter=None,metaDataMatrixFormat=False):
+    """ Returns the samples present based on the two possible metadata file input formats
+    (three column groups file or binary matrix of samples by mutations) """
     head=0
     header=[]
     newheader=[]
@@ -90,7 +92,7 @@ def header_file(fname, delimiter=None,Expand="no"):
             line = line.rstrip(os.linesep)
             header=string.split(line,'\t')
         
-            if Expand=="yes":
+            if metaDataMatrixFormat==True:
                 if head==0:
                     
                     for i in range(1,len(header)):
@@ -100,13 +102,13 @@ def header_file(fname, delimiter=None,Expand="no"):
                     head=1
                 else:break
             else:
-                if len(header)<3 or Expand=="no":
+                if len(header)<3 or metaDataMatrixFormat==False:
                     if header[0] not in newheader:
                         newheader.append(header[0]) 
     #print len(newheader)           
     return newheader
 
-def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
+def Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header):
     import collections
     import mappfinder
     X=defaultdict(list)
@@ -118,7 +120,8 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     dire=export.findParentDir(Inputfile)
     output_dir = dire+'MutationEnrichment'
     export.createExportFolder(output_dir)
-
+    number_of_samples = 0
+    
     ### All enrichment results
     exportnam=output_dir+'/Enrichment_Results.txt'
     export_enrich=open(exportnam,"w")
@@ -130,30 +133,21 @@ def Enrichment(Inputfile,mutdict,mutfile,Expand,header):
     header = "Mutations"+"\t"+"Cluster"+"\t"+"r"+"\t"+"R"+"\t"+"n"+"\t"+"Sensitivity"+"\t"+"Specificity"+"\t"+"z-score"+"\t"+"Fisher exact test"+"\t"+"adjp value"+"\n"
     export_enrich.write(header)
     export_hit.write(header)
-    number_of_samples = 0
-    if Expand=="yes":
-        header2=header_file(Inputfile,Expand="yes")
-        for line in open(Inputfile,'rU').xreadlines():
-            if head >0:
-                number_of_samples+=1
-                line=line.rstrip('\r\n')
-                q= string.split(line,'\t')
-                for i in range(1,len(q)):
-                    if q[i]==str(1):
-                        #group[q[0]].append(header2[i-1])
-                        group[header2[i-1]].append(q[0])
-            else:
-                number_of_samples+=1
-                head+=1
-                continue
-    else:
-        for line in open(Inputfile,'rU').xreadlines():
-            line=line.rstrip('\r\n')
-            line=string.split(line,'\t')
-            #for i in range(1,len(line)):
-            group[line[2]].append(line[0])
+    header2=returnSamplesInMetaData(Inputfile,metaDataMatrixFormat=True)
+    for line in open(Inputfile,'rU').xreadlines():
+        if head > 0:
             number_of_samples+=1
+            line=line.rstrip('\r\n')
+            q = string.split(line,'\t')
+            for i in range(1,len(q)):
+                if q[i]==str(1):
+                    #group[q[0]].append(header2[i-1])
+                    group[header2[i-1]].append(q[0])
+        else:
+            head+=1
+            continue
    
+    print 'Number of patient samples in dataset =',number_of_samples
     total_Scores={}
     for kiy in mutdict:
         if kiy =="MDP":
@@ -281,19 +275,22 @@ if __name__ == '__main__':
     else:
         analysisType = []
 
-        options, remainder = getopt.getopt(sys.argv[1:],'', ['Inputfile=','Reference=','Expand=', 'i=', 'input=', 'r=', 'reference=', 'expand='])
+        options, remainder = getopt.getopt(sys.argv[1:],'', ['Inputfile=','Reference=','metaDataMatrixFormat=', 'i=', 'input=', 'r=', 'reference=', 'expand='])
         for opt, arg in options:
             if opt == '--Inputfile' or opt == '--i' or opt == '--input': Inputfile=arg
-            elif opt == '--Reference' or opt == '--' or opt == '--reference': Reference=arg
-            elif opt =='--Expand' or opt =='--expand': Expand=arg
-            
+            elif opt == '--Reference' or opt == '--r' or opt == '--reference': Reference=arg
+            elif opt =='--metaDataMatrixFormat' or opt =='--expand':
+                if string.lower(arg) == 'true' or string.lower(arg) == 'yes':
+                    metaDataMatrixFormat = True
+                else:
+                    metaDataMatrixFormat = False
             else:
                 print "Warning! Command-line argument: %s not recognized. Exiting..." % opt; sys.exit()
     mutfile=Reference
          
     header=header_file(mutfile)
     mutdict=findsiggenepermut(mutfile)
-    Enrichment(Inputfile,mutdict,mutfile,Expand,header)
+    Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header)
 
         
         
