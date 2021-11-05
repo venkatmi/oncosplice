@@ -3537,6 +3537,7 @@ def filterByPathway(matrix,row_header,column_header,species,platform,vendor,Gene
 
 def getAllCorrelatedGenes(matrix,row_header,column_header,species,platform,vendor,targetGene,row_method,transpose):
     ### Filter all the matrix and header entries for IDs in the selected targetGene
+    print [targetGene[:100]]
     resort_by_ID_name=False
     if resort_by_ID_name:
         index=0; new_row_header=[]; new_matrix=[]; temp_row_header = []
@@ -3631,8 +3632,9 @@ def getAllCorrelatedGenes(matrix,row_header,column_header,species,platform,vendo
                     matrix_db[symbol]=matrix[i]
             i+=1
         i=0
-        #for gene in targetGenes:
-        #    if gene not in matrix_db: print gene
+        print 'Z',len(matrix_db)
+        for i in matrix_db:
+            print i,matrix_db[i];break
     else:
         i=0
         original_rows={} ### Don't add the same original ID twice if it associates with different Ensembl IDs
@@ -3820,7 +3822,7 @@ def getAllCorrelatedGenes(matrix,row_header,column_header,species,platform,vendo
     else:
         print len(row_header2), 'top-correlated IDs'
     exportData.close()
-
+    print 'AA',len(matrix2), row_header2[:2]
     return matrix2,row_header2,column_header,row_method
 
 

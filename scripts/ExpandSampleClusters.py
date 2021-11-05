@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-#!/usr/bin/env python
-
 import numpy as np
 import pylab as pl
 import sys,string
@@ -14,16 +12,11 @@ import export
 
 from sklearn import datasets, linear_model
 from sklearn.preprocessing import StandardScaler
-
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-
 import Orderedheatmap
-
-#from sklearn import cross_validation
-
 from sklearn import svm
 from sklearn.multiclass import OneVsOneClassifier
 from sklearn.multiclass import OneVsRestClassifier
@@ -34,13 +27,11 @@ from collections import OrderedDict
 from collections import defaultdict
 upd_guides=[]
 
-#upd_guides.append("uid")
 def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     head=0
     guidekeys=[]
     exportnam=os.path.join(Guidedir,"SplicingeventCount1.txt")
     export_class=open(exportnam,"w")
-    #commonkeys=[]
     tempkeys={}
     global upd_guides
     global train
@@ -61,17 +52,14 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
                     tempkeys[q[2]].append([q[0],float(q[10]),q[11]])
                 except KeyError:
                     tempkeys[q[2]]=[[q[0],float(q[10]),q[11]],]
+                    
     for i in tempkeys:
-       
         if len(tempkeys[i])>1:
-            #print tempkeys[i]
             tempkeys[i].sort(key=operator.itemgetter(1),reverse=False)
-            #print tempkeys[i][0]
             try:
                 unique_clusters[0].append(tempkeys[i][0])
             except KeyError:
                 unique_clusters[0]=[tempkeys[i][0],]
-          
         else:
             try:
                 unique_clusters[0].append(tempkeys[i][0])
@@ -83,15 +71,11 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     if len(unique_clusters[0])>100:
         guidekeys=unique_clusters[0]
         for i in range(0,len(guidekeys)):
-            
-            #upd_guides[i]=[upd_guides[i][3],upd_guides[i][4]]
             upd_guides.append(guidekeys[i][0])
     else:
         omitcluster=1
     export_class.write(psi+"\t"+str(len(unique_clusters[0]))+"\n")
-
     return omitcluster
-    #return upd_guides,train
 
 def cleanUpLine(line):
     line = string.replace(line,'\n','')
@@ -107,16 +91,10 @@ def filterRows(input_file,output_file,filterDB=None,logData=False):
     firstLine = True
     Flag=0;
 
-    #for i in filterDB:
     for line in open(input_file,'rU').xreadlines():
-        #for i in filterDB:
             flag1=0
-            
             data = cleanUpLine(line)
-           
             values = string.split(data,'\t')
-          
-            
             if firstLine:
                 firstLine = False
                 if Flag==0:
@@ -124,30 +102,16 @@ def filterRows(input_file,output_file,filterDB=None,logData=False):
             else:
                 if values[0] in filterDB:
                     counter=[index for index, value in enumerate(filterDB) if value == values[0]]
-                        #print counter
                     for it in range(0,len(counter)):
                         orderlst[counter[it]]=line
                     if logData:
                         line = string.join([values[0]]+map(str,(map(lambda x: math.log(float(x)+1,2),values[1:]))),'\t')+'\n'
-                        #export_object.write(line)
-                        #firstLine=True
-                       # Flag=1;
-               
-                    
-                #else:
-                   # max_val = max(map(float,values[1:]))
-                #min_val = min(map(float,values[1:]))
-                #if max_val>0.1:
-
-                     #   export_object.write(line)
     try:
         for i in range(0,len(orderlst)):
             export_object.write(orderlst[i])
     except Exception:
         print i,filterDB[i]
-    
-    
-         
+
     export_object.close()
     print 'Filtered rows printed to:',output_file
     
@@ -164,41 +128,24 @@ def filterRows_data(input_file,output_file,filterDB=None,logData=False):
         event=string.split(i,"|")[0]
         tempevents.append(event)
     for line in open(input_file,'rU').xreadlines():
-        #for i in filterDB:
-            flag1=0
-            
-            data = cleanUpLine(line)
-           
-            values = string.split(data,'\t')
-            event=string.split(values[0],"|")[0]
-                  
-            
-            if firstLine:
-                firstLine = False
-                if Flag==0:
-                    export_object.write(line)
-            else:
-                if event in tempevents:
-                    
-                    counter=[index for index, value in enumerate(tempevents) if value == event]
-                    #print counter
-                    filteredevents.append(event)
-                    for it in range(0,len(counter)):
-                        orderlst[counter[it]]=line
-                    if logData:
-                        line = string.join([values[0]]+map(str,(map(lambda x: math.log(float(x)+1,2),values[1:]))),'\t')+'\n'
-                        #export_object.write(line)
-                        #firstLine=True
-                       # Flag=1;
-               
-                    
-                #else:
-                   # max_val = max(map(float,values[1:]))
-                #min_val = min(map(float,values[1:]))
-                #if max_val>0.1:
-    
-                     #   export_object.write(line)
-   
+        flag1=0
+        data = cleanUpLine(line)
+        values = string.split(data,'\t')
+        event=string.split(values[0],"|")[0]
+              
+        if firstLine:
+            firstLine = False
+            if Flag==0:
+                export_object.write(line)
+        else:
+            if event in tempevents:
+                counter=[index for index, value in enumerate(tempevents) if value == event]
+                filteredevents.append(event)
+                for it in range(0,len(counter)):
+                    orderlst[counter[it]]=line
+                if logData:
+                    line = string.join([values[0]]+map(str,(map(lambda x: math.log(float(x)+1,2),values[1:]))),'\t')+'\n'
+
     for i in range(0,len(tempevents)):
         if i in orderlst:
             export_object.write(orderlst[i])
@@ -207,12 +154,10 @@ def filterRows_data(input_file,output_file,filterDB=None,logData=False):
                 export_object.write("\n") 
     export_object.close()
     tempevents2=[]
-    #print 'Filtered rows printed to:',output_file
     for i in range(len(tempevents)):
         if tempevents[i] in filteredevents:
             tempevents2.append(tempevents[i])
-    
-   # print len(tempevents2) 
+
     return tempevents2
 
 def findParentDir(filename):
@@ -220,6 +165,7 @@ def findParentDir(filename):
     filename = string.replace(filename,'\\','/')
     x = string.find(filename[::-1],'/')*-1
     return filename[:x]
+
 def Classify(header,Xobs,output_file,grplst,name,turn):
     count=0
     start=1
@@ -244,18 +190,14 @@ def Classify(header,Xobs,output_file,grplst,name,turn):
                     val.append(float(q[i]))
                 except Exception:
                     val.append(float(me))
-            #if q[1]==prev:
             Y.append(val)
-        
         else:
             head+=1
             continue
 
     Xobs=zip(*Xobs)
-
     Xobs=np.array(Xobs)
     Xobs=zip(*Xobs)
-
     Xobs=np.array(Xobs)
     X=grplst
     X=zip(*X)
@@ -263,52 +205,22 @@ def Classify(header,Xobs,output_file,grplst,name,turn):
     Y=zip(*Y)
     Y=np.array(Y)
 
-#X=np.loadtxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/group.txt")
-#print len(Xobs)
-#Load test
-#Y=np.loadtxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/testdata_CBFB.txt")
-#Y=zip(*Y)
-#Reshape the files
-#X=X.reshape(len(X), 1)
-#Xobs=np.array(Xobs)
-    #exportnam=output_file[:-4]+'KNN_test_30.txt'
-    #export_class=open(exportnam,"w")
-    #export_class.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
-    #regr = KNeighborsClassifier(n_neighbors=1)
-    ##print X.shape,Xobs.shape
-    #regr.fit(Xobs,X[:,0])
-    #q=regr.predict(Y)
-    #count=1
-    #for i in q:
-    #    export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
-    #    count+=1            
-    
-    #np.savetxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/complete_KNN.txt",q)
-    dire =export.findParentDir(export.findParentDir(export.findParentDir(output_file)[:-1])[:-1])
+    dire = export.findParentDir(export.findParentDir(export.findParentDir(output_file)[:-1])[:-1])
     output_dir = dire+'SVMOutputs'
     if os.path.exists(output_dir)==False:
         export.createExportFolder(output_dir)
-    #exportnam=output_dir+'/round'+str(turn)+'SVC_test_50cor.txt'
-    #export_class=open(exportnam,"w")
+
     exportnam1=output_dir+'/round'+str(turn)+'SVC_decision_func.txt'
     export_class1=open(exportnam1,"w")
     exportnam2=output_dir+'/round'+str(turn)+'SVC_Results.txt'
     export_class2=open(exportnam2,"w")
-    #export_class2.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
     regr = LinearSVC()
     regr.fit(Xobs,X[:,0])
     q=regr.predict(Y)
-    #print q
     count=1
-    
-    #for i in q:
-        
-        #export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
-        #count+=1
-    #print len(X[:,0])
+
     if len(X[:,0])>2:
         prob_=regr.fit(Xobs,X[:,0]).decision_function(Y)
-        #k=list(prob_)
         export_class1.write("uid")
         export_class2.write("uid")
         for ni in name:
@@ -317,15 +229,13 @@ def Classify(header,Xobs,output_file,grplst,name,turn):
             export_class2.write("\t"+"R"+str(turn)+"-"+sub)
         export_class1.write("\n")
         export_class2.write("\n")
-        #print prob_
+
         for iq in range(0,len(header)-1):
             export_class1.write(header[iq+1])
             export_class2.write(header[iq+1])
             for jq in range(0,len(X[:,0])):
                 export_class1.write("\t"+str(prob_[iq][jq]))
-                #if prob_[iq][jq]>0.4:
-                if prob_[iq][jq]>0:#big groups
-                    
+                if prob_[iq][jq]>0:
                     export_class2.write("\t"+str(1))
                 else:
                     export_class2.write("\t"+str(0))
@@ -333,28 +243,19 @@ def Classify(header,Xobs,output_file,grplst,name,turn):
             export_class2.write("\n")
     else:
         prob_=regr.fit(Xobs,X[:,0]).decision_function(Y)
-        #k=list(prob_)
         export_class1.write("uid"+"\t")
         export_class2.write("uid"+"\t")
         export_class1.write("group")
         export_class2.write("R"+str(turn)+"-V1"+"\t"+"R"+str(turn)+"-V2")
-        #for ni in name:
-        #   export_class1.write("\t"+ni)
-        #    export_class2.write("\t"+ni)
         export_class1.write("\n")
         export_class2.write("\n")
-        #print prob_
-        #export_class1.write(header[1])
-        #export_class2.write(header[1])
+
         for iq in range(0,len(header)-1):
             export_class1.write(header[iq+1])
             export_class2.write(header[iq+1])
-            #for jq in range(0,len(X[:,0])):
             export_class1.write("\t"+str(prob_[iq]))
             if prob_[iq]>0.5:
-                    
                 export_class2.write("\t"+str(1)+"\t"+str(0))
-            
             else:
                 if prob_[iq]<-0.5:  
                     export_class2.write("\t"+str(0)+"\t"+str(1))
@@ -363,24 +264,8 @@ def Classify(header,Xobs,output_file,grplst,name,turn):
             export_class1.write("\n")
             export_class2.write("\n")
     export_class2.close() 
-    Orderedheatmap.Classify(exportnam2)      
+    Orderedheatmap.Classify(exportnam2)
     
-        
-    #np.savetxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/complete_SVC_decisions.txt",prob_)
-    #
-    #exportnam=output_file[:-4]+'Random_test_30.txt'
-    #export_class=open(exportnam,"w")
-    #export_class.write("uid"+"\t"+"group"+"\t"+"class"+"\n")
-    #regr = RandomForestClassifier(n_estimators=60,max_features='sqrt',bootstrap='true')
-    #regr.fit(Xobs,X[:,0])
-    #q=regr.predict(Y)
-    #count=1
-    #for i in q:
-    #    export_class.write(header[count]+"\t"+str(i)+"\t"+name[int(i)-1]+"\n")
-    #    count+=1
-    #return exportnam1,exportnam2
-        #np.savetxt("/Volumes/MyPassport/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Leucegene/July-2017/PSI/ExpressionProfiles/DataPlots/complete_random_Forest.txt",q)
-        
 def header_file(fname, delimiter=None):
     head=0
     header=[]
@@ -392,13 +277,10 @@ def header_file(fname, delimiter=None):
                 header=string.split(line,'\t')
                 for i in header:
                     if ":" in i:
-                        
                         i=string.split(i,":")[1]
                     new_head.append(i)
-                        
                 head=1
             else:break
-   
     return new_head
 
 def avg(array):
@@ -409,7 +291,6 @@ def avg(array):
 def TrainDataGeneration(output_file,NMF_annot,name):
     head=0
     groups=[1,2]
-    
     matrix=defaultdict(list)
     compared_groups={}
     train=[]
@@ -431,82 +312,55 @@ def TrainDataGeneration(output_file,NMF_annot,name):
                     try:mapping[0].append(header[i])
                     except Exception: mapping[0]=[header[i]]
             head2=0
-            #print len(mapping[1]),len(mapping[0])
-            #print lin[0]
+
             eventname=[]
             for exp2 in open(output_file,"rU").xreadlines():
-                    lin2=exp2.rstrip('\r\n')
-                    lin2=string.split(lin2,"\t")
+                lin2=exp2.rstrip('\r\n')
+                lin2=string.split(lin2,"\t")
+                if head2==0:
+                    group_db={}
+                    index=0
+                    try:
+                        if len(mapping[1])>0 and len(mapping[0])>0:
+                            for i in lin2[1:]:
+                                if i in mapping[1]:
+                                    try: group_db[1].append(index)
+                                    except Exception: group_db[1] = [index]
+                                else:
+                                    try: group_db[2].append(index)
+                                    except Exception: group_db[2] = [index]
+                                index+=1
+                    except Exception:
+                        break
+
+                    head2=1
+                    continue   
+                else:  
+                    key = lin2[0]
+                    lin2=lin2[1:]
+                    grouped_floats=[]
+                    associated_groups=[]
+                    gvalues_list=[]
+                    for i in group_db[1]:
+                        try:
+                            x=float(lin2[i])
+                            gvalues_list.append(x)
+                        except Exception:
+                            pass
+                    try:  
+                        matrix[lin[0]].append(avg(gvalues_list))
+                        eventname.append(key)
+                    except Exception:
+                        matrix[lin[0]].append(float(0))
+                        eventname.append(key)
                     
-                    if head2==0:
-                        group_db={}
-                        index=0
-                        try:
-                            if len(mapping[1])>0 and len(mapping[0])>0:
-                                for i in lin2[1:]:
-                                    if i in mapping[1]:
-                                        
-                                        try: group_db[1].append(index)
-                                        except Exception: group_db[1] = [index]
-                                    else:
-                                        try: group_db[2].append(index)
-                                        except Exception: group_db[2] = [index]
-                                    index+=1
-                        except Exception:
-                            break
-                                
-                        #print len(group_db[1])   
-                        head2=1
-                        continue
-                        
-                    else:
-                        
-                        key = lin2[0]
-                        lin2=lin2[1:]
-                        grouped_floats=[]
-                        associated_groups=[]
-            
-                        ### string values
-                        gvalues_list=[]
-                        for i in group_db[1]:
-                                try:
-                                    
-                                    x=float(lin2[i])
-                                    gvalues_list.append(x)
-                                    
-                                except Exception:
-                                    #try: gvalues_list.append('') ### Thus are missing values
-                                    #except Exception: pass
-                                    pass
-                        try:
-                            
-                            matrix[lin[0]].append(avg(gvalues_list))
-                            eventname.append(key)
-                        except Exception:
-                            matrix[lin[0]].append(float(0))
-                            eventname.append(key)
-                        
-    #exportnam=output_file[:-4]+'training_centroid.txt'
-    #export_class=open(exportnam,"w")
-    #export_class.write('uid')
-    #for i in range(len(eventname)):
-     #   export_class.write('\t'+eventname[i])
-    #export_class.write('\n')
     for j in range(0,len(name)):
-        #print name[j]
-        
         for key in matrix:
             key1=key+"_vs"
             key2="vs_"+key+".txt"
             
             if key1 in name[j] or key2 in name[j]:
-               # print key
                 train.append(matrix[key])
-                #export_class.write(key)
-                #for i in range(len(matrix[key])):
-                 #   export_class.write('\t'+str(matrix[key][i]))
-                #export_class.write('\n')
-                 
     return train
 
 if __name__ == '__main__':
@@ -517,7 +371,6 @@ if __name__ == '__main__':
     name=[]
     matrix={}
     compared_groups={}
-
     
     ################  Comand-line arguments ################
     if len(sys.argv[1:])<=1:  ### Indicates that there are insufficient number of command-line arguments
@@ -532,14 +385,10 @@ if __name__ == '__main__':
             elif opt =='--PSIdir':PSIdir=arg
             elif opt =='--PSI':PSI=arg
             elif opt =='--NMF_annot':NMF_annot=arg
-           
             else:
                 print "Warning! Command-line argument: %s not recognized. Exiting..." % opt; sys.exit()
-    #commonkeys=[]
     counter=1
-#filename="/Users/meenakshi/Documents/leucegene/ICGS/Clustering-exp.Hs_RNASeq_top_alt_junctions367-Leucegene-75p_no149-Guide1 TRAK1&ENSG00000182606&I1.1_42075542-E2.1__E-hierarchical_cosine_correlation.txt"          
-#PSIfile="/Users/meenakshi/Documents/leucegene/ExpressionInput/exp.Hs_RNASeq_top_alt_junctions-PSI_EventAnnotation-367-Leucegene-75p-unique-filtered-filtered.txt"
-#keylabel="/Users/meenakshi/Documents/leucegene/ExpressionInput/exp.round2_glmfilteredKmeans_label.txt"
+
     for filename in os.listdir(Guidedir):
         if filename.startswith("PSI."):
             Guidefile=os.path.join(Guidedir, filename)
@@ -547,8 +396,6 @@ if __name__ == '__main__':
             PSIfile=os.path.join(PSIdir, psi)
             print Guidefile,PSIfile
   
-            #output_file=PSIfile[:-4]+"-filtered.txt"
-    #sampleIndexSelection.filterFile(PSIfile,output_file,header)
             omitcluster=FindTopUniqueEvents(Guidefile,psi,Guidedir)
             print omitcluster
             if omitcluster==0:
@@ -557,7 +404,7 @@ if __name__ == '__main__':
                 counter+=1
         
     output_file=PSI[:-4]+"-filtered.txt"  
-            #print guidekey
+
     print len(upd_guides)
     filterRows(PSI,output_file,filterDB=upd_guides,logData=False)
     header=header_file(output_file)

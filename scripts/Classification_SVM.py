@@ -125,7 +125,6 @@ def SupervisedAnalyses(Training,Test,Multigroup,group,diffevents,adjp,centroid,n
         filteredevents=[]
        
         for filename in os.listdir(Guidedir):
-            
             counter=1
             if filename.startswith("PSI."):
                 name=[]

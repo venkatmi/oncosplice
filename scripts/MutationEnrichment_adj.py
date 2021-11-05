@@ -90,6 +90,7 @@ def returnSamplesInMetaData(fname, delimiter=None,metaDataMatrixFormat=False):
         for line in fin:
             #print line
             line = line.rstrip(os.linesep)
+            line = string.replace(line,'"','')
             header=string.split(line,'\t')
         
             if metaDataMatrixFormat==True:
@@ -119,6 +120,7 @@ def Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header):
     mut=export.findFilename(mutfile)
     dire=export.findParentDir(Inputfile)
     output_dir = dire+'MutationEnrichment'
+    print output_dir
     export.createExportFolder(output_dir)
     number_of_samples = 0
     
@@ -134,6 +136,7 @@ def Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header):
     export_enrich.write(header)
     export_hit.write(header)
     header2=returnSamplesInMetaData(Inputfile,metaDataMatrixFormat=True)
+    print header2
     for line in open(Inputfile,'rU').xreadlines():
         if head > 0:
             number_of_samples+=1
@@ -142,7 +145,7 @@ def Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header):
             for i in range(1,len(q)):
                 if q[i]==str(1):
                     #group[q[0]].append(header2[i-1])
-                    group[header2[i-1]].append(q[0])
+                    group[header2[i-1]].append(q[0]) ### [Cluster] = [full_sample_ID]
         else:
             head+=1
             continue
@@ -202,8 +205,8 @@ def Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header):
         for signature in signature_db:
             zsd = signature_db[signature]
             results = [kiy,signature,zsd.Changed(),zsd.Measured(),zsd.InPathway(),str(float(zsd.PercentChanged())/100.0),str(float(float(zsd.Changed())/float(zsd.InPathway()))), zsd.ZScore(), zsd.PermuteP(), zsd.AdjP()] #string.join(zsd.AssociatedIDs(),'|')
-            sorted_results.append([signature,float(zsd.PermuteP()),results])
-    sorted_results.sort() ### Sort by p-value
+            sorted_results.append([signature,-1*float(zsd.ZScore()),results])
+    sorted_results.sort() ### Sort z-score
     
     prev=""
     for (sig,p,values) in sorted_results:
@@ -212,7 +215,8 @@ def Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header):
             export_hit.write(string.join(values,'\t')+'\n')
         if flag:
             ### Update the cluster label to include the top enriched term meeting, sensitivity and specificity cutoffs
-            if (float(values[5])>=0.5 and float(values[6])>=0.5) or float(values[5])>=0.6 :
+            #print values[5],values[6],values[6],values[2]; sys.exit()
+            if (float(values[5])>=0.2 and float(values[6])>=0.2 and float(values[7])>=1.95 and float(values[2])>=2):
                 clusterID = values[1]
                 topEnrichedTerm=values[0]
                 mutlabels[clusterID]=clusterID+' ('+topEnrichedTerm+')'
@@ -226,7 +230,7 @@ def Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header):
 
     return mutlabels
             
-def findsiggenepermut(mutfile):
+def findsiggenepermut(mutfile,valid_filenames=None):
     samplelist=[]
     mutdict=defaultdict(list)
     head=0
@@ -234,22 +238,30 @@ def findsiggenepermut(mutfile):
     for exp1 in open(mutfile,"rU").xreadlines():
         #print exp1
         lin=exp1.rstrip('\r\n')
+        lin = string.replace(lin,'"','')
         lin=string.split(lin,"\t")
         if len(lin)>3:
             if head==0:
                 for i in lin[1:]:
-            
                     samplelist.append(i)
                 head=1
                 continue
             else:
-                
                 for j in range(1,len(lin)):
                     if lin[j]==str(1):
-                        mutdict[lin[0]].append(samplelist[j-1])
-                        
+                        sampleName = samplelist[j-1]
+                        if valid_filenames != None:
+                            for fullName in valid_filenames:
+                                if sampleName in fullName:
+                                    sampleName = fullName
+                        mutdict[lin[0]].append(fullName)
         else:
-            mutdict[lin[-1]].append(lin[0])
+            sampleName = lin[0]
+            if valid_filenames != None:
+                for fullName in valid_filenames:
+                    if sampleName in fullName:
+                        sampleName = fullName
+            mutdict[lin[-1]].append(sampleName)
     return  mutdict
 
 def Zscore(r,n,N,R):
@@ -264,7 +276,7 @@ def Zscore(r,n,N,R):
                 
 if __name__ == '__main__':
     """ Enrichment analysis for user-supplied metadata, including mutations and clincial characteristics """
-    
+    metaDataMatrixFormat = False
     import getopt
     mutdict=defaultdict(list)
     
@@ -287,8 +299,8 @@ if __name__ == '__main__':
             else:
                 print "Warning! Command-line argument: %s not recognized. Exiting..." % opt; sys.exit()
     mutfile=Reference
-         
-    header=header_file(mutfile)
+    
+    header=returnSamplesInMetaData(mutfile,metaDataMatrixFormat=metaDataMatrixFormat)
     mutdict=findsiggenepermut(mutfile)
     Enrichment(Inputfile,mutdict,mutfile,metaDataMatrixFormat,header)
 

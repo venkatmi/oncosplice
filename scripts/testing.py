@@ -29,7 +29,7 @@ or batch effects (signature depletion).
 
 Steps applied in this workflow:
 1 - Run splice-ICGS (Feature Selection)
-2 - Block identification (k analysis)
+2 - Block identification (Rank analysis)
 3 - NMF Analysis (Initial subtype identification)
 4 - Filter Event Annotation
 5 - Meta data analysis (differential expression)
@@ -118,13 +118,10 @@ def header_list(EventAnnot):
             else:break
     return header
 
-def FindTopUniqueEvents(dPSI_results_fn,psi,dPSI_results_dir):
-    """ This function reports signatures with at least 100 splicing events.
-    If none are present the function indicates that these results should be ommitted """
-    
+def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     head=0
     guidekeys=[]
-    exportnam=os.path.join(dPSI_results_dir,"SplicingeventCount1.txt")
+    exportnam=os.path.join(Guidedir,"SplicingeventCount1.txt")
     export_class=open(exportnam,"a")
 
     tempkeys={}
@@ -134,7 +131,7 @@ def FindTopUniqueEvents(dPSI_results_fn,psi,dPSI_results_dir):
     
     unique_clusters={}
 
-    for line in open(dPSI_results_fn,'rU').xreadlines():
+    for line in open(Guidefile,'rU').xreadlines():
         if head==0:
             line1=line.rstrip('\r\n')
             q= string.split(line1,'\t')
@@ -151,11 +148,11 @@ def FindTopUniqueEvents(dPSI_results_fn,psi,dPSI_results_dir):
                 adjp=q.index('rawp')
                 dpsi=q.index('LogFold')
                 Clusterid=q.index('GeneID')
-                cutoff=0.58 ### 1.5 fold
+                cutoff=0.58
         else:
             line1=line.rstrip('\r\n')
             q= string.split(line1,'\t')
-            if abs(float(q[dpsi]))>cutoff and float(q[adjp])<0.05: ### Adjusted p-value cutoff of 0.01
+            if abs(float(q[dpsi]))>cutoff and float(q[adjp])<0.01:
                 try:
                     tempkeys[q[Clusterid]].append([q[uid],float(q[adjp]),q[adjp+1]])
                 except KeyError:
@@ -176,14 +173,14 @@ def FindTopUniqueEvents(dPSI_results_fn,psi,dPSI_results_dir):
                 unique_clusters[0]=[tempkeys[i][0],]
     
     try:
-        if len(unique_clusters[0])>1:
+        if len(unique_clusters[0])>1:     
             unique_clusters[0].sort(key=operator.itemgetter(1))
-            if len(unique_clusters[0])>100: ### ORIGINALY SET TO 120
+            if len(unique_clusters[0])>120:
                 guidekeys=unique_clusters[0][0:150]
                 for i in range(0,len(guidekeys)):
                     upd_guides.append(guidekeys[i][0])
             else:
-                omitcluster=1
+                        omitcluster=1
         else:
             omitcluster=1
         export_class.write(psi+"\t"+str(len(unique_clusters[0]))+"\n")
@@ -200,34 +197,88 @@ def cleanUpLine(line):
     return data
 
 def MergeResults(dire):
-    files_to_merge=[]
-    
-    for filename in os.listdir(dire): 
+    file_index={}
+    count=0
+    for filename in os.listdir(dire):
+
         if ("_Results" in filename or "Kmeans" in filename)  and "._" not in filename and "ordered" not in filename:
-            files_to_merge.append(dire+'/'+filename)
-            
-    import mergeFiles
+            file_index[filename]=count
+            count+=1
+
+    keylist={}
+    
+    heads={}
+    for filename in os.listdir(dire):
+        if ("_Results" in filename or "Kmeans" in filename)  and "._" not in filename and "ordered" not in filename:
+            Guidefile=os.path.join(dire, filename)
+            head=0
+            for line in open(Guidefile,'rU').xreadlines():
+                data = cleanUpLine(line)
+                t = string.split(data,'\t')
+                header=[]
+                if head==0:
+                    head=1
+                    for i in range(1,len(t)):
+                        header.append(t[i])
+                    heads[filename]=header
+                        
+                    continue
+                else:
+                    
+                    val=[]
+                    key=t[0]
+                    for i in range(1,len(t)):
+                        val.append(t[i])
+                    if key not in keylist:
+                        keylist[key]=[[file_index[filename],val],]
+                    else:
+                        keylist[key].append([file_index[filename],val])
     exportnam=os.path.join(dire,"MergedResult.txt")
-    join_option='Intersection'
-    uniqueOnly=False
-    outputfile = mergeFiles.remoteCombineAllLists(files_to_merge,'',includeDatasetName=False,ExportPath=exportnam)
+    export_class=open(exportnam,"w")
+    export_class.write("uid")
+    
+    for filename in file_index:
+        try:
+            export_class.write("\t")
+            print filename,heads[filename]
+            export_class.write(string.join(heads[filename],"\t"))
+        except:
+            print traceback.format_exc()
+            pass
+    try: export_class.write("\n")
+    except: print traceback.format_exc()
+
+    
+    for key in keylist:
+        try: export_class.write(key)
+        except: print traceback.format_exc()
+        for filename in file_index:
+            try:
+                for val1,val2 in keylist[key]:
+                    if file_index[filename]==val1:
+                        export_class.write("\t")
+                        export_class.write(string.join(val2,"\t"))
+                    break
+            except:
+                print traceback.format_exc()
+        try: export_class.write("\n")
+        except: print traceback.format_exc()
     return exportnam
 
-def CompleteWorkflow(full_PSI_InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroadClusters,AnalysisRound):
+def CompleteWorkflow(InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroadClusters,turn):
     """ This function is used perform a single-iteration of the OncoSplice workflow (called from main),
     including the unsupervised splicing analysis (splice-ICGS) and signature depletion """
     
     ### Filter the EventAnnotation PSI file with non-depleted events from the prior round
-    filtered_EventAnnot_dir=filterEventAnnotation.FilterFile(full_PSI_InputFile,EventAnnot,AnalysisRound)
+    FilteredEventAnnot=filterEventAnnotation.FilterFile(InputFile,EventAnnot,turn)
     
     try:
-        print "Running splice-ICGS for feature selection - Round"+str(AnalysisRound)
+        print "Running splice-ICGS for feature selection - Round"+str(turn)
 
         ### Reset the below variables which can be altered in prior rounds
         gsp.setGeneSelection('')
         gsp.setGeneSet('None Selected')
         gsp.setPathwaySelect([])
-        species = gsp.Species()
         if forceBroadClusters == True:
             ### Find Broad clusters with at least 25% of all samples
             originalSamplesDiffering = gsp.SamplesDiffering()
@@ -235,151 +286,114 @@ def CompleteWorkflow(full_PSI_InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,f
             
         print 'Number varying samples to identify:',gsp.SamplesDiffering()
         
-        graphic_links3 = RNASeq.singleCellRNASeqWorkflow(species, 'exons', full_PSI_InputFile,mlp,exp_threshold=0, rpkm_threshold=0, parameters=gsp)
+        graphic_links3 = RNASeq.singleCellRNASeqWorkflow(species, 'exons', InputFile,mlp,exp_threshold=0, rpkm_threshold=0, parameters=gsp)
         if forceBroadClusters == True:
             gsp.setSamplesDiffering(originalSamplesDiffering)
 
-        dPSI_results_fn=graphic_links3[-1][-1]
-        dPSI_results_fn=dPSI_results_fn[:-4]+'.txt'
+        Guidefile=graphic_links3[-1][-1]
+        Guidefile=Guidefile[:-4]+'.txt'
        
-        print "Running block identification for k analyses - Round"+str(AnalysisRound)
+        print "Running block identification for rank analyses - Round"+str(turn)
         ### Parameters are fixed as they are distinct 
-        RNASeq_blockIdentification.correlateClusteredGenesParameters(dPSI_results_fn,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
-        dPSI_results_fn_block=dPSI_results_fn[:-4]+'-BlockIDs.txt'
-        NMFinput, k = NMF_Analysis.FilterFile(dPSI_results_fn,dPSI_results_fn_block,full_PSI_InputFile,AnalysisRound)
+        RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
+        Guidefile_block=Guidefile[:-4]+'-BlockIDs.txt'
+        NMFinput,Rank=NMF_Analysis.FilterFile(Guidefile,Guidefile_block,InputFile,turn)
 
     except Exception:
-        print 'UNKNOWN ERROR!!!!! Setting k=0' 
-        print traceback.format_exc()
-        k=0
-    
-    print "Round =", AnalysisRound,'and k =', k
-    if AnalysisRound == 1:
-        if force_broad_round1:
-            k = 2
+        print 'UNKNOWN ERROR!!!!! Setting Rank=0' 
+        #print traceback.format_exc()
+        Rank=0
+ 
+    if Rank>1:
+        ### ADJUST THE RANKS - MUST UPDATE!!!!
+        if turn == 1:
+            if force_broad_round1:
+                #Rank=2
+                Rank = Rank
+            else:
+                if Rank>2:
+                    Rank=30
         else:
-            NMFinput,k = NMF_Analysis.FilterFile(dPSI_results_fn,dPSI_results_fn,full_PSI_InputFile,AnalysisRound) ### Just use the Guide 3 file alone
-    if k < 2:
-        NMFinput,k = NMF_Analysis.FilterFile(dPSI_results_fn,dPSI_results_fn,full_PSI_InputFile,AnalysisRound) ### Just use the Guide 3 file alone
-        #k = 2
-        
-    print "Round =", AnalysisRound,'and k =', k
-    if k>1:
-        ### ADJUST THE k - MUST UPDATE!!!!
-        if AnalysisRound == 1:
-            if k < 2:
-                k = 30
+            if Rank>2:
+                Rank = 30
+        if seq=="bulk":
+           use_adjusted_p=True
         else:
-            if k > 2:
-                k = 30
-        print "Round =", AnalysisRound,'and k =', k
-        
-        try:
-            flag,full_PSI_InputFile = performNMF(species, NMFinput, full_PSI_InputFile, filtered_EventAnnot_dir, k,AnalysisRound, strategy)
-        except:
-            print traceback.format_exc()
-            k+=1
-            print 'Adjusted k =',k
-            try:
-                flag,full_PSI_InputFile = performNMF(species, NMFinput, full_PSI_InputFile, filtered_EventAnnot_dir, k, AnalysisRound, strategy)
-                print traceback.format_exc()
-            except:
-                k = 30
-                print 'Adjusted k = 30'
-                try:
-                    flag,full_PSI_InputFile = performNMF(species, NMFinput, full_PSI_InputFile, filtered_EventAnnot_dir, k,AnalysisRound, strategy)
-                    print traceback.format_exc()
-                except:
-                    flag = True
-                    pass ### will force k-means below
+           use_adjusted_p=False
+     
+        print "Running NMF analyses for dimension reduction using "+str(Rank)+" ranks - Round"+str(turn)
+        NMFResult,BinarizedOutput,Metadata,Annotation=NMF_Analysis.NMFAnalysis(NMFinput,Rank,turn,strategy)
+        print "Running Metadata Analyses for finding differential splicing events"
+        rootdir,CovariateQuery=metaDataAnalysis.remoteAnalysis('Hs',FilteredEventAnnot,Metadata,'PSI',0.1,use_adjusted_p,0.05,Annotation)
+        counter=1
+        Guidedir=rootdir+CovariateQuery
+        PSIdir=rootdir+'ExpressionProfiles'
+        global upd_guides
+        upd_guides=[]
+        name=[]
+        group=[]
+        grplst=[]
+        for filename in os.listdir(Guidedir):
+            if filename.startswith("PSI."):
+                Guidefile=os.path.join(Guidedir, filename)
+                psi=string.replace(filename,"PSI.","")
+                PSIfile=os.path.join(PSIdir, psi)
+                omitcluster=FindTopUniqueEvents(Guidefile,psi,Guidedir)
+               
+                if omitcluster==0:
+                    group.append(counter)
+                    name.append(psi)
+                    counter+=1
+        if counter>2:
+            dire = export.findParentDir(InputFile)
+            output_dir = dire+'OncoInputs'
+            if os.path.exists(output_dir)==False:
+                export.createExportFolder(output_dir)
     
-    if k<2:
-        if k==1:
+            output_file = output_dir+'/SVMInput-Round'+str(turn)+'.txt'
+            ExpandSampleClusters.filterRows(InputFile,output_file,filterDB=upd_guides,logData=False)
+            header=ExpandSampleClusters.header_file(output_file)
+            print "Running SVM prediction for improved subtypes - Round"+str(turn)
+            train=ExpandSampleClusters.TrainDataGeneration(output_file,BinarizedOutput,name)
+            grplst.append(group)
+            ExpandSampleClusters.Classify(header,train,output_file,grplst,name,turn)
+            header=Correlationdepletion.header_file(NMFResult)
+            
+            output_file=output_dir+'/DepletionInput-Round'+str(turn)+".txt"
+            sampleIndexSelection.filterFile(InputFile,output_file,header)
+            print "Running Correlation Depletion - Round"+str(turn)
+            commonkeys,count=Correlationdepletion.FindCorrelations(NMFResult,output_file,name)
+            Depleted=Correlationdepletion.DepleteSplicingevents(commonkeys,output_file,count,InputFile)
+            InputFile=Depleted
+        
+            flag=True
+        else:
             try:
-                print "Running K-means analyses instead of NMF - Round"+str(AnalysisRound)
+                print "Running K-means analyses instead of NMF - Round"+str(turn)
                 header=[]
-                header=Kmeans.header_file(dPSI_results_fn_block)
-                Kmeans.KmeansAnalysis(dPSI_results_fn_block,header,full_PSI_InputFile,AnalysisRound)
-                if AnalysisRound == 1:
-                    flag=True
-                else:
-                    flag=False
+                header=Kmeans.header_file(Guidefile_block)
+                Kmeans.KmeansAnalysis(Guidefile_block,header,InputFile,turn)
+                flag=False
             except Exception:
                 print 'WARNING!!!!! DID NOT RUN K-MEANS!!!!!'
                 print traceback.format_exc()
-                AnalysisRound = True
+                flag=False
+    else:
+        if Rank==1:
+            try:
+                print "Running K-means analyses instead of NMF - Round"+str(turn)
+                header=[]
+                header=Kmeans.header_file(Guidefile_block)
+                Kmeans.KmeansAnalysis(Guidefile_block,header,InputFile,turn)
+                flag=False
+            except Exception:
+                print 'WARNING!!!!! DID NOT RUN K-MEANS!!!!!'
+                print traceback.format_exc()
+                flag=False
         else:
             flag=False
      
-    return flag,full_PSI_InputFile,filtered_EventAnnot_dir
-
-def performNMF(species, NMFinput, full_PSI_InputFile, filtered_EventAnnot_dir, k, AnalysisRound, strategy):
-    """ Run NMF and determine the number of valid clusters based on the magnitude of detected differential splicing """
-    
-    use_adjusted_p=True
-           
-    print "Running NMF analyses for dimension reduction using "+str(k)+" k - Round"+str(AnalysisRound)
-    NMFResult,BinarizedOutput,metaData,Annotation=NMF_Analysis.NMFAnalysis(NMFinput,k,AnalysisRound,strategy) ### This is where we get the correct version
-    print "Running metaData Analyses for finding differential splicing events"
-    rootdir,CovariateQuery=metaDataAnalysis.remoteAnalysis(species,filtered_EventAnnot_dir,metaData,'PSI',0.1,use_adjusted_p,0.05,Annotation)
-    counter=1
-    dPSI_results_dir=rootdir+CovariateQuery
-    global upd_guides
-    upd_guides=[]
-    name=[]
-    group=[]
-    grplst=[]
-    for filename in os.listdir(dPSI_results_dir):
-        if filename.startswith("PSI."):
-            dPSI_results_fn=os.path.join(dPSI_results_dir, filename)
-            dPSI_comparison_alt_name=string.replace(filename,"PSI.","")
-            omitcluster=FindTopUniqueEvents(dPSI_results_fn,dPSI_comparison_alt_name,dPSI_results_dir)
-            if omitcluster==0: ### Hence, clustering succeeded and did not fail in this dPSI comparison
-                group.append(counter)
-                name.append(string.replace(filename,"PSI.",""))
-                counter+=1
-                
-    print counter, 'robust splicing subtypes identified in round',AnalysisRound
-    if counter>0: #counter>2 --- changed to 0 to force NMF
-        dire = export.findParentDir(full_PSI_InputFile)
-        output_dir = dire+'OncoInputs'
-        if os.path.exists(output_dir)==False:
-            export.createExportFolder(output_dir)
-
-        output_file = output_dir+'/SVMInput-Round'+str(AnalysisRound)+'.txt'
-        ExpandSampleClusters.filterRows(full_PSI_InputFile,output_file,filterDB=upd_guides,logData=False)
-        header=ExpandSampleClusters.header_file(output_file)
-        print "Running SVM prediction for improved subtypes - Round"+str(AnalysisRound)
-        #print 'AAAAAAAAAAAAAAAAAAAAAAAA',output_file
-        #print 'BBBBBBBBBBBBBBBBBBBBBBBB',BinarizedOutput
-        train=ExpandSampleClusters.TrainDataGeneration(output_file,BinarizedOutput,name)
-        grplst.append(group)
-        ExpandSampleClusters.Classify(header,train,output_file,grplst,name,AnalysisRound) ### This is where we write the worng version
-        header=Correlationdepletion.header_file(NMFResult)
-        
-        output_file=output_dir+'/DepletionInput-Round'+str(AnalysisRound)+".txt"
-        sampleIndexSelection.filterFile(full_PSI_InputFile,output_file,header)
-        print "Running Correlation Depletion - Round"+str(AnalysisRound)
-        commonkeys,count=Correlationdepletion.FindCorrelations(NMFResult,output_file,name)
-        Depleted=Correlationdepletion.DepleteSplicingevents(commonkeys,output_file,count,full_PSI_InputFile)
-        full_PSI_InputFile=Depleted
-    
-        flag=True ### Indicates that K-means was not run - hence, another round of splice-ICGS should be performed
-    """"
-    else:
-        try:
-            print "Running K-means analyses instead of NMF - Round"+str(AnalysisRound)
-            header=[]
-            header=Kmeans.header_file(dPSI_results_fn_block)
-            Kmeans.KmeansAnalysis(dPSI_results_fn_block,header,full_PSI_InputFile,AnalysisRound)
-            flag=True
-        except Exception:
-            print 'WARNING!!!!! DID NOT RUN K-MEANS!!!!!'
-            print traceback.format_exc()
-            AnalysisRound = True
-    """
-    return flag,full_PSI_InputFile
-
+    return flag,InputFile,FilteredEventAnnot
 
 def formatMetaData(filename):
     """ Export metadata annotations from a matrix that consist of mutations, numerical values
@@ -460,7 +474,7 @@ def formatMetaData(filename):
     eo.close()
     return export_path
     
-def checkmetaDataFormat(filename):
+def checkMetadataFormat(filename):
     ### Allow more complex metadata file formats with a matrix of diverse annotations
     for line in open(filename, 'rU').xreadlines():
         data = cleanUpLine(line)
@@ -471,28 +485,18 @@ def checkmetaDataFormat(filename):
         except:
             pass
     return filename  
-
-def getPSIHeader(full_PSI_InputFile):
-    firstRow=True
-    PSI_sample_headers=[]
-    for line in open(full_PSI_InputFile,'rU').xreadlines():
-        data = line.rstrip()
-        values = string.split(data,'\t')
-        if firstRow:
-            PSI_sample_headers = values
-            firstRow=False
-        else:
-            break
-    return PSI_sample_headers
     
 if __name__ == '__main__':
     """ OncoSplice user-input and default parameters for iterative analysis of PSI splicing files """
-    
+    import RNASeq_blockIdentification
+    Guidefile = '/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Anukana/Breast-Cancer/OncoSplice-Healthy/ExpressionInput/amplify/DataPlots/Clustering-exp.input-Guide3 MROH1 ENSG00000179832 E43.1-E44.1 ENSG00000-hierarchical_euclidean_correlation.txt'
+    RNASeq_blockIdentification.correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True) 
+    sys.exit()
     import getopt
     """ Below are the default variables for OncoSplice """
     seq = "bulk"
-    rho_cutoff = 0.3
-    strategy = "conservative"
+    rho_cutoff = 0.4
+    strategy = "stringent"
     filters = True
     mode = "iterative"
     Mutationref = ""
@@ -528,14 +532,13 @@ if __name__ == '__main__':
                                             'strategy=','filter=','mode=','Mutationref=','Assoc=','row_method',
                                             'column_method=','ExpressionCutoff=','normalization=','CountsCutoff=',
                                             'FoldDiff=','SamplesDiffering=','removeOutliers=','percentCutoff=',
-                                            'forceBroadClusters=','i=','metadata=','EnrichmentOnly=', 'm=',
-                                            'subtypeDiscovery=','row_metric=','column_metric=','SamplesDiffering-',
+                                            'forceBroadClusters=','i=','metadata=','EnrichmentOnly=',
+                                            'subtypeDiscvoery=','row_metric=','column_metric=','SamplesDiffering-',
                                             'removeOutliers=','FoldDiff=','ExpressionCutoff=','normalization=',
                                             'metaDataMatrixFormat=','Expand=','force_broad_round1='])
-        print options
         for opt, arg in options:
             if opt == '--EventAnnotation' or opt == '--i':EventAnnot=arg
-            elif opt == '--strategy' or opt == '--subtypeDiscovery':
+            elif opt == '--strategy' or opt == '--subtypeDiscvoery':
                 ### How stringent should OncoSplice be to EXCLUDE clusters with evidence of sample overlap
                 ### Options: stringent (DEFAULT), conservative
                 strategy=arg 
@@ -550,7 +553,7 @@ if __name__ == '__main__':
                 if string.lower(arg) == 'yes' or string.lower(arg) == 'yes':
                     ### Rather than forcing 30 or 2 clusters in Round1 - uses the blockID based k
                     force_broad_round1 = True
-            elif opt == '--Mutationref' or opt == '--metadata' or opt == '--m':
+            elif opt == '--Mutationref' or opt == '--metadata':
                 Mutationref=arg
             elif opt == '--Assoc':
                 arg = string.lower(arg)
@@ -599,7 +602,7 @@ if __name__ == '__main__':
     
     print "Subtype discovery stringency:",strategy
     dire = export.findParentDir(EventAnnot)
-
+    
     if EnrichmentOnly==False:
         
         print 'PSI input files:',EventAnnot
@@ -612,9 +615,9 @@ if __name__ == '__main__':
         output_dir = dire+'ExpressionInput'
     
         export.createExportFolder(output_dir)
-        full_PSI_InputFile=output_dir+"/exp.input.txt"
+        InputFile=output_dir+"/exp.input.txt"
         header=header_list(EventAnnot)
-        sampleIndexSelection.filterFile(EventAnnot,full_PSI_InputFile,header,FirstCol=False)
+        sampleIndexSelection.filterFile(EventAnnot,InputFile,header,FirstCol=False)
         
         ### Set Splice-ICGS defaults
         gsp = UI.GeneSelectionParameters(species,platform,platform)
@@ -626,19 +629,19 @@ if __name__ == '__main__':
         gsp.setSampleDiscoveryParameters(ExpressionCutoff,CountsCutoff,FoldDiff,SamplesDiffering,removeOutliers,
                         featurestoEvaluate,restrictBy,excludeCellCycle,column_metric,column_method,rho_cutoff)
         
-        AnalysisRound=1
+        turn=1
         if mode == "single":
             """ Perform a single round of Splice-ICGS (RNASeq.py module) """
-            flag,full_PSI_InputFile,EventAnnot=CompleteWorkflow(full_PSI_InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroadClusters,AnalysisRound)
+            flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroadClusters,turn)
       
         else:
             """ Optionally iterate through multiple rounds of Splice-ICGS (RNASeq.py module) """
             while flag:
-                if AnalysisRound != 1:
+                if turn != 1:
                     forceBroadClusters = False
-                flag,full_PSI_InputFile,EventAnnot=CompleteWorkflow(full_PSI_InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroadClusters,AnalysisRound)
-                AnalysisRound+=1
-                if AnalysisRound>3:
+                flag,InputFile,EventAnnot=CompleteWorkflow(InputFile,EventAnnot,rho_cutoff,strategy,seq,gsp,forceBroadClusters,turn)
+                turn+=1
+                if turn>3:
                     flag = False
                 if flag == False:
                     break
@@ -652,18 +655,16 @@ if __name__ == '__main__':
     ### Peform enrichment anlayses for each subtype against user-supplied clusters
     mutlabels={}
     if Mutationref!="":
-        PSI_sample_headers = getPSIHeader(EventAnnot)
         print "Running Mutation Enrichment Analyses"
         Expand="yes"
-        Mutationref = checkmetaDataFormat(Mutationref)
+        Mutationref = checkMetadataFormat(Mutationref)
         mutdict=defaultdict(list)
-        #print Mutationref
+        print Mutationref
         print metaDataMatrixFormat
         header=ME.returnSamplesInMetaData(Mutationref,metaDataMatrixFormat=metaDataMatrixFormat)
         print len(header)
-        mutdict=ME.findsiggenepermut(Mutationref,valid_filenames=PSI_sample_headers)
+        mutdict=ME.findsiggenepermut(Mutationref)
         mutlabels=ME.Enrichment(Combinedres,mutdict,Mutationref,metaDataMatrixFormat,header)
-
     print "Generating the final consolidated results"
     Orderedheatmap.Classify(Combinedres,mutlabels,dire)
     Orderedheatmap.Classify(Combinedres,mutlabels,dire,False) 

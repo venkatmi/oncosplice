@@ -3846,7 +3846,7 @@ def exportReDefinedClusterBlocks(results_file,block_db,rho_cutoff):
     centroid_blocks=[]
     centroids = []
     for block in block_db:
-        if len(block_db[block])>3:
+        if len(block_db[block])>3:  ############## Could make > 1, but doesn't solve the issues
             new_block_db[block] = block_db[block]  ### Keep track of the row_header indexes associated with each blcok
             data = map(lambda x: matrix[x],block_db[block])
             ### Compute an expression centroid from the block (cluster)
@@ -3879,7 +3879,6 @@ def exportReDefinedClusterBlocks(results_file,block_db,rho_cutoff):
     existing=[]
     updated_blocks={}
     correlated_blocks.sort()
-    #print correlated_blocks
     ### Build a tree of related blocks (based on the code in junctionGraph)
     for (block1,block2) in correlated_blocks:
         if block1 not in existing and block2 not in existing:
@@ -3910,10 +3909,10 @@ def exportReDefinedClusterBlocks(results_file,block_db,rho_cutoff):
                     if b not in updated_blocks[b1]:
                         updated_blocks[b1].append(b)
                 del updated_blocks[b2]
-                
+
     ### Add blocks not correlated to other blocks (not in correlated_blocks)
     #print len(existing),len(centroid_blocks)
-    #print updated_blocks
+    #print updated_blocks;sys.exit()
     for block in centroid_blocks:
         if block not in existing:
             newBlock+=1
@@ -3949,7 +3948,7 @@ def exportReDefinedClusterBlocks(results_file,block_db,rho_cutoff):
     eo = export.ExportFile(new_results_file)
     eo.write(string.join(['UID','row_clusters-flat']+column_header,'\t')+'\n')
     eo.write(string.join(['column_clusters-flat','']+priorColumnClusters,'\t')+'\n')
-    
+
     for i in row_order:
         cluster_number = str(row_order[i])
         uid = row_header[i]
@@ -4168,8 +4167,7 @@ def correlateClusteredGenesParameters(results_file,rho_cutoff=0.3,hits_cutoff=4,
             indexes = block_db[block]
             for ls in map(lambda i: [row_header[i]]+map(str,(matrix[i])), indexes):
                 final_rows[tuple(ls)]=[]
-    #print 'block length:',len(block_db), 'genes retained:',len(retained_ids)
-
+    print 'block length:',len(block_db), 'genes retained:',len(retained_ids)
     return final_rows, column_header
 
 def exportGroupsFromClusters(cluster_file,expFile,platform,suffix=None):
@@ -5284,9 +5282,9 @@ if __name__ == '__main__':
     else:
         analysisType = []
 
-        options, remainder = getopt.getopt(sys.argv[1:],'', ['Guidefile='])
+        options, remainder = getopt.getopt(sys.argv[1:],'', ['i='])
         for opt, arg in options:
-            if opt == '--Guidefile': Guidefile=arg
+            if opt == '--i': Guidefile=arg
             
             else:
                 print "Warning! Command-line argument: %s not recognized. Exiting..." % opt; sys.exit()
@@ -5301,7 +5299,8 @@ if __name__ == '__main__':
     #Guidefile='/Volumes/Pass/NewLeucegene_3samplesdel/ICGS/Clustering-exp.splicing-Guide3 CLEC7A ENSG00000172243 E2.1-E3.1 ENSG000001-hierarchical_euclidean_correlation.txt'
     #Guidefile='/Volumes/Pass/NewLeucegene_3samplesdel/ICGS/Clustering-exp.splicing-filteredcor_depleted-Guide3 TMBIM4 ENSG00000228144 E8.1-I5.1 ENSG000002-hierarchical_euclidean_correlation.txt'
     #Guidefile=' /Volumes/Pass/complete_splice/ExpressionInput/amplify/DataPlots/Clustering-exp.input-Guide3 ZNF275 ENSG00000063587 E2.1-E4.3 ENSG000000-hierarchical_euclidean_correlation.txt'
-    correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.4,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True)
+    #Guidefile = '/Users/saljh8/Desktop/dataAnalysis/SalomonisLab/Anukana/Breast-Cancer/OncoSplice-Healthy/ExpressionInput/amplify/DataPlots/Clustering-exp.input-Guide3 MROH1 ENSG00000179832 E43.1-E44.1 ENSG00000-hierarchical_euclidean_correlation.txt'
+    correlateClusteredGenesParameters(Guidefile,rho_cutoff=0.3,hits_cutoff=4,hits_to_report=50,ReDefinedClusterBlocks=True,filter=True)
     sys.exit()
     correlateClusteredGenes('exons',results_file,stringency='strict',rhoCutOff=0.6);sys.exit()
     #sys.exit()

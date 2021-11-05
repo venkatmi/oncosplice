@@ -3668,6 +3668,7 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
             parameters.setGeneSelection(newDriverGenes1_str)
             guidegenelst = string.join(guidegenelst,' ')
             parameters.setJustShowTheseIDs(guidegenelst)
+               
         #print guidegenelst
               
         parameters.setGeneSet('None Selected') ### silence this
@@ -3683,11 +3684,8 @@ def findCommonExpressionProfiles(expFile,species,platform,expressed_uids,driver_
             guidegenelst=[]
             genelist=[];correlatedevents=[]
             for gene in newDriverGenes2:
-                
                 correlatedevents=correlated_genes[gene]
-                #changed 26oct-meenakshi -change back
                 correlatedevents=correlatedevents[1:280]
-                
                 if gene not in genelist:
                     guidegenelst.append(gene)
                     genelist.append(gene)
@@ -3788,10 +3786,9 @@ def numpyCorrelationMatrixCount(platform,x,rows,cutoff=0.4,geneTypeReport=None):
     i=0;genelist=[]
     for geneID in rows:
         k=0; genes_to_report=[]
-        #print geneID
         genelist=correlated_genes[geneID]
         
-        #print geneID,genelist
+        #print geneID,genelist[:10];sys.exit()
         for gene in genelist:
             if gene in geneTypeReport:
                 genes_to_report.append(gene)
@@ -3816,6 +3813,7 @@ def numpyCorrelationMatrixCount(platform,x,rows,cutoff=0.4,geneTypeReport=None):
         i+=1
    # print  gene_correlation_counts
     #sys.exit()
+
   return gene_correlation_counts
     
 def numpyCorrelationMatrixGene(x,rows,gene):

@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
-#!/usr/bin/env python
 import traceback
 import export
 import numpy as np
-#import pylab as pl
 import sys,string
 import os
 import os.path
@@ -12,8 +10,6 @@ from collections import defaultdict
 from sklearn.cluster import KMeans
 import nimfa
 import Orderedheatmap
-#import statistics
-
 from sklearn.decomposition import NMF
 
 def cleanUpLine(line):
@@ -34,51 +30,28 @@ def filterRows(input_file,output_file,filterDB=None,logData=False):
     gene_to_symbol_db = ExpressionBuilder.importGeneAnnotations(species)
     symbol_to_gene = OBO_import.swapKeyValues(gene_to_symbol_db)
     
-    #for i in filterDB:
     for line in open(input_file,'rU').xreadlines():
-        #for i in filterDB:
-            flag1=0
-            
-            data = cleanUpLine(line)
-           
-            values = string.split(data,'\t')
-          
-            
-            if firstLine:
-                firstLine = False
-                if Flag==0:
-                    export_object.write(line)
-            else:
-               
-               # print values[0], filterDB
-                #sys.exit()
-                try: symbolID = gene_to_symbol_db[values[0]][0]
-                except Exception: symbolID = values[0]
-                if symbolID in filterDB:
-                    counter=[index for index, value in enumerate(filterDB) if value == symbolID]
-                    
-                    for it in range(0,len(counter)):
-                        orderlst[counter[it]]=line
-              
-                        #export_object.write(line)
-                        #firstLine=True
-                       # Flag=1;
-               
-                    
-                #else:
-                   # max_val = max(map(float,values[1:]))
-                #min_val = min(map(float,values[1:]))
-                #if max_val>0.1:
-
-                     #   export_object.write(line)
+        flag1 = 0
+        data = cleanUpLine(line)
+        values = string.split(data,'\t')
+    
+        if firstLine:
+            firstLine = False
+            if Flag==0:
+                export_object.write(line)
+        else:
+            try: symbolID = gene_to_symbol_db[values[0]][0]
+            except Exception: symbolID = values[0]
+            if symbolID in filterDB:
+                counter=[index for index, value in enumerate(filterDB) if value == symbolID]
+                for it in range(0,len(counter)):
+                    orderlst[counter[it]]=line
     try:
         for i in range(0,len(orderlst)):
             export_object.write(orderlst[i])
     except Exception:
         print i,filterDB[i]
-    
-    
-         
+
     export_object.close()
     print 'Filtered rows printed to:',output_file
 
@@ -92,12 +65,12 @@ def FilterFile(Guidefile,Guidefile_block,PSI,turn):
         count=0
     val=[]
     head=0
+    
+    print Guidefile_block
     for line in open(Guidefile_block,'rU').xreadlines():
         if head >count:
-            
             line=line.rstrip('\r\n')
             q= string.split(line,'\t')
-            #val.append(q[0])
             if flag:
                
                 if int(q[1])==prev:
@@ -105,18 +78,16 @@ def FilterFile(Guidefile,Guidefile_block,PSI,turn):
                 else:
                     rank_Count+=1
                     prev=int(q[1])
-                
         else:
             head+=1
             continue
     head=0
+    print Guidefile
     for line in open(Guidefile,'rU').xreadlines():
         if head >count:
-            
             line=line.rstrip('\r\n')
             q= string.split(line,'\t')
             val.append(q[0])
-            
         else:
             head+=1
             continue
@@ -127,28 +98,22 @@ def FilterFile(Guidefile,Guidefile_block,PSI,turn):
     
     output_file = output_dir+'/NMFInput-Round'+str(turn)+'.txt'
     filterRows(PSI,output_file,filterDB=val)
-    
     return output_file,rank_Count
-
 
 def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     
     X=[]
     header=[]
     head=0
-    exportnam=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_versionr'+str(Rank)+'.txt'
+    exportnam=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_versionr.txt'#+str(Rank)+'.txt'
     export_res=export.ExportFile(exportnam)
-    exportnam_bin=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_binary'+str(Rank)+'.txt'
+    exportnam_bin=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_binary.txt'#+str(Rank)+'.txt'
     export_res1=export.ExportFile(exportnam_bin)
-    exportnam_bint=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_binary_t_'+str(Rank)+'.txt'
+    exportnam_bint=export.findParentDir(filename)+'/NMF/round'+str(turn)+'NMFsnmf_binary_t_.txt'#+str(Rank)+'.txt'
     export_res5=export.ExportFile(exportnam_bint)
-    #exportnam_spec=filename[:-4]+'NMFsnmf_binary_specific'+str(Rank)+'.txt'
-    #export_res4=open(exportnam_spec,"w")
-    exportnam2=export.findParentDir(filename)+'/SubtypeAnalyses/round'+str(turn)+'Metadata'+str(Rank)+'.txt'
-    #exportnam2=filename[:-4]+'Metadata'+str(Rank)+'.txt'
+    exportnam2=export.findParentDir(filename)+'/SubtypeAnalyses/round'+str(turn)+'Metadata.txt'#+str(Rank)+'.txt'
     export_res2=export.ExportFile(exportnam2)
-    exportnam3=export.findParentDir(filename)+'/SubtypeAnalyses/round'+str(turn)+'Annotation'+str(Rank)+'.txt'
-    #exportnam3=filename[:-4]+'Annotation'+str(Rank)+'.txt'
+    exportnam3=export.findParentDir(filename)+'/SubtypeAnalyses/round'+str(turn)+'Annotation.txt'#+str(Rank)+'.txt'
     export_res3=export.ExportFile(exportnam3)
     if 'Clustering' in filename:
         count=1
@@ -156,7 +121,8 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
     else:
         count=0
         start=1
-    #print Rank
+        
+    print filename
     for line in open(filename,'rU').xreadlines():
         line=line.rstrip('\r\n')
         q= string.split(line,'\t')
@@ -176,61 +142,38 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
                     val.append(float(q[i]))
                 except Exception:
                     val.append(float(me))
-            #if q[1]==prev:
             X.append(val)
           
         else:
             export_res1.write(line)
             export_res.write(line)
             export_res1.write("\n")
-            #export_res4.write(line)
-            #export_res4.write("\n")
             export_res.write("\n")
             header=q
             head+=1
             continue
-    
-   
+
     group=defaultdict(list)
         
     sh=[]
     X=np.array(X)
-    #print X.shape
     mat=[]
-    #mat=X
     mat=zip(*X)
     mat=np.array(mat)
-    #print mat.shape
-    #model = NMF(n_components=15, init='random', random_state=0)
-    #W = model.fit_transform(mat)
     nmf = nimfa.Snmf(mat,seed="nndsvd", rank=int(Rank), max_iter=20,n_run=10,track_factor=True)
     nmf_fit = nmf()
     W = nmf_fit.basis()
     W=np.array(W)
-    #np.savetxt("basismatrix2.txt",W,delimiter="\t")
     H=nmf_fit.coef()
     H=np.array(H)
-   # np.savetxt("coefficientmatrix2.txt",H,delimiter="\t")
-    #print W.shape
+
     sh=W.shape
     export_res3.write("uid\tUID\tUID\n")
     if int(Rank)==2:
         par=1
     else:
         par=2
-    #for i in range(sh[1]):
-    #    val=W[:,i]
-    #    me=np.mean(val)
-    #    st=np.std(val)
-    #    export_res2.write(header[i+1])
-    #    for j in range(sh[0]):
-    #        if float(W[i][j])>=float(me+(par*st)):
-    #          
-    #            export_res2.write("\t"+str(1))
-    #        else:
-    #            export_res2.write("\t"+str(0))
-    #       
-    #    export_res2.write("\n")
+
     W=zip(*W)
     W=np.array(W)
     sh=W.shape
@@ -248,9 +191,7 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
         #print 'V'+str(i)
         export_res.write('V'+str(i))
         export_res1.write('V'+str(i))
-       
         for j in range(sh[1]):
-            
             if compstd:   
                 if float(W[i][j])>=float(me+(par*st)):
                 
@@ -268,11 +209,10 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
                     export_res1.write("\t"+str(0))
                     new_val.append(0)
             export_res.write("\t"+str(W[i][j]))
-            
         Z.append(new_val)
         export_res.write("\n")
         export_res1.write("\n")
-   # Z=zip(*Z)
+        
     Z=np.array(Z)
     sh=Z.shape
     Z_new=[]
@@ -332,38 +272,26 @@ def NMFAnalysis(filename,Rank,turn=0,strategy="conservative"):
         
         for j in range(sh[1]):
             if strategy=="conservative":
-                print header[i+1]
+                #print header[i+1]
                 export_res2.write("\t"+str(val1[j]))
                 export_res5.write("\t"+str(val1[j]))
             else:
-               print header[i+1] 
+               #print header[i+1] 
                export_res2.write("\t"+str(val[j]))
                export_res5.write("\t"+str(val[j])) 
         export_res2.write("\n")
         export_res5.write("\n")
-        
         Z_new.append(val)
+        
     Z_new=zip(*Z_new)
     Z_new=np.array(Z_new)
-    
     sh=Z_new.shape
-   
- 
-    
     export_res5.close()
-    Orderedheatmap.Classify(exportnam_bint)    
-    if strategy=="conservative":
-        return exportnam,exportnam_bin,exportnam2,exportnam3
-    else:
-        return exportnam,exportnam_bin,exportnam2,exportnam3
+    Orderedheatmap.Classify(exportnam_bint)
+    return exportnam,exportnam_bin,exportnam2,exportnam3
     
-
-                           
-                
 if __name__ == '__main__':
-
     import getopt
-  
     mutdict=defaultdict(list)
     
     ################  Comand-line arguments ################

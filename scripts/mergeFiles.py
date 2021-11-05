@@ -1,4 +1,5 @@
-import sys, string
+import sys,string,os
+sys.path.insert(1, os.path.join(sys.path[0], '..')) ### import parent dir dependencies
 import os.path
 import unique
 import itertools
@@ -54,8 +55,21 @@ def cleanUpLine(line):
     data = string.replace(data,'"','')
     return data
     
-def combineAllLists(files_to_merge,original_filename,includeColumns=False):
-    headers =[]; all_keys={}; dataset_data={}; files=[]; filter_keys={}
+def remoteCombineAllLists(files_to_merge,original_filename,includeColumns=False,includeDatasetName=True,ExportPath=None):
+    global combine_type
+    global permform_all_pairwise
+    combine_type = 'intersection'
+    permform_all_pairwise = 'yes'
+    output = combineAllLists(files_to_merge,original_filename,includeColumns=includeColumns,includeDatasetName=includeDatasetName,ExportPath=ExportPath)
+    return output
+    
+def combineAllLists(files_to_merge,original_filename,includeColumns=False,includeDatasetName=True,ExportPath=None):
+    headers =[]; files=[]
+    
+    import collections 
+    all_keys=collections.OrderedDict()
+    dataset_data=collections.OrderedDict()
+    
     for filename in files_to_merge:
         print filename
         duplicates=[]
@@ -66,20 +80,31 @@ def combineAllLists(files_to_merge,original_filename,includeColumns=False):
             file = string.split(filename,'\\')[-1][:-4]
         for line in open(fn,'rU').xreadlines():         
             data = cleanUpLine(line)
-            t = string.split(data,'\t')
+            if '\t' in data:
+                t = string.split(data,'\t')
+            elif ',' in data:
+                t = string.split(data,',')
+            else:
+                t = string.split(data,'\t')
             if x==0:
                 if data[0]!='#':
                     x=1
                     try: t = t[1:]
                     except Exception: t = ['null']
                     if includeColumns==False:
-                        #headers.append(file)
-                        for i in t: headers.append(i+'.'+file); #headers.append(i)
+                        for i in t:
+                            if includeDatasetName:
+                                headers.append(i+'.'+file)
+                            else:
+                                headers.append(i)
+                            #headers.append(i)
                     else:
-                        headers.append(t[includeColumns]+'.'+file)
+                        if includeDatasetName:
+                            headers.append(t[includeColumns]+'.'+file)
+                        else:
+                            headers.append(t[includeColumns])
             else: #elif 'FOXP1' in data or 'SLK' in data or 'MBD2' in data:
                 key = t[0]
-                #key = t[0]+':'+t[1]+' '+t[3]+'|'+t[5]; t = [key,t[2]]
                 if includeColumns==False:
                     try: values = t[1:]
                     except Exception: values = ['null']
@@ -97,23 +122,19 @@ def combineAllLists(files_to_merge,original_filename,includeColumns=False):
                     except Exception: combined_data[key] = [values]
                 else:
                     combined_data[key] = values
-                #if float(t[1])>0.15: filter_keys[key]=[]
         #print duplicates
         dataset_data[filename] = combined_data
     for i in dataset_data:
         print len(dataset_data[i]), i
-    #print 'filter_keys',len(filter_keys)
     ###Add null values for key's in all_keys not in the list for each individual dataset
-    combined_file_data = {}
+    combined_file_data = collections.OrderedDict()
     for filename in files:
         combined_data = dataset_data[filename]
         ###Determine the number of unique values for each key for each dataset
         null_values = []; i=0
-        for key in combined_data:
-            number_of_values = len(combined_data[key][0]); break
+        for key in combined_data: number_of_values = len(combined_data[key][0]); break
         while i<number_of_values: null_values.append('0'); i+=1
         for key in all_keys:
-            #if key in filter_keys:
             include = 'yes'
             if combine_type == 'intersection':
                 if all_keys[key]>(len(files_to_merge)-1): include = 'yes'
@@ -138,7 +159,11 @@ def combineAllLists(files_to_merge,original_filename,includeColumns=False):
                     except KeyError: combined_file_data[key] = values
 
     original_filename = string.replace(original_filename,'1.',  '1.AS-')
-    export_file = output_dir+'/MergedFiles.txt'
+    if ExportPath != None:
+        export_file = ExportPath
+    else:
+        export_file = output_dir+'/MergedFiles.txt'
+    
     fn=filepath(export_file);data = open(fn,'w')
     title = string.join(['uid']+headers,'\t')+'\n'; data.write(title)
     for key in combined_file_data:
@@ -199,7 +224,12 @@ def combineUniqueAllLists(files_to_merge,original_filename):
             file = string.split(filename,'\\')[-1][:-4]
         for line in open(fn,'rU').xreadlines():         
             data = cleanUpLine(line)
-            t = string.split(data,'\t')
+            if '\t' in data:
+                t = string.split(data,'\t')
+            elif ',' in data:
+                t = string.split(data,',')
+            else:
+                t = string.split(data,'\t')
             if x==0:
                 if data[0]!='#':
                     x=1

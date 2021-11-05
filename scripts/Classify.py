@@ -17,7 +17,6 @@ import operator
 from collections import OrderedDict
 from collections import defaultdict
 
-
 def FindTopUniqueEvents(Guidefile,psi,Guidedir):
     head=0
     guidekeys=[]
@@ -44,12 +43,9 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
                     tempkeys[q[0]].append([q[0],float(q[4]),q[6]])
                 except KeyError:
                     tempkeys[q[4]]=[[q[0],float(q[4]),q[6]],]
-    for i in tempkeys:
-        
+    for i in tempkeys:      
         if len(tempkeys[i])>1:
-            #print tempkeys[i]
             tempkeys[i].sort(key=operator.itemgetter(1),reverse=False)
-            #print tempkeys[i][0]
             try:
                 unique_clusters[0].append(tempkeys[i][0])
             except KeyError:
@@ -68,16 +64,7 @@ def FindTopUniqueEvents(Guidefile,psi,Guidedir):
             if len(unique_clusters[0])>10:
                 guidekeys=unique_clusters[0]
                 for i in range(0,len(guidekeys)):
-            
-            #upd_guides[i]=[upd_guides[i][3],upd_guides[i][4]]
                     upd_guides.append(guidekeys[i][0])
-            #else:
-            #        #if len(unique_clusters[0])>50:
-            #            guidekeys=unique_clusters[0][0:25]
-            #            for i in range(0,len(guidekeys)):
-            #
-            ##upd_guides[i]=[upd_guides[i][3],upd_guides[i][4]]
-            #                upd_guides.append(guidekeys[i][0])
             else:
                     omitcluster=1
             export_class.write(psi+"\t"+str(len(unique_clusters[0]))+"\n")
